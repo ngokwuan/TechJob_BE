@@ -10,6 +10,5 @@ build
 # Environment
 .env
 .env.*
-#Documents
-docs
+
 
