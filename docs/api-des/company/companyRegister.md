@@ -11,9 +11,6 @@
 | companyName | string    | \*       | Tên công ty            |
 | email       | string    | \*       | Email công ty (unique) |
 | password    | string    | \*       | Mật khẩu (min 6 ký tự) |
-| phone       | string    | \*       | Số điện thoại          |
-| address     | string    |          | Địa chỉ                |
-| cityId      | string    | \*       | ID thành phố           |
 
 ## Response Data
 
