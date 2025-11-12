@@ -2,12 +2,15 @@ import express, { Request, Response, NextFunction, Application } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { Routes } from './routes/index.route';
+import { connectDB } from './config/db';
 
 dotenv.config();
 
 const app: Application = express();
 const PORT = process.env.PORT;
 
+//MongoDB connection
+connectDB();
 // Middleware
 app.use(cors());
 app.use(express.json());
