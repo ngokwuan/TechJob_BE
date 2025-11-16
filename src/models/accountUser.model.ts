@@ -1,33 +1,5 @@
-// import mongoose, { Schema } from 'mongoose';
-
-// export interface IAccountsUser {
-//   _id: mongoose.Types.ObjectId;
-//   fullName: string;
-//   email: string;
-//   password: string;
-//   role: string;
-//   isDeleted: boolean;
-// }
-
-// const AccountsUserSchema = new Schema<IAccountsUser>(
-//   {
-//     fullName: { type: String, required: true },
-//     email: { type: String, required: true, unique: true },
-//     password: { type: String, required: true },
-//     role: { type: String, default: 'user' },
-//     isDeleted: { type: Boolean, default: false },
-//   },
-//   { timestamps: true }
-// );
-
-// export const AccountsUser = mongoose.model<IAccountsUser>(
-//   'AccountsUser',
-//   AccountsUserSchema
-// );
-
 import mongoose, { Schema, Document } from 'mongoose';
 
-// ==================== USER MODEL ====================
 export interface IAccountsUser extends Document {
   _id: mongoose.Types.ObjectId;
   fullName: string;
@@ -62,5 +34,6 @@ const AccountsUserSchema = new Schema<IAccountsUser>(
 
 export const AccountsUser = mongoose.model<IAccountsUser>(
   'AccountsUser',
-  AccountsUserSchema
+  AccountsUserSchema,
+  'accountUser'
 );

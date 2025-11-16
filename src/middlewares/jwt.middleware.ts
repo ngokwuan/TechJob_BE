@@ -3,21 +3,23 @@ import { Response, NextFunction } from 'express';
 import { AuthRequest, JWTPayload } from '../types/auth.type';
 import { isBlacklisted } from '../services/auth.service';
 
-const JWT_SECRET = process.env.JWT_SECRET_KEY || 'default-secret-key';
+// Validate environment variables
+if (!process.env.JWT_SECRET_KEY) {
+  throw new Error('JWT_SECRET_KEY is not defined in environment variables');
+}
+
+const JWT_SECRET = process.env.JWT_SECRET_KEY;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1h';
 
-export const createJWT = (payload: JWTPayload): string => {
-  if (!process.env.JWT_SECRET_KEY) {
-    throw new Error('JWT_SECRET_KEY is not defined in environment variables');
-  }
-
-  return jwt.sign(payload, JWT_SECRET);
+export const createJWT = (payload: JWTPayload) => {
+  return jwt.sign(payload, JWT_SECRET, {
+    expiresIn: JWT_EXPIRES_IN,
+  });
 };
 
 export const verifyToken = (token: string): JWTPayload | null => {
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as JWTPayload;
-
     return decoded;
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {

@@ -34,4 +34,4 @@ const JobSchema: Schema<IJob> = new Schema(
   { timestamps: true }
 );
 
-export const Job = mongoose.model<IJob>('Job', JobSchema);
+export const Job = mongoose.model<IJob>('Job', JobSchema, 'job');

@@ -1,6 +1,6 @@
+import dotenv from 'dotenv';
 import express, { Request, Response, NextFunction, Application } from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import { Routes } from './routes/index.route';
 import { connectDB } from './config/db';
 

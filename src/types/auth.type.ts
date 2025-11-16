@@ -9,8 +9,8 @@ export interface JWTPayload {
   exp?: number;
 }
 
-export interface AuthRequest extends Request {
-  validated?: any;
+export interface AuthRequest<T = any> extends Request {
+  validated?: T;
   user?: JWTPayload;
   token?: string;
 }
@@ -24,10 +24,6 @@ export interface RegisterUserInput {
   fullName: string;
   email: string;
   password: string;
-  phone?: string;
-  address?: string;
-  dateOfBirth?: Date;
-  gender?: string;
 }
 
 export interface RegisterCompanyInput {

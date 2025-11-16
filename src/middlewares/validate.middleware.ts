@@ -3,8 +3,8 @@ import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../types/auth.type';
 
 export const validate =
-  (schema: z.ZodSchema) =>
-  (req: AuthRequest, res: Response, next: NextFunction) => {
+  <T>(schema: z.ZodSchema<T>) =>
+  (req: AuthRequest<T>, res: Response, next: NextFunction) => {
     try {
       req.validated = schema.parse(req.body);
       next();

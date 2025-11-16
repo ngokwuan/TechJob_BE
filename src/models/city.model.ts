@@ -11,4 +11,4 @@ const CitySchema: Schema<ICity> = new Schema(
   { timestamps: false }
 );
 
-export const City = mongoose.model<ICity>('City', CitySchema);
+export const City = mongoose.model<ICity>('City', CitySchema, 'city');

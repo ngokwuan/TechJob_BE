@@ -1,18 +1,17 @@
 import { Response } from 'express';
+import { AuthRequest } from '../types/auth.type';
 import {
-  AuthRequest,
-  LoginInput,
-  RegisterUserInput,
-  RegisterCompanyInput,
-} from '../types/auth.type';
-import { loginAccount, registerAccount } from '../services/auth.service';
+  loginAccount,
+  registerAccount,
+  removeToken,
+} from '../services/auth.service';
 import { createJWT } from '../middlewares/jwt.middleware';
 import { IAccountsUser } from '../models/accountUser.model';
 import { IAccountsCompany } from '../models/accountCompany.model';
-import { removeToken } from '../services/auth.service';
+
 export const userLogin = async (req: AuthRequest, res: Response) => {
   try {
-    const { email, password } = req.validated as LoginInput;
+    const { email, password } = req.validated;
 
     const user = (await loginAccount(
       email,
@@ -58,7 +57,7 @@ export const userLogin = async (req: AuthRequest, res: Response) => {
 
 export const userRegister = async (req: AuthRequest, res: Response) => {
   try {
-    const data = req.validated as RegisterUserInput;
+    const data = req.validated;
 
     const user = (await registerAccount(data, 'user')) as IAccountsUser | null;
 
@@ -100,7 +99,7 @@ export const userRegister = async (req: AuthRequest, res: Response) => {
 
 export const companyLogin = async (req: AuthRequest, res: Response) => {
   try {
-    const { email, password } = req.validated as LoginInput;
+    const { email, password } = req.validated;
 
     const company = (await loginAccount(
       email,
@@ -146,7 +145,7 @@ export const companyLogin = async (req: AuthRequest, res: Response) => {
 
 export const companyRegister = async (req: AuthRequest, res: Response) => {
   try {
-    const data = req.validated as RegisterCompanyInput;
+    const data = req.validated;
 
     const company = (await registerAccount(
       data,

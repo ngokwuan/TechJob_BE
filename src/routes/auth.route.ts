@@ -1,4 +1,3 @@
-// routes/auth.route.ts
 import { Router } from 'express';
 import {
   userLogin,
@@ -15,20 +14,39 @@ import {
   companyLoginSchema,
   companyRegisterSchema,
 } from '../validateSchemas/auth.schema';
+import {
+  LoginInput,
+  RegisterUserInput,
+  RegisterCompanyInput,
+} from '../types/auth.type';
 
 export const AuthRouter = Router();
 
 // User routes
-AuthRouter.post('/users/login', validate(userLoginSchema), userLogin);
-AuthRouter.post('/users/register', validate(userRegisterSchema), userRegister);
+AuthRouter.post(
+  '/users/login',
+  validate<LoginInput>(userLoginSchema),
+  userLogin
+);
+
+AuthRouter.post(
+  '/users/register',
+  validate<RegisterUserInput>(userRegisterSchema),
+  userRegister
+);
 
 // Company routes
-AuthRouter.post('/companies/login', validate(companyLoginSchema), companyLogin);
+AuthRouter.post(
+  '/companies/login',
+  validate<LoginInput>(companyLoginSchema),
+  companyLogin
+);
+
 AuthRouter.post(
   '/companies/register',
-  validate(companyRegisterSchema),
+  validate<RegisterCompanyInput>(companyRegisterSchema),
   companyRegister
 );
 
-// Logout (chung cho cả user và company)
+// Logout
 AuthRouter.post('/logout', checkUserJWT, logout);
