@@ -25,29 +25,23 @@ export const userLogin = async (req: AuthRequest, res: Response) => {
         message: 'Email hoặc mật khẩu không chính xác',
       });
     }
-
-    const token = createJWT({
+    const payload = {
       id: user._id.toString(),
       email: user.email,
       name: user.fullName,
       role: user.role,
-    });
+    };
+    const token = createJWT(payload);
 
     return res.status(200).json({
       success: true,
       message: 'Đăng nhập thành công',
       data: {
         accessToken: token,
-        user: {
-          id: user._id,
-          email: user.email,
-          fullName: user.fullName,
-          role: user.role,
-        },
+        user: payload,
       },
     });
   } catch (error) {
-    console.error('User login error:', error);
     return res.status(500).json({
       success: false,
       message: 'Lỗi server, vui lòng thử lại sau',
@@ -67,29 +61,23 @@ export const userRegister = async (req: AuthRequest, res: Response) => {
         message: 'Email đã tồn tại',
       });
     }
-
-    const token = createJWT({
+    const payload = {
       id: user._id.toString(),
       email: user.email,
       name: user.fullName,
       role: user.role,
-    });
+    };
+    const token = createJWT(payload);
 
     return res.status(201).json({
       success: true,
       message: 'Đăng ký thành công',
       data: {
         accessToken: token,
-        user: {
-          id: user._id,
-          email: user.email,
-          fullName: user.fullName,
-          role: user.role,
-        },
+        user: payload,
       },
     });
   } catch (error) {
-    console.error('User register error:', error);
     return res.status(500).json({
       success: false,
       message: 'Lỗi server, vui lòng thử lại sau',
@@ -113,25 +101,20 @@ export const companyLogin = async (req: AuthRequest, res: Response) => {
         message: 'Email hoặc mật khẩu không chính xác',
       });
     }
-
-    const token = createJWT({
+    const payload = {
       id: company._id.toString(),
       email: company.email,
       name: company.companyName,
       role: company.role,
-    });
+    };
+    const token = createJWT(payload);
 
     return res.status(200).json({
       success: true,
       message: 'Đăng nhập thành công',
       data: {
         accessToken: token,
-        company: {
-          id: company._id,
-          email: company.email,
-          companyName: company.companyName,
-          role: company.role,
-        },
+        company: payload,
       },
     });
   } catch (error) {
@@ -158,25 +141,20 @@ export const companyRegister = async (req: AuthRequest, res: Response) => {
         message: 'Email đã tồn tại',
       });
     }
-
-    const token = createJWT({
+    const payload = {
       id: company._id.toString(),
       email: company.email,
       name: company.companyName,
       role: company.role,
-    });
+    };
+    const token = createJWT(payload);
 
     return res.status(201).json({
       success: true,
       message: 'Đăng ký thành công',
       data: {
         accessToken: token,
-        company: {
-          id: company._id,
-          email: company.email,
-          companyName: company.companyName,
-          role: company.role,
-        },
+        company: payload,
       },
     });
   } catch (error) {

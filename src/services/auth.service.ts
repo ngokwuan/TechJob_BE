@@ -7,7 +7,6 @@ import {
 } from '../models/accountCompany.model';
 import { RegisterUserInput, RegisterCompanyInput } from '../types/auth.type';
 
-// Define account models mapping
 const AccountModels = {
   user: AccountsUser,
   company: AccountsCompany,

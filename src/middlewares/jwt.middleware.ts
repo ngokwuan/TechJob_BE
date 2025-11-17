@@ -76,10 +76,8 @@ export const checkUserJWT = async (
     }
 
     req.user = decoded;
-    req.token = token;
     next();
   } catch (error) {
-    console.error('JWT verification error:', error);
     return res.status(401).json({
       success: false,
       message: 'Xác thực thất bại',
