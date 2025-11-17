@@ -20,33 +20,33 @@ import {
   RegisterCompanyInput,
 } from '../types/auth.type';
 
-export const AuthRouter = Router();
+export const authRouter = Router();
 
 // User routes
-AuthRouter.post(
+authRouter.post(
   '/users/login',
   validate<LoginInput>(userLoginSchema),
   userLogin
 );
 
-AuthRouter.post(
+authRouter.post(
   '/users/register',
   validate<RegisterUserInput>(userRegisterSchema),
   userRegister
 );
 
 // Company routes
-AuthRouter.post(
+authRouter.post(
   '/companies/login',
   validate<LoginInput>(companyLoginSchema),
   companyLogin
 );
 
-AuthRouter.post(
+authRouter.post(
   '/companies/register',
   validate<RegisterCompanyInput>(companyRegisterSchema),
   companyRegister
 );
 
 // Logout
-AuthRouter.post('/logout', checkUserJWT, logout);
+authRouter.post('/logout', checkUserJWT, logout);

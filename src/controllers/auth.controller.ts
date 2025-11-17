@@ -27,8 +27,6 @@ export const userLogin = async (req: AuthRequest, res: Response) => {
     }
     const payload = {
       id: user._id.toString(),
-      email: user.email,
-      name: user.fullName,
       role: user.role,
     };
     const token = createJWT(payload);
@@ -63,8 +61,6 @@ export const userRegister = async (req: AuthRequest, res: Response) => {
     }
     const payload = {
       id: user._id.toString(),
-      email: user.email,
-      name: user.fullName,
       role: user.role,
     };
     const token = createJWT(payload);
@@ -103,8 +99,6 @@ export const companyLogin = async (req: AuthRequest, res: Response) => {
     }
     const payload = {
       id: company._id.toString(),
-      email: company.email,
-      name: company.companyName,
       role: company.role,
     };
     const token = createJWT(payload);
@@ -143,8 +137,6 @@ export const companyRegister = async (req: AuthRequest, res: Response) => {
     }
     const payload = {
       id: company._id.toString(),
-      email: company.email,
-      name: company.companyName,
       role: company.role,
     };
     const token = createJWT(payload);

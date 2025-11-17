@@ -74,6 +74,12 @@ export const checkUserJWT = async (
         message: 'Token không hợp lệ hoặc đã hết hạn',
       });
     }
+    // req.user = {
+    //   id: String(decoded.id),
+    //   role: decoded.role,
+    //   iat: decoded.iat,
+    //   exp: decoded.exp,
+    // };
 
     req.user = decoded;
     next();

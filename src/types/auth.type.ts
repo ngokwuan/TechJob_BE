@@ -2,8 +2,6 @@ import { Request } from 'express';
 
 export interface JWTPayload {
   id: string;
-  email: string;
-  name: string;
   role: string;
   iat?: number;
   exp?: number;
@@ -12,7 +10,6 @@ export interface JWTPayload {
 export interface AuthRequest<T = any> extends Request {
   validated?: T;
   user?: JWTPayload;
-  token?: string;
 }
 
 export interface LoginInput {
