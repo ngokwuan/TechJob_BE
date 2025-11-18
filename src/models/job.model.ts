@@ -11,6 +11,7 @@ export interface IJob extends Document {
   technologies?: string;
   description?: string;
   images?: string;
+  isDeleted?: boolean;
 }
 
 const JobSchema: Schema<IJob> = new Schema(
@@ -28,8 +29,9 @@ const JobSchema: Schema<IJob> = new Schema(
     technologies: { type: String },
     description: { type: String },
     images: { type: String },
+    isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
 
-export const Job = mongoose.model<IJob>('Job', JobSchema);
+export const Job = mongoose.model<IJob>('Job', JobSchema, 'job');

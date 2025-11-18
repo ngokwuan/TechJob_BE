@@ -1,12 +1,14 @@
 import mongoose, { Schema, Document } from 'mongoose';
+
 import { ICity } from './city.model';
 
 export interface IAccountsCompany extends Document {
+  _id: mongoose.Types.ObjectId;
   companyName: string;
   email: string;
   password: string;
   address?: string;
-  cityID?: mongoose.Types.ObjectId | ICity;
+  cityID?: mongoose.Types.ObjectId;
   companyEmployees?: string;
   companyModel?: string;
   description?: string;
@@ -15,11 +17,11 @@ export interface IAccountsCompany extends Document {
   workingTime?: string;
   logo?: string;
   status?: string;
-  role?: string;
-  deletedAt?: Date | null;
+  role: string;
+  isDeleted: boolean;
 }
 
-const AccountsCompanySchema: Schema<IAccountsCompany> = new Schema(
+const AccountsCompanySchema = new Schema<IAccountsCompany>(
   {
     companyName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -35,12 +37,13 @@ const AccountsCompanySchema: Schema<IAccountsCompany> = new Schema(
     logo: { type: String },
     status: { type: String },
     role: { type: String, default: 'company' },
-    deletedAt: { type: Date, default: null },
+    isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
 
 export const AccountsCompany = mongoose.model<IAccountsCompany>(
   'AccountsCompany',
-  AccountsCompanySchema
+  AccountsCompanySchema,
+  'accountCompany'
 );
