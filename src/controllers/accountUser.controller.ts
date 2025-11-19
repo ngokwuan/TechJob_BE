@@ -1,6 +1,7 @@
 import { AuthRequest } from '../types/auth.type';
 import { Response } from 'express';
 import { getUserById } from '../services/accountUser.service';
+import { IAccountsUser } from '../models/accountUser.model';
 
 export const getUserProfile = async (req: AuthRequest, res: Response) => {
   try {
@@ -12,7 +13,7 @@ export const getUserProfile = async (req: AuthRequest, res: Response) => {
       });
     }
 
-    const user = await getUserById(id);
+    const user: IAccountsUser | null = await getUserById(id);
 
     if (!user) {
       return res.status(404).json({

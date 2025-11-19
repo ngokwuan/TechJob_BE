@@ -14,13 +14,11 @@
 
 ## Response Data
 
-| JSON Key  | Data Type | Required | Value Description |
-| --------- | --------- | -------- | ----------------- |
-| userId    | string    | \*       | User ID           |
-| fullName  | string    | \*       | Họ và tên         |
-| email     | string    | \*       | Email             |
-| createdAt | string    | \*       | Thời gian tạo     |
-| token     | string    | \*       | JWT token         |
+| JSON Key | Data Type | Required | Value Description |
+| -------- | --------- | -------- | ----------------- |
+| userId   | string    | \*       | User ID           |
+| fullName | string    | \*       | Họ và tên         |
+| role     | string    | \*       | Quyền hạn         |
 
 ## Status
 

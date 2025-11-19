@@ -17,7 +17,7 @@
 | -------- | --------- | -------- | ----------------- |
 | userId   | string    | \*       | User ID           |
 | fullName | string    | \*       | Họ và tên         |
-| email    | string    | \*       | Email             |
+| role     | string    | \*       | Quyền hạn         |
 | token    | string    | \*       | JWT token         |
 
 ## Status

@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`POST /api/auth/companies/register`
+`POST /auth/companies/register`
 
 ## Request Data
 
@@ -18,9 +18,7 @@
 | ----------- | --------- | -------- | ----------------- |
 | companyId   | string    | \*       | Company ID        |
 | companyName | string    | \*       | Tên công ty       |
-| email       | string    | \*       | Email             |
-| createdAt   | string    | \*       | Thời gian tạo     |
-| token       | string    | \*       | JWT token         |
+| role        | string    | \*       | Quyền hạn         |
 
 ## Status
 
