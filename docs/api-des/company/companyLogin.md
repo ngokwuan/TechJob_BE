@@ -17,7 +17,7 @@
 | ----------- | --------- | -------- | ----------------- |
 | companyId   | string    | \*       | Company ID        |
 | companyName | string    | \*       | Tên công ty       |
-| email       | string    | \*       | Email             |
+| role        | string    | \*       | Quyền hạn         |
 | token       | string    | \*       | JWT token         |
 
 ## Status
