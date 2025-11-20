@@ -123,7 +123,6 @@ export const companyLogin = async (req: AuthRequest, res: Response) => {
 export const companyRegister = async (req: AuthRequest, res: Response) => {
   try {
     const data = req.validated;
-
     const company = (await registerAccount(
       data,
       'company'
@@ -148,7 +147,6 @@ export const companyRegister = async (req: AuthRequest, res: Response) => {
       },
     });
   } catch (error) {
-    console.error('Company register error:', error);
     return res.status(500).json({
       success: false,
       message: 'Lỗi server, vui lòng thử lại sau',

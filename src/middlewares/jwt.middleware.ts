@@ -74,12 +74,6 @@ export const checkUserJWT = async (
         message: 'Token không hợp lệ hoặc đã hết hạn',
       });
     }
-    // req.user = {
-    //   id: String(decoded.id),
-    //   role: decoded.role,
-    //   iat: decoded.iat,
-    //   exp: decoded.exp,
-    // };
 
     req.user = decoded;
     next();
@@ -91,17 +85,17 @@ export const checkUserJWT = async (
   }
 };
 
-export const checkRole = (...roles: string[]) => {
+export const checkRole = (role: string) => {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       if (!req.user) {
         return res.status(401).json({
           success: false,
-          message: 'Chưa xác thực',
+          message: 'Token không hợp lệ ',
         });
       }
 
-      if (!roles.includes(req.user.role)) {
+      if (role !== req.user.role) {
         return res.status(403).json({
           success: false,
           message: 'Bạn không có quyền truy cập',

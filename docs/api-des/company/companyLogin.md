@@ -25,5 +25,6 @@
 | Status | Message               | Error Reason              |
 | ------ | --------------------- | ------------------------- |
 | 200    | Login Successful      | -                         |
+| 400    | Bad request           | Dữ liệu không hợp lệ      |
 | 401    | Unauthorized          | Email/Password không đúng |
 | 500    | Internal Server Error | -                         |
