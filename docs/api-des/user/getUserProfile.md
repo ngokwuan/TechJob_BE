@@ -1,14 +1,14 @@
-# Get Job Detail
+# Get User Detail
 
 ## Endpoint
 
 `GET /users/me`
 
-## Request Data
+## Headers
 
-| JSON Key | Data Type | Required | Value Description |
-| -------- | --------- | -------- | ----------------- |
-| userId   | string    | \*       | User ID           |
+| Header        | Value          |
+| ------------- | -------------- |
+| Authorization | Bearer {token} |
 
 ## Response Data
 
@@ -17,6 +17,8 @@
 | userId   | string    | \*       | User ID           |
 | fullName | string    | \*       | Họ và tên         |
 | email    | string    | \*       | Email             |
+| phone    | string    | \*       | SDT               |
+| avatar   | string    | \*       | Ảnh đại diện      |
 
 ## Status
 
