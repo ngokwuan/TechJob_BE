@@ -9,6 +9,13 @@ import { createJWT } from '../middlewares/jwt.middleware';
 import { IAccountsUser } from '../models/accountUser.model';
 import { IAccountsCompany } from '../models/accountCompany.model';
 
+export const checkAccount = async (req: AuthRequest, res: Response) => {
+  return res.status(200).json({
+    success: true,
+    message: 'Lấy thông tin thành công',
+    data: req.user,
+  });
+};
 export const userLogin = async (req: AuthRequest, res: Response) => {
   try {
     const { email, password } = req.validated;

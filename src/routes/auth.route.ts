@@ -15,6 +15,7 @@ import {
 } from '../types/auth.type';
 
 export const authRouter = Router();
+authRouter.get('/check', checkUserJWT, controller.checkAccount);
 
 // User routes
 authRouter.post(
