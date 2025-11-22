@@ -101,7 +101,7 @@ export const checkUserJWT = async (
         });
       }
     }
-    req.user = data;
+    req.user = { id, ...data };
     next();
   } catch (error) {
     return res.status(401).json({

@@ -1,4 +1,4 @@
-// services/job.service.ts
+import mongoose from 'mongoose';
 import { Job } from '../models/job.model';
 import { AccountsCompany } from '../models/accountCompany.model';
 
@@ -25,4 +25,36 @@ export const createJob = async (data: any) => {
   });
 
   return newJob;
+};
+export const softDeleteByJobID = async (id: string) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return null;
+    }
+    const existJob = await Job.findByIdAndUpdate(
+      id,
+      { isDeleted: true },
+      { new: true }
+    );
+    if (!existJob) return null;
+    return existJob.id;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const forceDeleteByJobID = async (id: string) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return null;
+    }
+
+    const deletedJob = await Job.findByIdAndDelete(id);
+
+    if (!deletedJob) return null;
+
+    return id;
+  } catch (error) {
+    throw error;
+  }
 };

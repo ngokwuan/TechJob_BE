@@ -13,5 +13,17 @@ router.post(
   validate(createJobSchema),
   controller.createJobController
 );
+router.delete(
+  '/:id',
+  checkUserJWT,
+  checkRole('company'),
+  controller.softDeleteJob
+);
+router.delete(
+  '/:id/force',
+  checkUserJWT,
+  checkRole('company'),
+  controller.forceDeleteJob
+);
 
 export const jobRouter = router;
