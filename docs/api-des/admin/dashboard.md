@@ -4,11 +4,11 @@
 
 `GET /admin/dashboard/stats`
 
-## Headers
+## Cookies
 
-| Header        | Value               |
-| ------------- | ------------------- |
-| Authorization | Bearer {adminToken} |
+| Cookie | Value   |
+| ------ | ------- |
+| token  | {token} |
 
 ## Response Data
 

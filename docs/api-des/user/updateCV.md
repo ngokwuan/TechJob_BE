@@ -4,11 +4,11 @@
 
 `PUT /users/cvs/:cvId`
 
-## Headers
+## Cookies
 
-| Header        | Value          |
-| ------------- | -------------- |
-| Authorization | Bearer {token} |
+| Cookie | Value   |
+| ------ | ------- |
+| token  | {token} |
 
 ## Path Parameters
 

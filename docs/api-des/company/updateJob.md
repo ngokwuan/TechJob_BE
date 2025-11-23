@@ -4,11 +4,11 @@
 
 `PUT /companies/jobs/:jobId`
 
-## Headers
+## Cookies
 
-| Header        | Value          |
-| ------------- | -------------- |
-| Authorization | Bearer {token} |
+| Cookie | Value   |
+| ------ | ------- |
+| token  | {token} |
 
 ## Path Parameters
 
