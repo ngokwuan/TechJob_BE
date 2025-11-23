@@ -64,7 +64,6 @@ export const softDeleteJob = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
 export const forceDeleteJob = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
