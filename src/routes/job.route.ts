@@ -1,29 +1,27 @@
-import express from 'express';
+import { Router } from 'express';
 import * as controller from '../controllers/job.controller';
 import { checkRole, checkUserJWT } from '../middlewares/jwt.middleware';
 import { validate } from '../middlewares/validate.middleware';
 import { createJobSchema } from '../validateSchemas/job.schema';
 
-const router = express.Router();
+export const jobRouter = Router();
 
-router.post(
+jobRouter.post(
   '/',
   checkUserJWT,
   checkRole('company'),
   validate(createJobSchema),
   controller.createJobController
 );
-router.delete(
+jobRouter.delete(
   '/:id',
   checkUserJWT,
   checkRole('company'),
   controller.softDeleteJob
 );
-router.delete(
+jobRouter.delete(
   '/:id/force',
   checkUserJWT,
   checkRole('company'),
   controller.forceDeleteJob
 );
-
-export const jobRouter = router;
