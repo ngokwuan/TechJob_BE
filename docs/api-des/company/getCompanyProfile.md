@@ -4,11 +4,11 @@
 
 `GET /companies/me`
 
-## Headers
+## Cookies
 
-| Header        | Value          |
-| ------------- | -------------- |
-| Authorization | Bearer {token} |
+| Cookie | Value   |
+| ------ | ------- |
+| token  | {token} |
 
 ## Response Data
 

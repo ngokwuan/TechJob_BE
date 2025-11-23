@@ -4,11 +4,11 @@
 
 `POST /users/cvs/`
 
-## Headers
+## Cookies
 
-| Header        | Value          |
-| ------------- | -------------- |
-| Authorization | Bearer {token} |
+| Cookie | Value   |
+| ------ | ------- |
+| token  | {token} |
 
 ## Request Data
 

@@ -4,11 +4,11 @@
 
 `GET /admin/users`
 
-## Headers
+## Cookies
 
-| Header        | Value               |
-| ------------- | ------------------- |
-| Authorization | Bearer {adminToken} |
+| Cookie | Value   |
+| ------ | ------- |
+| token  | {token} |
 
 ## Response Data
 

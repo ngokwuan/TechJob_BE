@@ -4,11 +4,11 @@
 
 `DELETE /admin/users/:userId`
 
-## Headers
+## Cookies
 
-| Header        | Value               |
-| ------------- | ------------------- |
-| Authorization | Bearer {adminToken} |
+| Cookie | Value   |
+| ------ | ------- |
+| token  | {token} |
 
 ## Path Parameters
 

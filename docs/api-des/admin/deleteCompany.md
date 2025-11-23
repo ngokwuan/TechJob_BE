@@ -4,11 +4,11 @@
 
 `DELETE /admin/companies/:companyId`
 
-## Headers
+## Cookies
 
-| Header        | Value               |
-| ------------- | ------------------- |
-| Authorization | Bearer {adminToken} |
+| Cookie | Value   |
+| ------ | ------- |
+| token  | {token} |
 
 ## Path Parameters
 
