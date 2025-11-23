@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import express, { Request, Response, NextFunction, Application } from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { Routes } from './routes/index.route';
 import { connectDB } from './config/db';
 
@@ -20,7 +21,7 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
-
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
