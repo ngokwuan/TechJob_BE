@@ -9,6 +9,13 @@ import { createJWT } from '../middlewares/jwt.middleware';
 import { IAccountsUser } from '../models/accountUser.model';
 import { IAccountsCompany } from '../models/accountCompany.model';
 
+export const checkAccount = async (req: AuthRequest, res: Response) => {
+  return res.status(200).json({
+    success: true,
+    message: 'Lấy thông tin thành công',
+    data: req.user,
+  });
+};
 export const userLogin = async (req: AuthRequest, res: Response) => {
   try {
     const { email, password } = req.validated;
@@ -123,7 +130,6 @@ export const companyLogin = async (req: AuthRequest, res: Response) => {
 export const companyRegister = async (req: AuthRequest, res: Response) => {
   try {
     const data = req.validated;
-
     const company = (await registerAccount(
       data,
       'company'
@@ -148,7 +154,6 @@ export const companyRegister = async (req: AuthRequest, res: Response) => {
       },
     });
   } catch (error) {
-    console.error('Company register error:', error);
     return res.status(500).json({
       success: false,
       message: 'Lỗi server, vui lòng thử lại sau',

@@ -2,6 +2,8 @@ import jwt from 'jsonwebtoken';
 import { Response, NextFunction } from 'express';
 import { AuthRequest, JWTPayload } from '../types/auth.type';
 import { isBlacklisted } from '../services/auth.service';
+import { AccountsCompany } from '../models/accountCompany.model';
+import { AccountsUser } from '../models/accountUser.model';
 
 // Validate environment variables
 if (!process.env.JWT_SECRET_KEY) {
@@ -66,7 +68,7 @@ export const checkUserJWT = async (
       });
     }
 
-    const decoded = verifyToken(token);
+    let decoded = verifyToken(token);
 
     if (!decoded) {
       return res.status(401).json({
@@ -74,14 +76,32 @@ export const checkUserJWT = async (
         message: 'Token không hợp lệ hoặc đã hết hạn',
       });
     }
-    // req.user = {
-    //   id: String(decoded.id),
-    //   role: decoded.role,
-    //   iat: decoded.iat,
-    //   exp: decoded.exp,
-    // };
 
-    req.user = decoded;
+    const id = decoded.id;
+    let data: any;
+
+    if (decoded.role === 'company') {
+      data = await AccountsCompany.findById(id)
+        .select('companyName email role avatar')
+        .lean();
+      if (!data) {
+        return res.status(401).json({
+          success: false,
+          message: 'Công ty không tồn tại',
+        });
+      }
+    } else {
+      data = await AccountsUser.findById(id)
+        .select('fullName email role avatar')
+        .lean();
+      if (!data) {
+        return res.status(401).json({
+          success: false,
+          message: 'Người dùng không tồn tại',
+        });
+      }
+    }
+    req.user = { id, ...data };
     next();
   } catch (error) {
     return res.status(401).json({
@@ -91,17 +111,17 @@ export const checkUserJWT = async (
   }
 };
 
-export const checkRole = (...roles: string[]) => {
+export const checkRole = (role: string) => {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       if (!req.user) {
         return res.status(401).json({
           success: false,
-          message: 'Chưa xác thực',
+          message: 'Token không hợp lệ ',
         });
       }
 
-      if (!roles.includes(req.user.role)) {
+      if (role !== req.user.role) {
         return res.status(403).json({
           success: false,
           message: 'Bạn không có quyền truy cập',

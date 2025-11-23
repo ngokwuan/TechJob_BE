@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`POST  /auth/user/register`
+`POST  /auth/users/register`
 
 ## Request Data
 
@@ -22,8 +22,9 @@
 
 ## Status
 
-| Status | Message                      | Error Reason                          |
-| ------ | ---------------------------- | ------------------------------------- |
-| 201    | User Registration Successful | -                                     |
-| 400    | Bad Request                  | Email đã tồn tại/Dữ liệu không hợp lệ |
-| 500    | Internal Server Error        | -                                     |
+| Status | Message                      | Error Reason         |
+| ------ | ---------------------------- | -------------------- |
+| 201    | User Registration Successful | -                    |
+| 400    | Bad Request                  | Dữ liệu không hợp lệ |
+| 409    | Conflict                     | Email đã tồn tại     |
+| 500    | Internal Server Error        | -                    |
