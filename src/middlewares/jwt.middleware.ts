@@ -41,21 +41,21 @@ export const checkUserJWT = async (
   next: NextFunction
 ) => {
   try {
-    const authHeader = req.headers.authorization;
+    // const authHeader = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({
-        success: false,
-        message: 'Token không tồn tại hoặc không hợp lệ',
-      });
-    }
+    // if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    //   return res.status(401).json({
+    //     success: false,
+    //     message: 'Token không tồn tại hoặc không hợp lệ',
+    //   });
+    // }
 
-    const token = authHeader.split(' ')[1];
-
+    // const token = authHeader.split(' ')[1];
+    const token = req.cookies.token;
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: 'Token không tồn tại',
+        message: 'Token không tồn tại hoặc không hợp lệ',
       });
     }
 

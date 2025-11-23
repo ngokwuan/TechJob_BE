@@ -2,12 +2,7 @@ import { Router } from 'express';
 import * as controller from '../controllers/auth.controller';
 import { checkUserJWT } from '../middlewares/jwt.middleware';
 import { validate } from '../middlewares/validate.middleware';
-import {
-  userLoginSchema,
-  userRegisterSchema,
-  companyLoginSchema,
-  companyRegisterSchema,
-} from '../validateSchemas/auth.schema';
+import * as authSchema from '../validateSchemas/auth.schema';
 import {
   LoginInput,
   RegisterUserInput,
@@ -20,26 +15,26 @@ authRouter.get('/check', checkUserJWT, controller.checkAccount);
 // User routes
 authRouter.post(
   '/users/login',
-  validate<LoginInput>(userLoginSchema),
+  validate<LoginInput>(authSchema.userLoginSchema),
   controller.userLogin
 );
 
 authRouter.post(
   '/users/register',
-  validate<RegisterUserInput>(userRegisterSchema),
+  validate<RegisterUserInput>(authSchema.userRegisterSchema),
   controller.userRegister
 );
 
 // Company routes
 authRouter.post(
   '/companies/login',
-  validate<LoginInput>(companyLoginSchema),
+  validate<LoginInput>(authSchema.companyLoginSchema),
   controller.companyLogin
 );
 
 authRouter.post(
   '/companies/register',
-  validate<RegisterCompanyInput>(companyRegisterSchema),
+  validate<RegisterCompanyInput>(authSchema.companyRegisterSchema),
   controller.companyRegister
 );
 
