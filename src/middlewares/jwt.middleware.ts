@@ -41,16 +41,6 @@ export const checkUserJWT = async (
   next: NextFunction
 ) => {
   try {
-    // const authHeader = req.headers.authorization;
-
-    // if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    //   return res.status(401).json({
-    //     success: false,
-    //     message: 'Token không tồn tại hoặc không hợp lệ',
-    //   });
-    // }
-
-    // const token = authHeader.split(' ')[1];
     const token = req.cookies.token;
     if (!token) {
       return res.status(401).json({
@@ -59,7 +49,6 @@ export const checkUserJWT = async (
       });
     }
 
-    // Check if token is blacklisted
     const blacklisted = await isBlacklisted(token);
     if (blacklisted) {
       return res.status(401).json({

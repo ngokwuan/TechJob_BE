@@ -1,6 +1,8 @@
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { AccountsUser, IAccountsUser } from '../models/accountUser.model';
+import redis from '../config/redis';
 import {
   AccountsCompany,
   IAccountsCompany,
@@ -70,12 +72,20 @@ export const registerAccount = async (
   }
 };
 
-const blacklist = new Set<string>();
-
 export const removeToken = async (token: string) => {
-  blacklist.add(token);
+  try {
+    const decoded: any = jwt.decode(token);
+    const exp = decoded?.exp;
+
+    const ttl = exp ? exp - Math.floor(Date.now() / 1000) : 3600;
+
+    await redis.set(`blacklist:${token}`, '1', { EX: ttl });
+  } catch (err) {
+    console.error('Blacklist token error:', err);
+  }
 };
 
-export const isBlacklisted = async (token: string) => {
-  return blacklist.has(token);
+export const isBlacklisted = async (token: string): Promise<boolean> => {
+  const result = await redis.get(`blacklist:${token}`);
+  return result === '1';
 };

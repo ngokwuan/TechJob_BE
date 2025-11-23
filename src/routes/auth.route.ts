@@ -38,5 +38,4 @@ authRouter.post(
   controller.companyRegister
 );
 
-// Logout
-authRouter.post('/logout', checkUserJWT, controller.logout);
+authRouter.post('/logout', controller.logout);

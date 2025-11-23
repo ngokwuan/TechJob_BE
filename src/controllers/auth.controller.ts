@@ -38,7 +38,6 @@ export const userLogin = async (req: AuthRequest, res: Response) => {
       fullName: user.fullName,
     };
     const token = createJWT(payload);
-
     return res.status(200).json({
       success: true,
       message: 'Đăng nhập thành công',
@@ -163,18 +162,8 @@ export const companyRegister = async (req: AuthRequest, res: Response) => {
 
 export const logout = async (req: AuthRequest, res: Response) => {
   try {
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({
-        success: false,
-        message: 'Token không tồn tại hoặc không hợp lệ',
-      });
-    }
-
-    const token = authHeader.split(' ')[1];
-
-    // Thêm token vào blacklist
+    const token = req.cookies.token;
+    console.log(token);
     await removeToken(token);
 
     return res.status(200).json({
