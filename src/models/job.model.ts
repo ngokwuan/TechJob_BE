@@ -7,7 +7,7 @@ export interface IJob extends Document {
   salaryMin?: string;
   salaryMax?: string;
   position?: string;
-  workingForm?: boolean;
+  workingForm?: string;
   technologies?: string;
   description?: string;
   images?: string;
@@ -25,7 +25,7 @@ const JobSchema: Schema<IJob> = new Schema(
     salaryMin: { type: String },
     salaryMax: { type: String },
     position: { type: String },
-    workingForm: { type: Boolean },
+    workingForm: { type: String },
     technologies: { type: String },
     description: { type: String },
     images: { type: String },

@@ -24,7 +24,7 @@
 | salaryMin    | string    |          | Lương tối thiểu    |
 | salaryMax    | string    |          | Lương tối đa       |
 | position     | string    |          | Vị trí             |
-| workingForm  | boolean   |          | Hình thức làm việc |
+| workingForm  | string    |          | Hình thức làm việc |
 | technologies | string    |          | Công nghệ yêu cầu  |
 | description  | string    |          | Mô tả công việc    |
 | images       | string    |          | URL hình ảnh       |

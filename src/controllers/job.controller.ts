@@ -17,7 +17,7 @@ export const createJobController = async (req: AuthRequest, res: Response) => {
 
     return res.status(201).json({
       status: 201,
-      message: 'Create Job Successful',
+      message: 'Tạo công việc thành công',
       data: {
         jobId: job._id,
         companyId: job.companyId,
@@ -34,7 +34,7 @@ export const createJobController = async (req: AuthRequest, res: Response) => {
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: 'Internal Server Error',
+      message: 'Lỗi server, vui lòng thử lại sau',
     });
   }
 };
@@ -60,7 +60,7 @@ export const softDeleteJob = async (req: AuthRequest, res: Response) => {
     console.error(error);
     return res.status(500).json({
       success: false,
-      message: 'Lỗi server',
+      message: 'Lỗi server, vui lòng thử lại sau',
     });
   }
 };
@@ -85,7 +85,7 @@ export const forceDeleteJob = async (req: AuthRequest, res: Response) => {
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: 'Lỗi server',
+      message: 'Lỗi server, vui lòng thử lại sau',
     });
   }
 };

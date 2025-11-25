@@ -18,6 +18,7 @@ export const getCompanyProfile = async (req: AuthRequest, res: Response) => {
 
     if (!company) {
       return res.status(404).json({
+        success: false,
         message: 'Không tìm thấy người dùng',
       });
     }
@@ -29,8 +30,9 @@ export const getCompanyProfile = async (req: AuthRequest, res: Response) => {
     });
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .json({ message: 'Lỗi server, vui lòng thử lại sau' });
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server, vui lòng thử lại sau',
+    });
   }
 };
