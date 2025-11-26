@@ -51,11 +51,11 @@ AccountsUser ||--o{ CV : "submits"
        string salaryMin
        string salaryMax
        string position
-        enum workingForm
+       string workingForm
        string technologies
        string description
        string images
-        boolean isDeleted
+      boolean isDeleted
        string createdAt
        string updatedAt
     }
@@ -68,10 +68,10 @@ AccountsUser ||--o{ CV : "submits"
        string email
        string phone
        string fileCV
-        boolean viewed
-        enum status "Pending, Rejected, Accepted"
-        date createdAt
-        date updatedAt
+      boolean viewed
+       string status "Pending, Rejected, Accepted"
+         date createdAt
+         date updatedAt
     }
 
 ```

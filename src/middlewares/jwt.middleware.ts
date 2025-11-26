@@ -5,7 +5,6 @@ import { isBlacklisted } from '../services/auth.service';
 import { AccountsCompany } from '../models/accountCompany.model';
 import { AccountsUser } from '../models/accountUser.model';
 
-// Validate environment variables
 if (!process.env.JWT_SECRET_KEY) {
   throw new Error('JWT_SECRET_KEY is not defined in environment variables');
 }
