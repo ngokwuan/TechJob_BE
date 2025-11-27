@@ -2,8 +2,34 @@ import mongoose from 'mongoose';
 import { Job } from '../models/job.model';
 import { AccountsCompany } from '../models/accountCompany.model';
 
+// export const createJob = async (data: any) => {
+//   const { companyId } = data;
+//   const company = await AccountsCompany.findById(companyId);
+//   if (!company) {
+//     throw {
+//       status: 400,
+//       message: 'Company does not exist',
+//     };
+//   }
+
+//   const newJob = await Job.create({
+//     companyId: companyId,
+//     title: data.title,
+//     salaryMin: data.salaryMin,
+//     salaryMax: data.salaryMax,
+//     position: data.position,
+//     workingForm: data.workingForm,
+//     technologies: data.technologies,
+//     description: data.description,
+//     images: Array.isArray(data.images) ? data.images : [],
+//   });
+
+//   return newJob;
+// };
+
 export const createJob = async (data: any) => {
   const { companyId } = data;
+
   const company = await AccountsCompany.findById(companyId);
   if (!company) {
     throw {
@@ -13,7 +39,7 @@ export const createJob = async (data: any) => {
   }
 
   const newJob = await Job.create({
-    companyId: companyId,
+    companyId,
     title: data.title,
     salaryMin: data.salaryMin,
     salaryMax: data.salaryMax,
@@ -21,11 +47,12 @@ export const createJob = async (data: any) => {
     workingForm: data.workingForm,
     technologies: data.technologies,
     description: data.description,
-    images: data.images || null,
+    images: data.images || [],
   });
 
   return newJob;
 };
+
 export const softDeleteByJobID = async (id: string) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -57,4 +84,32 @@ export const forceDeleteByJobID = async (id: string) => {
   } catch (error) {
     throw error;
   }
+};
+export const updateJobById = async (
+  jobId: string,
+  companyId: string,
+  updateData: any
+) => {
+  const job = await Job.findById(jobId);
+  if (!job) return null;
+
+  const allowedFields = [
+    'title',
+    'salaryMin',
+    'salaryMax',
+    'position',
+    'workingForm',
+    'technologies',
+    'description',
+    'images',
+  ];
+
+  allowedFields.forEach((field) => {
+    if (updateData[field] !== undefined) {
+      (job as any)[field] = updateData[field];
+    }
+  });
+
+  const updatedJob = await job.save();
+  return updatedJob;
 };

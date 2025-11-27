@@ -2,7 +2,11 @@ import { Router } from 'express';
 import * as controller from '../controllers/job.controller';
 import { checkRole, checkUserJWT } from '../middlewares/jwt.middleware';
 import { validate } from '../middlewares/validate.middleware';
-import { createJobSchema } from '../validateSchemas/job.schema';
+import {
+  createJobSchema,
+  updateJobSchema,
+} from '../validateSchemas/job.schema';
+import { upload } from '../middlewares/upload.middleware';
 
 export const jobRouter = Router();
 
@@ -10,9 +14,11 @@ jobRouter.post(
   '/',
   checkUserJWT,
   checkRole('company'),
+  upload.array('images', 10),
   validate(createJobSchema),
   controller.createJobController
 );
+
 jobRouter.delete(
   '/:id',
   checkUserJWT,
@@ -24,4 +30,12 @@ jobRouter.delete(
   checkUserJWT,
   checkRole('company'),
   controller.forceDeleteJob
+);
+jobRouter.patch(
+  '/:jobId',
+  checkUserJWT,
+  checkRole('company'),
+  upload.array('images', 10),
+  validate(updateJobSchema),
+  controller.updateJobController
 );

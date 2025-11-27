@@ -10,7 +10,7 @@ export interface IJob extends Document {
   workingForm?: string;
   technologies?: string;
   description?: string;
-  images?: string;
+  images?: string[];
   isDeleted?: boolean;
 }
 
@@ -28,7 +28,7 @@ const JobSchema: Schema<IJob> = new Schema(
     workingForm: { type: String },
     technologies: { type: String },
     description: { type: String },
-    images: { type: String },
+    images: { type: [String], default: [] },
     isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
