@@ -31,14 +31,16 @@
 
 ## Response Data
 
-| JSON Key  | Data Type | Required | Value Description |
-| --------- | --------- | -------- | ----------------- |
-| jobId     | string    | \*       | Job ID            |
-| companyId | string    | \*       | Company ID        |
-| title     | string    | \*       | Tiêu đề công việc |
-| salaryMin | string    | \*       | Lương tối thiểu   |
-| salaryMax | string    | \*       | Lương tối đa      |
-| updatedAt | string    | \*       | Ngày cập nhật     |
+| JSON Key     | Data Type | Required | Value Description  |
+| ------------ | --------- | -------- | ------------------ |
+| title        | string    |          | Tiêu đề công việc  |
+| salaryMin    | string    |          | Lương tối thiểu    |
+| salaryMax    | string    |          | Lương tối đa       |
+| position     | string    |          | Vị trí             |
+| workingForm  | string    |          | Hình thức làm việc |
+| technologies | string    |          | Công nghệ yêu cầu  |
+| description  | string    |          | Mô tả công việc    |
+| images       | string    |          | URL hình ảnh       |
 
 ## Status
 

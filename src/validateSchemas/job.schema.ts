@@ -8,5 +8,15 @@ export const createJobSchema = z.object({
   workingForm: z.string().min(1, 'working form không được để trống'),
   technologies: z.string().min(1, 'technologies không được để trống'),
   description: z.string().min(1, 'description không được để trống'),
-  images: z.string().optional(),
+  images: z.array(z.string()).optional(),
+});
+export const updateJobSchema = z.object({
+  title: z.string().optional(),
+  salaryMin: z.string().optional(),
+  salaryMax: z.string().optional(),
+  position: z.string().optional(),
+  workingForm: z.string().optional(),
+  technologies: z.string().optional(),
+  description: z.string().optional(),
+  images: z.any().optional(),
 });
