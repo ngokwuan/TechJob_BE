@@ -4,12 +4,15 @@ import { userRouter } from './accountUser.route';
 import { jobRouter } from './job.route';
 import { cvRouter } from './cv.route';
 import { companyRouter } from './accountCompany.route';
+import { cityRouter } from './city.route';
+
 export const Routes = (app: Application): void => {
   app.use('/auth', authRouter);
   app.use('/companies/job', jobRouter);
   app.use('/companies', companyRouter);
   app.use('/users', userRouter);
   app.use('/users/cvs', cvRouter);
+  app.use('/cities', cityRouter);
   // app.use('/admin', adminRouter);
 
   app.get('/', (req: Request, res: Response) => {
