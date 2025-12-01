@@ -10,6 +10,13 @@ import { upload } from '../middlewares/upload.middleware';
 
 export const jobRouter = Router();
 
+jobRouter.get('/all', controller.getListJobWithoutRole);
+jobRouter.get(
+  '/',
+  checkUserJWT,
+  checkRole('company'),
+  controller.getListJobWithRole
+);
 jobRouter.post(
   '/',
   checkUserJWT,
