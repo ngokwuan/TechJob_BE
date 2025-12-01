@@ -44,7 +44,7 @@ export const softDeleteJob = async (req: AuthRequest, res: Response) => {
 
     return res.status(200).json({
       success: true,
-      message: 'Xóa mềm công việc thành công',
+      message: 'Đã đóng tin tuyển dụng',
       data: { id },
     });
   } catch (error) {
