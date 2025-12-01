@@ -1,14 +1,15 @@
 import { Request, Response } from 'express';
 import * as service from '../services/job.service';
 import { AuthRequest } from '../types/auth.type';
-
+import { uploadImages } from '../services/cloudinary.service';
 export const createJobController = async (req: AuthRequest, res: Response) => {
   try {
     const companyId = req.user?.id;
-    const imageFiles = req.files as Express.Multer.File[];
 
-    const imageUrls = await service.uploadImagesToCloudinary(imageFiles);
-
+    const imageUrls = await uploadImages(
+      req.files as Express.Multer.File[],
+      'jobs'
+    );
     const job = await service.createJob({
       ...req.validated,
       companyId,
@@ -86,8 +87,10 @@ export const updateJobController = async (req: AuthRequest, res: Response) => {
     const { jobId } = req.params;
     const updateData = req.validated;
     // Lấy file upload (nếu có)
-    const imageFiles = req.files as Express.Multer.File[];
-    const imageUrls = await service.uploadImagesToCloudinary(imageFiles);
+    const imageUrls = await uploadImages(
+      req.files as Express.Multer.File[],
+      'jobs'
+    );
 
     // Nếu có ảnh mới, cập nhật vào updateData
     if (imageUrls.length > 0) {

@@ -3,34 +3,34 @@ import { Job } from '../models/job.model';
 import { AccountsCompany } from '../models/accountCompany.model';
 import cloudinary from '../config/cloudinary';
 
-export const uploadImagesToCloudinary = async (
-  files: Express.Multer.File[],
-  folder = 'jobs'
-): Promise<string[]> => {
-  const imageUrls: string[] = [];
+// export const uploadImagesToCloudinary = async (
+//   files: Express.Multer.File[],
+//   folder = 'jobs'
+// ): Promise<string[]> => {
+//   const imageUrls: string[] = [];
 
-  if (!files || files.length === 0) return imageUrls;
+//   if (!files || files.length === 0) return imageUrls;
 
-  for (const file of files) {
-    const result: any = await new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        {
-          folder,
-          resource_type: 'image',
-        },
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        }
-      );
-      stream.end(file.buffer);
-    });
+//   for (const file of files) {
+//     const result: any = await new Promise((resolve, reject) => {
+//       const stream = cloudinary.uploader.upload_stream(
+//         {
+//           folder,
+//           resource_type: 'image',
+//         },
+//         (error, result) => {
+//           if (error) reject(error);
+//           else resolve(result);
+//         }
+//       );
+//       stream.end(file.buffer);
+//     });
 
-    imageUrls.push(result.secure_url);
-  }
+//     imageUrls.push(result.secure_url);
+//   }
 
-  return imageUrls;
-};
+//   return imageUrls;
+// };
 export const createJob = async (data: any) => {
   const { companyId } = data;
 

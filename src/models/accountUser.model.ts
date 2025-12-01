@@ -6,8 +6,6 @@ export interface IAccountsUser extends Document {
   email: string;
   password: string;
   phone?: string;
-  address?: string;
-  dateOfBirth?: Date;
   gender?: string;
   avatar?: string;
   status?: string;
@@ -21,8 +19,6 @@ const AccountsUserSchema = new Schema<IAccountsUser>(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     phone: { type: String },
-    address: { type: String },
-    dateOfBirth: { type: Date },
     gender: { type: String },
     avatar: { type: String },
     status: { type: String },

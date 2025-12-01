@@ -18,6 +18,7 @@
 | email    | string    |          | Email             |
 | phone    | string    |          | SDT               |
 | avatar   | string    |          | Ảnh đại diện      |
+| gender   | string    |          | Giới tính         |
 
 ## Response Data
 
@@ -27,6 +28,7 @@
 | email    | string    |          | Email             |
 | phone    | string    |          | SDT               |
 | avatar   | string    |          | Ảnh đại diện      |
+| gender   | string    |          | Giới tính         |
 
 ## Status
 
