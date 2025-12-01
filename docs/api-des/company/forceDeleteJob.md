@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`DELETE /companies/jobs/:jobId/force`
+`DELETE /jobs/:jobId/force`
 
 ## Cookies
 

@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`GET /companies/cvs/:cvId`
+`GET cvs/:cvId`
 
 ## Cookies
 

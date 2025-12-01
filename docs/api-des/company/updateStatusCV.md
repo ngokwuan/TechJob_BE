@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`PUT /companies/cvs/:cvId`
+`PUT /cvs/:cvId`
 
 ## Cookies
 

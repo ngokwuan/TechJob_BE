@@ -13,3 +13,10 @@ cvRouter.post(
   validate(createCVSchema),
   controller.createCVController
 );
+cvRouter.get(
+  '/:cvId',
+  checkUserJWT,
+  checkRole('company'),
+  controller.getDetailCV
+);
+cvRouter.get('/', checkUserJWT, checkRole('user'), controller.getDetailCVUser);

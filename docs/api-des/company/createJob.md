@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`POST /companies/jobs`
+`POST /jobs`
 
 ## Cookies
 

@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`GET /companies/jobs/`
+`GET /jobs/`
 
 ## Cookies
 

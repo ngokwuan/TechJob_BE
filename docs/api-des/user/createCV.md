@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`POST /users/cvs/`
+`POST /cvs/`
 
 ## Cookies
 

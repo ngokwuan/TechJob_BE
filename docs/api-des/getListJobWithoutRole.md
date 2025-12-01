@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`GET /companies/jobs/all`
+`GET /jobs/all`
 
 ## Request Data
 
