@@ -1,14 +1,15 @@
 import { Request, Response } from 'express';
 import * as service from '../services/job.service';
 import { AuthRequest } from '../types/auth.type';
-
+import { uploadImages } from '../services/cloudinary.service';
 export const createJobController = async (req: AuthRequest, res: Response) => {
   try {
     const companyId = req.user?.id;
-    const imageFiles = req.files as Express.Multer.File[];
 
-    const imageUrls = await service.uploadImagesToCloudinary(imageFiles);
-
+    const imageUrls = await uploadImages(
+      req.files as Express.Multer.File[],
+      'jobs'
+    );
     const job = await service.createJob({
       ...req.validated,
       companyId,
@@ -79,15 +80,16 @@ export const forceDeleteJob = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
 export const updateJobController = async (req: AuthRequest, res: Response) => {
   try {
     const companyId = String(req.user?.id);
     const { jobId } = req.params;
     const updateData = req.validated;
     // Lấy file upload (nếu có)
-    const imageFiles = req.files as Express.Multer.File[];
-    const imageUrls = await service.uploadImagesToCloudinary(imageFiles);
+    const imageUrls = await uploadImages(
+      req.files as Express.Multer.File[],
+      'jobs'
+    );
 
     // Nếu có ảnh mới, cập nhật vào updateData
     if (imageUrls.length > 0) {
@@ -111,6 +113,65 @@ export const updateJobController = async (req: AuthRequest, res: Response) => {
       success: true,
       message: 'Cập nhật công việc thành công',
       data: updatedJob,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server, vui lòng thử lại sau',
+    });
+  }
+};
+export const getListJobWithoutRole = async (
+  req: AuthRequest,
+  res: Response
+) => {
+  try {
+    const { companyId } = req.body;
+
+    if (!companyId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Không xác thực công ty',
+      });
+    }
+
+    const jobs = await service.getJobsWithoutRole(companyId);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Lấy danh sách công việc thành công',
+      data: jobs,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server, vui lòng thử lại sau',
+    });
+  }
+};
+export const getListJobWithRole = async (req: AuthRequest, res: Response) => {
+  try {
+    const companyId = req.user?.id;
+    if (!companyId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Không xác thực công ty',
+      });
+    }
+    const jobs = await service.getJobsByCompanyId(companyId);
+    if (!jobs) {
+      return res.status(404).json({
+        success: false,
+        message: 'Không tồn tài công việc nào',
+      });
+    }
+    const totalJob = jobs.length;
+    return res.status(200).json({
+      success: true,
+      message: 'Lấy danh sách công việc thành công',
+      data: { totalJob, jobs },
     });
   } catch (error) {
     console.error(error);

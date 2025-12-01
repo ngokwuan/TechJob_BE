@@ -8,7 +8,7 @@ import { cityRouter } from './city.route';
 
 export const Routes = (app: Application): void => {
   app.use('/auth', authRouter);
-  app.use('/companies/job', jobRouter);
+  app.use('/companies/jobs', jobRouter);
   app.use('/companies', companyRouter);
   app.use('/users', userRouter);
   app.use('/users/cvs', cvRouter);

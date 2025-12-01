@@ -1,36 +1,7 @@
 import mongoose from 'mongoose';
 import { Job } from '../models/job.model';
 import { AccountsCompany } from '../models/accountCompany.model';
-import cloudinary from '../config/cloudinary';
 
-export const uploadImagesToCloudinary = async (
-  files: Express.Multer.File[],
-  folder = 'jobs'
-): Promise<string[]> => {
-  const imageUrls: string[] = [];
-
-  if (!files || files.length === 0) return imageUrls;
-
-  for (const file of files) {
-    const result: any = await new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        {
-          folder,
-          resource_type: 'image',
-        },
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        }
-      );
-      stream.end(file.buffer);
-    });
-
-    imageUrls.push(result.secure_url);
-  }
-
-  return imageUrls;
-};
 export const createJob = async (data: any) => {
   const { companyId } = data;
 
@@ -116,4 +87,53 @@ export const updateJobById = async (
 
   const updatedJob = await job.save();
   return updatedJob;
+};
+export const getJobsWithoutRole = async (companyId: string) => {
+  return Job.find({
+    companyId,
+    isDeleted: false,
+  }).sort({ createdAt: -1 });
+};
+
+export const getJobsByCompanyId = async (companyId: string) => {
+  const jobs = await Job.aggregate([
+    {
+      $match: {
+        companyId: new mongoose.Types.ObjectId(companyId),
+        isDeleted: false,
+      },
+    },
+
+    // Join CV để đếm số lượng
+    {
+      $lookup: {
+        from: 'cv', // TÊN COLLECTION CV
+        localField: '_id', // Job._id
+        foreignField: 'jobId', // CV.jobId
+        as: 'cvList',
+      },
+    },
+
+    // Thêm field totalApplicants
+    {
+      $addFields: {
+        totalApplicants: { $size: '$cvList' },
+      },
+    },
+
+    {
+      $project: {
+        jobId: '$_id',
+        title: 1,
+        isDeleted: 1,
+        workingForm: 1,
+        createdAt: 1,
+        totalApplicants: 1,
+        _id: 0, // không trả về _id vì đã map thành jobId
+      },
+    },
+
+    { $sort: { createdAt: -1 } },
+  ]);
+  return jobs;
 };
