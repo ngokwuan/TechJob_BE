@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`GET /companies/jobs/:jobId`
+`GET /jobs/:jobId`
 
 ## Path Parameters
 

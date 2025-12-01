@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`DELETE /companies/jobs/:jobId`
+`DELETE /jobs/:jobId`
 
 ## Cookies
 
@@ -26,7 +26,7 @@
 
 | Status | Message               | Error Reason               |
 | ------ | --------------------- | -------------------------- |
-| 200    | Delete Job Successful | -                          |
+| 200    | Successful            | -                          |
 | 401    | Unauthorized          | Token không hợp lệ         |
 | 403    | Forbidden             | Không có quyền xóa job này |
 | 404    | Not Found             | Job không tồn tại          |

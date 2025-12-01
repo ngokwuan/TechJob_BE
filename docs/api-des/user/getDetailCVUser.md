@@ -1,4 +1,4 @@
-# Get Cv Detail
+# Get Cv Detail with user
 
 ## Endpoint
 
@@ -10,11 +10,11 @@
 | ------ | ------- |
 | token  | {token} |
 
-## Path Parameters
+## Request data
 
-| Parameter | Data Type | Required | Value Description |
-| --------- | --------- | -------- | ----------------- |
-| cvId      | string    | \*       | Cv ID             |
+| JSON Key | Data Type | Required | Value Description |
+| -------- | --------- | -------- | ----------------- |
+| cvId     | string    | \*       | Cv ID             |
 
 ## Response Data
 

@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`DELETE /users/cvs/:cvId`
+`DELETE /cvs/:cvId`
 
 ## Cookies
 

@@ -22,3 +22,15 @@ export const createCV = async (data: any) => {
 
   return newCV;
 };
+
+export const findAndChangeViewedCV = async (cvId: string) => {
+  const cv = await CV.findById(cvId).lean();
+  if (!cv?.viewed) {
+    await CV.findByIdAndUpdate(cvId, { viewed: true });
+  }
+  return cv;
+};
+export const findCV = async (cvId: string) => {
+  const cv = await CV.findById(cvId).lean();
+  return cv;
+};
