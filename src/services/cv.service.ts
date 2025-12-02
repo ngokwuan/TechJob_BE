@@ -34,3 +34,6 @@ export const findCV = async (cvId: string) => {
   const cv = await CV.findById(cvId).lean();
   return cv;
 };
+export const updateStatus = async (cvId: string, status: string) => {
+  return await CV.findByIdAndUpdate(cvId, { status }, { new: true }).lean();
+};

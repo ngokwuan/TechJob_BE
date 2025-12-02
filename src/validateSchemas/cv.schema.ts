@@ -7,3 +7,12 @@ export const createCVSchema = z.object({
   fileCV: z.string().url('fileCV phải là URL hợp lệ'),
   jobId: z.string().min(1, 'jobID không được để trống'),
 });
+export const updateStatusSchema = z.object({
+  status: z.union([
+    z.literal('Pending'),
+    z.literal('Rejected'),
+    z.literal('Accepted'),
+  ]),
+});
+
+export type UpdateStatusCVInput = z.infer<typeof updateStatusSchema>;

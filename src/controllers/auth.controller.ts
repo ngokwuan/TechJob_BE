@@ -163,7 +163,6 @@ export const companyRegister = async (req: AuthRequest, res: Response) => {
 export const logout = async (req: AuthRequest, res: Response) => {
   try {
     const token = req.cookies.token;
-    console.log(token);
     await removeToken(token);
 
     return res.status(200).json({
