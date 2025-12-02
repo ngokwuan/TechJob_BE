@@ -181,3 +181,29 @@ export const getListJobWithRole = async (req: AuthRequest, res: Response) => {
     });
   }
 };
+export const getDetailJob=async (req: AuthRequest, res: Response) =>{
+  try{
+  const { jobId } = req.params;
+
+    if (!jobId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Không xác thực công việc',
+      });
+    }
+
+    const jobs = await service.getJob(jobId);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Lấy  công việc thành công',
+      data: jobs,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server, vui lòng thử lại sau',
+    });
+  }
+}

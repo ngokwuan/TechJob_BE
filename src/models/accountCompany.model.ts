@@ -8,7 +8,7 @@ export interface IAccountsCompany extends Document {
   email: string;
   password: string;
   address?: string;
-  cityID?: mongoose.Types.ObjectId;
+  cityId?: mongoose.Types.ObjectId;
   companyEmployees?: string;
   companyModel?: string;
   description?: string;
@@ -27,7 +27,7 @@ const AccountsCompanySchema = new Schema<IAccountsCompany>(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     address: { type: String },
-    cityID: { type: mongoose.Schema.Types.ObjectId, ref: 'City' },
+    cityId: { type: mongoose.Schema.Types.ObjectId, ref: 'City' },
     companyEmployees: { type: String },
     companyModel: { type: String },
     description: { type: String },
