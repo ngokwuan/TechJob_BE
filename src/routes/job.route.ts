@@ -11,6 +11,7 @@ import { upload } from '../middlewares/upload.middleware';
 export const jobRouter = Router();
 
 jobRouter.get('/all', controller.getListJobWithoutRole);
+jobRouter.get('/:jobId', controller.getDetailJob);
 jobRouter.get(
   '/',
   checkUserJWT,

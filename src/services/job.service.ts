@@ -137,3 +137,6 @@ export const getJobsByCompanyId = async (companyId: string) => {
   ]);
   return jobs;
 };
+export const getJob = async (jobId: string) => {
+  return await Job.findById(jobId);
+};
