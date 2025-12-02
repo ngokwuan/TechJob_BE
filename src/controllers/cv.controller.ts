@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { AuthRequest } from '../types/auth.type';
 import * as service from '../services/cv.service';
-
+import { UpdateStatusCVInput } from '../validateSchemas/cv.schema';
 export const createCVController = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.user?.id;
@@ -71,6 +71,30 @@ export const getDetailCVUser = async (req: AuthRequest, res: Response) => {
     return res.status(200).json({
       success: true,
       message: 'Lấy chi tiết CV thành công',
+      data: cv,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server, vui lòng thử lại sau ',
+    });
+  }
+};
+export const updateStatusCV = async (req: AuthRequest, res: Response) => {
+  try {
+    const cvId = req.params.cvId;
+    const { status } = req.validated as UpdateStatusCVInput;
+    const cv = await service.updateStatus(cvId, status);
+    if (!cv) {
+      return res.status(404).json({
+        success: false,
+        message: 'CV không tồn tại ',
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: 'Cập nhật status CV thành công',
       data: cv,
     });
   } catch (error) {

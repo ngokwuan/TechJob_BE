@@ -42,7 +42,7 @@ export const getCompanyProfile = async (req: AuthRequest, res: Response) => {
 };
 export const updateCompanyProfile = async (req: AuthRequest, res: Response) => {
   try {
-    const id = req.user?.id;
+    const id = String(req.user?.id);
     const {
       companyName,
       address,
@@ -54,21 +54,6 @@ export const updateCompanyProfile = async (req: AuthRequest, res: Response) => {
       workOverTime,
       workingTime,
     } = req.validated;
-
-    if (!id) {
-      return res.status(401).json({
-        success: false,
-        message: 'Không xác thực công ty ',
-      });
-    }
-
-    const company: IAccountsCompany | null = await getCompanyById(id);
-    if (!company) {
-      return res.status(404).json({
-        success: false,
-        message: 'Người dùng không tồn tại',
-      });
-    }
 
     let logoUrl: string | undefined;
 
@@ -88,6 +73,12 @@ export const updateCompanyProfile = async (req: AuthRequest, res: Response) => {
       ...(logoUrl && { logo: logoUrl }),
     });
 
+    if (!updatedCompany) {
+      return res.status(404).json({
+        success: false,
+        message: 'Công ty không tồn tại',
+      });
+    }
     return res.status(200).json({
       success: true,
       message: 'Cập nhật thông tin công ty thành công',
