@@ -1,7 +1,11 @@
 import { AuthRequest } from '../types/auth.type';
 import { Response } from 'express';
-import { getCompanyById } from '../services/accountCompany.service';
+import {
+  getCompanyById,
+  updateCompanyById,
+} from '../services/accountCompany.service';
 import { IAccountsCompany } from '../models/accountCompany.model';
+import { uploadImage } from '../services/cloudinary.service';
 
 export const getCompanyProfile = async (req: AuthRequest, res: Response) => {
   try {
@@ -10,7 +14,7 @@ export const getCompanyProfile = async (req: AuthRequest, res: Response) => {
     if (!id) {
       return res.status(401).json({
         success: false,
-        message: 'Không xác thực người dùng',
+        message: 'Không xác thực công ty',
       });
     }
 
@@ -27,6 +31,67 @@ export const getCompanyProfile = async (req: AuthRequest, res: Response) => {
       success: true,
       message: 'Lấy thông tin người dùng thành công',
       data: company,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server, vui lòng thử lại sau',
+    });
+  }
+};
+export const updateCompanyProfile = async (req: AuthRequest, res: Response) => {
+  try {
+    const id = req.user?.id;
+    const {
+      companyName,
+      address,
+      cityId,
+      companyEmployees,
+      companyModel,
+      description,
+      phone,
+      workOverTime,
+      workingTime,
+    } = req.validated;
+
+    if (!id) {
+      return res.status(401).json({
+        success: false,
+        message: 'Không xác thực công ty ',
+      });
+    }
+
+    const company: IAccountsCompany | null = await getCompanyById(id);
+    if (!company) {
+      return res.status(404).json({
+        success: false,
+        message: 'Người dùng không tồn tại',
+      });
+    }
+
+    let logoUrl: string | undefined;
+
+    if (req.file) {
+      logoUrl = await uploadImage(req.file, 'company-logo');
+    }
+    const updatedCompany = await updateCompanyById(id, {
+      companyName,
+      address,
+      cityId,
+      companyEmployees,
+      companyModel,
+      description,
+      phone,
+      workOverTime,
+      workingTime,
+      ...(logoUrl && { logo: logoUrl }),
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Cập nhật thông tin công ty thành công',
+      data: updatedCompany,
     });
   } catch (error) {
     console.error(error);
