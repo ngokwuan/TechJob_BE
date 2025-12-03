@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`PUT /jobs/:jobId`
+`PATCH /jobs/:jobId`
 
 ## Cookies
 
