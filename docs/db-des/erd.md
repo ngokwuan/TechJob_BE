@@ -48,8 +48,8 @@ AccountsUser ||--o{ CV : "submits"
        string jobId PK
        string companyId FK
        string title
-       string salaryMin
-       string salaryMax
+       number salaryMin
+       number salaryMax
        string position
        string workingForm
        string technologies

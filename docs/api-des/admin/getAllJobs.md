@@ -12,8 +12,8 @@
 | jobs[].jobId        | string    | \*       | Job ID                                           |
 | jobs[].companyId    | string    | \*       | Company ID                                       |
 | jobs[].title        | string    | \*       | Tiêu đề công việc                                |
-| jobs[].salaryMin    | string    | \*       | Lương tối thiểu                                  |
-| jobs[].salaryMax    | string    | \*       | Lương tối đa                                     |
+| jobs[].salaryMin    | number    | \*       | Lương tối thiểu                                  |
+| jobs[].salaryMax    | number    | \*       | Lương tối đa                                     |
 | jobs[].position     | string    | \*       | Vị trí                                           |
 | jobs[].workingForm  | boolean   | \*       | Hình thức làm việc (true: remote, false: office) |
 | jobs[].technologies | string    | \*       | Công nghệ yêu cầu                                |
