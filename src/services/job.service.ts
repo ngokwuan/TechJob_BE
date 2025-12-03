@@ -100,16 +100,15 @@ export const getJobsByCompanyId = async (companyId: string) => {
     {
       $match: {
         companyId: new mongoose.Types.ObjectId(companyId),
-        isDeleted: false,
       },
     },
 
     // Join CV để đếm số lượng
     {
       $lookup: {
-        from: 'cv', // TÊN COLLECTION CV
-        localField: '_id', // Job._id
-        foreignField: 'jobId', // CV.jobId
+        from: 'cv',
+        localField: '_id',
+        foreignField: 'jobId',
         as: 'cvList',
       },
     },
