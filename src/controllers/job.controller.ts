@@ -58,15 +58,14 @@ export const softDeleteJob = async (req: AuthRequest, res: Response) => {
 export const forceDeleteJob = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
-
-    const job = await service.forceDeleteByJobID(id);
-
+    const job = service.checkExistJob(id);
     if (!job) {
       return res.status(404).json({
         success: false,
         message: 'Không tìm thấy công việc',
       });
     }
+    await service.forceDeleteByJobID(id);
 
     return res.status(200).json({
       success: true,
@@ -181,9 +180,9 @@ export const getListJobWithRole = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-export const getDetailJob=async (req: AuthRequest, res: Response) =>{
-  try{
-  const { jobId } = req.params;
+export const getDetailJob = async (req: AuthRequest, res: Response) => {
+  try {
+    const { jobId } = req.params;
 
     if (!jobId) {
       return res.status(401).json({
@@ -206,4 +205,4 @@ export const getDetailJob=async (req: AuthRequest, res: Response) =>{
       message: 'Lỗi server, vui lòng thử lại sau',
     });
   }
-}
+};

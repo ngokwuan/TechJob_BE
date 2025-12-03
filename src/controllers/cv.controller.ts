@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { AuthRequest } from '../types/auth.type';
 import * as service from '../services/cv.service';
+import { checkExistJob } from '../services/job.service';
 import { UpdateStatusCVInput } from '../validateSchemas/cv.schema';
 export const createCVController = async (req: AuthRequest, res: Response) => {
   try {
@@ -9,7 +10,7 @@ export const createCVController = async (req: AuthRequest, res: Response) => {
       ...req.validated,
       userId,
     };
-    const job = await service.checkExistJob(cvData.jobId);
+    const job = await checkExistJob(cvData.jobId);
     if (!job) {
       return res.status(404).json({
         success: false,
@@ -102,6 +103,31 @@ export const updateStatusCV = async (req: AuthRequest, res: Response) => {
     return res.status(500).json({
       success: false,
       message: 'Lỗi server, vui lòng thử lại sau ',
+    });
+  }
+};
+export const deleteCV = async (req: AuthRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const cv = await service.checkExistCV(id);
+    console.log(cv);
+    if (!cv) {
+      return res.status(404).json({
+        success: false,
+        message: 'Không tìm thấy CV',
+      });
+    }
+    await service.deleteByCVId(id);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Xóa vĩnh viễn CV thành công',
+      data: { id },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server, vui lòng thử lại sau',
     });
   }
 };

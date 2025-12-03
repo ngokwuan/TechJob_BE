@@ -9,7 +9,12 @@ import {
 
 export const cvRouter = Router();
 cvRouter.get('/', checkUserJWT, checkRole('user'), controller.getDetailCVUser);
-
+cvRouter.delete(
+  '/:id',
+  checkUserJWT,
+  checkRole('company'),
+  controller.deleteCV
+);
 cvRouter.post(
   '/',
   checkUserJWT,
