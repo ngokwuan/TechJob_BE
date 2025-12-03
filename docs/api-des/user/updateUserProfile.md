@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`PUT /users`
+`PATCH /users`
 
 ## Cookies
 

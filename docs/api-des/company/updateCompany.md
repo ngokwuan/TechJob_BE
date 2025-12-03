@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`PUT /companies/profile`
+`PATCH /companies/`
 
 ## Cookies
 
