@@ -1,7 +1,14 @@
 import mongoose from 'mongoose';
 import { Job } from '../models/job.model';
 import { AccountsCompany } from '../models/accountCompany.model';
+export const checkExistJob = async (jobId: string) => {
+  const job = await Job.findById(jobId);
+  if (!job || job.isDeleted) {
+    return null;
+  }
 
+  return job;
+};
 export const createJob = async (data: any) => {
   const { companyId } = data;
 

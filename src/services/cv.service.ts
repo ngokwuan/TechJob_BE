@@ -1,14 +1,4 @@
 import { CV } from '../models/cv.model';
-import { Job } from '../models/job.model';
-
-export const checkExistJob = async (jobId: string) => {
-  const job = await Job.findById(jobId);
-  if (!job || job.isDeleted) {
-    return null;
-  }
-
-  return job;
-};
 
 export const createCV = async (data: any) => {
   const newCV = await CV.create({
@@ -22,7 +12,9 @@ export const createCV = async (data: any) => {
 
   return newCV;
 };
-
+export const checkExistCV = async (id: string) => {
+  return await CV.findById(id);
+};
 export const findAndChangeViewedCV = async (cvId: string) => {
   const cv = await CV.findById(cvId).lean();
   if (!cv?.viewed) {
@@ -36,4 +28,13 @@ export const findCV = async (cvId: string) => {
 };
 export const updateStatus = async (cvId: string, status: string) => {
   return await CV.findByIdAndUpdate(cvId, { status }, { new: true }).lean();
+};
+
+export const deleteByCVId = async (id: string) => {
+  try {
+    await CV.findByIdAndDelete(id);
+    return id;
+  } catch (error) {
+    throw error;
+  }
 };
