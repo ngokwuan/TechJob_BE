@@ -6,7 +6,9 @@ import {
 export const getCompanyById = async (
   id: string
 ): Promise<IAccountsCompany | null> => {
-  return AccountsCompany.findById(id).select('companyName email role logo');
+  return AccountsCompany.findById(id).select(
+    'companyName address cityId companyEmployees companyModel description phone workOverTime workingTime logo'
+  );
 };
 export const updateCompanyById = async (
   id: string,
