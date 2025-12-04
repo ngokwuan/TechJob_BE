@@ -6,7 +6,7 @@ import {
   createCVSchema,
   updateStatusSchema,
 } from '../validateSchemas/cv.schema';
-
+import { upload } from '../middlewares/upload.middleware';
 export const cvRouter = Router();
 cvRouter.get('/', checkUserJWT, checkRole('user'), controller.getDetailCVUser);
 cvRouter.delete(
@@ -15,13 +15,22 @@ cvRouter.delete(
   checkRole('company'),
   controller.deleteCV
 );
+// cvRouter.post(
+//   '/',
+//   checkUserJWT,
+//   checkRole('user'),
+//   validate(createCVSchema),
+//   controller.createCVController
+// );
 cvRouter.post(
   '/',
   checkUserJWT,
   checkRole('user'),
+  upload.single('fileCV'),
   validate(createCVSchema),
   controller.createCVController
 );
+
 cvRouter.patch(
   '/:cvId',
   checkUserJWT,

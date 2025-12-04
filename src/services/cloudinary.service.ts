@@ -1,6 +1,4 @@
-// services/upload.service.ts
 import cloudinary from '../config/cloudinary';
-import { Express } from 'express';
 
 export const uploadImage = async (
   file: Express.Multer.File,
@@ -32,4 +30,23 @@ export const uploadImages = async (
     urls.push(url);
   }
   return urls;
+};
+export const uploadCV = (file: Express.Multer.File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: 'cv',
+        resource_type: 'raw',
+        public_id: file.originalname.split('.')[0],
+        format: 'pdf',
+      },
+      (error, result) => {
+        if (error || !result) {
+          return reject(error || new Error('Upload CV thất bại'));
+        }
+        resolve(result.secure_url);
+      }
+    );
+    stream.end(file.buffer);
+  });
 };
