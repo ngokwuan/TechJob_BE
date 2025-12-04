@@ -4,35 +4,6 @@ import * as service from '../services/cv.service';
 import { checkExistJob } from '../services/job.service';
 import { UpdateStatusCVInput } from '../validateSchemas/cv.schema';
 import { uploadCV } from '../services/cloudinary.service';
-// export const createCVController = async (req: AuthRequest, res: Response) => {
-//   try {
-//     const userId = req.user?.id;
-//     const cvData = {
-//       ...req.validated,
-//       userId,
-//     };
-//     const job = await checkExistJob(cvData.jobId);
-//     if (!job) {
-//       return res.status(404).json({
-//         success: false,
-//         message: 'Công việc không tồn tại',
-//       });
-//     }
-
-//     const cv = await service.createCV(cvData);
-
-//     return res.status(201).json({
-//       success: true,
-//       message: 'Tạo CV thành công',
-//       data: cv,
-//     });
-//   } catch (error: any) {
-//     return res.status(500).json({
-//       success: false,
-//       message: 'Lỗi server, vui lòng thử lại sau ',
-//     });
-//   }
-// };
 
 export const createCVController = async (req: AuthRequest, res: Response) => {
   try {
@@ -147,6 +118,40 @@ export const updateStatusCV = async (req: AuthRequest, res: Response) => {
     return res.status(500).json({
       success: false,
       message: 'Lỗi server, vui lòng thử lại sau ',
+    });
+  }
+};
+export const updateCV = async (req: AuthRequest, res: Response) => {
+  try {
+    const { cvId } = req.params;
+    const updateData = req.validated;
+    const existCV = await service.checkExistCV(cvId);
+    if (!existCV) {
+      return res.status(404).json({
+        success: false,
+        message: 'CV không tồn tại ',
+      });
+    }
+    if (req.file) {
+      const file = req.file;
+      const fileCVUrl = await uploadCV(file);
+      if (fileCVUrl.length > 0) {
+        updateData.fileCV = fileCVUrl;
+      }
+    }
+
+    const updatedCV = await service.updateCV(cvId, updateData);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Cập nhật CV thành công',
+      data: updatedCV,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server, vui lòng thử lại sau',
     });
   }
 };

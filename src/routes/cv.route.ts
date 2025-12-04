@@ -4,6 +4,7 @@ import { checkUserJWT, checkRole } from '../middlewares/jwt.middleware';
 import { validate } from '../middlewares/validate.middleware';
 import {
   createCVSchema,
+  updateCVSchema,
   updateStatusSchema,
 } from '../validateSchemas/cv.schema';
 import { upload } from '../middlewares/upload.middleware';
@@ -15,13 +16,7 @@ cvRouter.delete(
   checkRole('company'),
   controller.deleteCV
 );
-// cvRouter.post(
-//   '/',
-//   checkUserJWT,
-//   checkRole('user'),
-//   validate(createCVSchema),
-//   controller.createCVController
-// );
+
 cvRouter.post(
   '/',
   checkUserJWT,
@@ -29,6 +24,14 @@ cvRouter.post(
   upload.single('fileCV'),
   validate(createCVSchema),
   controller.createCVController
+);
+cvRouter.patch(
+  '/:cvId',
+  checkUserJWT,
+  checkRole('user'),
+  upload.single('fileCV'),
+  validate(updateCVSchema),
+  controller.updateCV
 );
 
 cvRouter.patch(

@@ -29,6 +29,20 @@ export const findCV = async (cvId: string) => {
 export const updateStatus = async (cvId: string, status: string) => {
   return await CV.findByIdAndUpdate(cvId, { status }, { new: true }).lean();
 };
+export const updateCV = async (cvId: string, updateData: any) => {
+  const cv = await CV.findById(cvId);
+  if (!cv) return null;
+  const allowedFields = ['fullName', 'email', 'phone', 'fileCV'];
+
+  allowedFields.forEach((field) => {
+    if (updateData[field] !== undefined) {
+      (cv as any)[field] = updateData[field];
+    }
+  });
+
+  const updatedJob = await cv.save();
+  return updatedJob;
+};
 
 export const deleteByCVId = async (id: string) => {
   try {

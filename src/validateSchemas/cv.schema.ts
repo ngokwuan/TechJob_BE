@@ -6,6 +6,11 @@ export const createCVSchema = z.object({
   phone: z.string().min(1, 'phone không được để trống'),
   jobId: z.string().min(1, 'jobID không được để trống'),
 });
+export const updateCVSchema = z.object({
+  fullName: z.string().optional(),
+  email: z.string().optional(),
+  phone: z.string().optional(),
+});
 
 export const updateStatusSchema = z.object({
   status: z.union([
