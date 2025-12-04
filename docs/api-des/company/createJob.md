@@ -16,7 +16,7 @@
 | ------------ | --------- | -------- | ------------------ |
 | title        | string    | \*       | Tiêu đề công việc  |
 | companyID    | string    | \*       | ID Công ty         |
-| salaryMin    | number    | \*       | Lương tối thiểu    |
+| salaryMin    | string    | \*       | Lương tối thiểu    |
 | salaryMax    | number    | \*       | Lương tối đa       |
 | position     | string    | \*       | Vị trí             |
 | workingForm  | string    | \*       | Hình thức làm việc |
@@ -31,7 +31,7 @@
 | jobId        | string    | \*       | Job ID             |
 | companyId    | string    | \*       | ID Công ty         |
 | title        | string    | \*       | Tiêu đề công việc  |
-| salaryMin    | number    | \*       | Lương tối thiểu    |
+| salaryMin    | string    | \*       | Lương tối thiểu    |
 | salaryMax    | number    | \*       | Lương tối đa       |
 | position     | string    | \*       | Vị trí             |
 | workingForm  | boolean   | \*       | Hình thức làm việc |
