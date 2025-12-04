@@ -21,7 +21,7 @@
 | JSON Key     | Data Type | Required | Value Description  |
 | ------------ | --------- | -------- | ------------------ |
 | title        | string    |          | Tiêu đề công việc  |
-| salaryMin    | number    |          | Lương tối thiểu    |
+| salaryMin    | string    |          | Lương tối thiểu    |
 | salaryMax    | number    |          | Lương tối đa       |
 | position     | string    |          | Vị trí             |
 | workingForm  | string    |          | Hình thức làm việc |
@@ -34,7 +34,7 @@
 | JSON Key     | Data Type | Required | Value Description  |
 | ------------ | --------- | -------- | ------------------ |
 | title        | string    |          | Tiêu đề công việc  |
-| salaryMin    | number    |          | Lương tối thiểu    |
+| salaryMin    | string    |          | Lương tối thiểu    |
 | salaryMax    | number    |          | Lương tối đa       |
 | position     | string    |          | Vị trí             |
 | workingForm  | string    |          | Hình thức làm việc |

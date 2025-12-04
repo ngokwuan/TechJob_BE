@@ -1,15 +1,31 @@
 import { Response } from 'express';
 import { AuthRequest } from '../types/auth.type';
 import * as service from '../services/cv.service';
-import { checkExistJob } from '../services/job.service';
+import { checkExistJob, getJobsWithoutRole } from '../services/job.service';
 import { UpdateStatusCVInput } from '../validateSchemas/cv.schema';
+import { uploadCV } from '../services/cloudinary.service';
+import { Job } from '../models/job.model';
+import { CV } from '../models/cv.model';
 export const createCVController = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.user?.id;
+
+    const file = req.file;
+    if (!file) {
+      return res.status(400).json({
+        success: false,
+        message: 'Bạn phải tải lên file CV (PDF)',
+      });
+    }
+
+    const fileCVUrl = await uploadCV(file);
+
     const cvData = {
       ...req.validated,
       userId,
+      fileCV: fileCVUrl,
     };
+
     const job = await checkExistJob(cvData.jobId);
     if (!job) {
       return res.status(404).json({
@@ -32,7 +48,6 @@ export const createCVController = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
 export const getDetailCV = async (req: AuthRequest, res: Response) => {
   try {
     const cvId = req.params.cvId;
@@ -106,6 +121,40 @@ export const updateStatusCV = async (req: AuthRequest, res: Response) => {
     });
   }
 };
+export const updateCV = async (req: AuthRequest, res: Response) => {
+  try {
+    const { cvId } = req.params;
+    const updateData = req.validated;
+    const existCV = await service.checkExistCV(cvId);
+    if (!existCV) {
+      return res.status(404).json({
+        success: false,
+        message: 'CV không tồn tại ',
+      });
+    }
+    if (req.file) {
+      const file = req.file;
+      const fileCVUrl = await uploadCV(file);
+      if (fileCVUrl.length > 0) {
+        updateData.fileCV = fileCVUrl;
+      }
+    }
+
+    const updatedCV = await service.updateCV(cvId, updateData);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Cập nhật CV thành công',
+      data: updatedCV,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server, vui lòng thử lại sau',
+    });
+  }
+};
 export const deleteCV = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
@@ -123,6 +172,40 @@ export const deleteCV = async (req: AuthRequest, res: Response) => {
       success: true,
       message: 'Xóa vĩnh viễn CV thành công',
       data: { id },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server, vui lòng thử lại sau',
+    });
+  }
+};
+
+export const getListCVWithCPN = async (req: AuthRequest, res: Response) => {
+  try {
+    const companyId = String(req.user?.id);
+
+    const jobs = await getJobsWithoutRole(companyId);
+
+    if (!jobs.length) {
+      return res.json({
+        success: true,
+        message: 'Không có job nào',
+        data: { totalCV: 0, cvs: [] },
+      });
+    }
+
+    const jobIds = jobs.map((j: any) => String(j._id));
+
+    const cvs = await service.getCVOfJob(jobIds);
+
+    return res.json({
+      success: true,
+      message: 'Lấy danh sách CV thành công',
+      data: {
+        totalCV: cvs.length,
+        cvs,
+      },
     });
   } catch (error) {
     return res.status(500).json({

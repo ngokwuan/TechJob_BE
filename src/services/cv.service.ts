@@ -1,5 +1,5 @@
 import { CV } from '../models/cv.model';
-
+import mongoose from 'mongoose';
 export const createCV = async (data: any) => {
   const newCV = await CV.create({
     userId: data.userId,
@@ -29,6 +29,20 @@ export const findCV = async (cvId: string) => {
 export const updateStatus = async (cvId: string, status: string) => {
   return await CV.findByIdAndUpdate(cvId, { status }, { new: true }).lean();
 };
+export const updateCV = async (cvId: string, updateData: any) => {
+  const cv = await CV.findById(cvId);
+  if (!cv) return null;
+  const allowedFields = ['fullName', 'email', 'phone', 'fileCV'];
+
+  allowedFields.forEach((field) => {
+    if (updateData[field] !== undefined) {
+      (cv as any)[field] = updateData[field];
+    }
+  });
+
+  const updatedJob = await cv.save();
+  return updatedJob;
+};
 
 export const deleteByCVId = async (id: string) => {
   try {
@@ -37,4 +51,10 @@ export const deleteByCVId = async (id: string) => {
   } catch (error) {
     throw error;
   }
+};
+
+export const getCVOfJob = async (jobIds: string[]) => {
+  return CV.find({
+    jobId: { $in: jobIds },
+  });
 };
