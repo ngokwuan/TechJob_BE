@@ -10,6 +10,12 @@ import {
 import { upload } from '../middlewares/upload.middleware';
 export const cvRouter = Router();
 cvRouter.get('/', checkUserJWT, checkRole('user'), controller.getDetailCVUser);
+cvRouter.get(
+  '/all',
+  checkUserJWT,
+  checkRole('company'),
+  controller.getListCVWithCPN
+);
 cvRouter.delete(
   '/:id',
   checkUserJWT,
