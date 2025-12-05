@@ -2,7 +2,7 @@ import { CV } from '../models/cv.model';
 import mongoose from 'mongoose';
 export const createCV = async (data: any) => {
   const newCV = await CV.create({
-    userId: data.userId,
+    userId: new mongoose.Types.ObjectId(data.userId),
     jobId: data.jobId,
     fullName: data.fullName,
     email: data.email,
@@ -56,5 +56,5 @@ export const deleteByCVId = async (id: string) => {
 export const getCVOfJob = async (jobIds: string[]) => {
   return CV.find({
     jobId: { $in: jobIds },
-  });
+  }).populate('jobId', 'title');
 };
