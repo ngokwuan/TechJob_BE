@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { AuthRequest } from '../types/auth.type';
 import * as service from '../services/cv.service';
-import { checkExistJob, getJobsWithoutRole } from '../services/job.service';
+import { checkExistJob, getJobsByCompanyId } from '../services/job.service';
 import { UpdateStatusCVInput } from '../validateSchemas/cv.schema';
 import { uploadCV } from '../services/cloudinary.service';
 import { Job } from '../models/job.model';
@@ -185,7 +185,7 @@ export const getListCVWithCPN = async (req: AuthRequest, res: Response) => {
   try {
     const companyId = String(req.user?.id);
 
-    const jobs = await getJobsWithoutRole(companyId);
+    const jobs = await getJobsByCompanyId(companyId);
 
     if (!jobs.length) {
       return res.json({
@@ -195,7 +195,7 @@ export const getListCVWithCPN = async (req: AuthRequest, res: Response) => {
       });
     }
 
-    const jobIds = jobs.map((j: any) => String(j._id));
+    const jobIds = jobs.map((j: any) => String(j.jobId));
 
     const cvs = await service.getCVOfJob(jobIds);
 
