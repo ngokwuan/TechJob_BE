@@ -21,7 +21,7 @@ export const createJob = async (data: any) => {
   }
 
   const newJob = await Job.create({
-    companyId,
+    companyId: new mongoose.Types.ObjectId(companyId),
     title: data.title,
     salaryMin: data.salaryMin,
     salaryMax: data.salaryMax,
@@ -181,5 +181,5 @@ export const getJobsByCompanyId = async (companyId: string) => {
   return jobs;
 };
 export const getJob = async (jobId: string) => {
-  return await Job.findById(jobId);
+  return await Job.findById(jobId).populate('companyId', 'companyName');
 };
