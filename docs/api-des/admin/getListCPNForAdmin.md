@@ -6,9 +6,10 @@
 
 ## Response Data
 
-| JSON Key  | Data Type | Required | Value Description |
-| --------- | --------- | -------- | ----------------- |
-| company[] | array     |          | Mảng công ty      |
+| JSON Key     | Data Type | Required | Value Description |
+| ------------ | --------- | -------- | ----------------- |
+| totalCompany | string    |          | Số lượng công ty  |
+| company[]    | array     |          | Mảng công ty      |
 
 ## Status
 
