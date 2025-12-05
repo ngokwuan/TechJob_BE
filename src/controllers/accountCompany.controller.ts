@@ -1,9 +1,6 @@
 import { AuthRequest } from '../types/auth.type';
 import { Response } from 'express';
-import {
-  getCompanyById,
-  updateCompanyById,
-} from '../services/accountCompany.service';
+import * as service from '../services/accountCompany.service';
 import { IAccountsCompany } from '../models/accountCompany.model';
 import { uploadImage } from '../services/cloudinary.service';
 
@@ -18,7 +15,7 @@ export const getCompanyProfile = async (req: AuthRequest, res: Response) => {
       });
     }
 
-    const company: IAccountsCompany | null = await getCompanyById(id);
+    const company: IAccountsCompany | null = await service.getCompanyById(id);
 
     if (!company) {
       return res.status(404).json({
@@ -60,7 +57,7 @@ export const updateCompanyProfile = async (req: AuthRequest, res: Response) => {
     if (req.file) {
       logoUrl = await uploadImage(req.file, 'company-logo');
     }
-    const updatedCompany = await updateCompanyById(id, {
+    const updatedCompany = await service.updateCompanyById(id, {
       companyName,
       address,
       cityId,
@@ -83,6 +80,23 @@ export const updateCompanyProfile = async (req: AuthRequest, res: Response) => {
       success: true,
       message: 'Cập nhật thông tin công ty thành công',
       data: updatedCompany,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server, vui lòng thử lại sau',
+    });
+  }
+};
+export const getListCPN = async (req: AuthRequest, res: Response) => {
+  try {
+    const jobs = await service.getAllCompanies();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Lấy danh sách công ty thành công',
+      data: jobs,
     });
   } catch (error) {
     console.error(error);

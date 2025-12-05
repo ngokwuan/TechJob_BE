@@ -95,10 +95,48 @@ export const updateJobById = async (
   const updatedJob = await job.save();
   return updatedJob;
 };
+
 export const getJobsWithoutRole = async () => {
-  return Job.find({
-    isDeleted: false,
-  }).sort({ createdAt: -1 });
+  const jobs = await Job.aggregate([
+    {
+      $match: { isDeleted: false },
+    },
+
+    // Join company
+    {
+      $lookup: {
+        from: 'accountCompany',
+        localField: 'companyId',
+        foreignField: '_id',
+        as: 'company',
+      },
+    },
+
+    // Lấy đúng 1 object thay vì mảng
+    { $unwind: '$company' },
+
+    // Chọn field
+    {
+      $project: {
+        jobId: '$_id',
+        title: 1,
+        salaryMin: 1,
+        salaryMax: 1,
+        position: 1,
+        workingForm: 1,
+        technologies: 1,
+        createdAt: 1,
+        companyName: '$company.companyName',
+        logo: '$company.logo',
+
+        _id: 0,
+      },
+    },
+
+    { $sort: { createdAt: -1 } },
+  ]);
+
+  return jobs;
 };
 
 export const getJobsByCompanyId = async (companyId: string) => {

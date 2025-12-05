@@ -6,6 +6,7 @@ import { validate } from '../middlewares/validate.middleware';
 import { updateCompanySchema } from '../validateSchemas/accountCompany.schema';
 export const companyRouter = Router();
 companyRouter.get('/me', checkUserJWT, controller.getCompanyProfile);
+companyRouter.get('/all', controller.getListCPN);
 companyRouter.patch(
   '/',
   checkUserJWT,

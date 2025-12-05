@@ -4,8 +4,7 @@ import * as service from '../services/cv.service';
 import { checkExistJob, getJobsByCompanyId } from '../services/job.service';
 import { UpdateStatusCVInput } from '../validateSchemas/cv.schema';
 import { uploadCV } from '../services/cloudinary.service';
-import { Job } from '../models/job.model';
-import { CV } from '../models/cv.model';
+
 export const createCVController = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.user?.id;
