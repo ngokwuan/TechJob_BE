@@ -126,16 +126,7 @@ export const getListJobWithoutRole = async (
   res: Response
 ) => {
   try {
-    const { companyId } = req.body;
-
-    if (!companyId) {
-      return res.status(401).json({
-        success: false,
-        message: 'Không xác thực công ty',
-      });
-    }
-
-    const jobs = await service.getJobsWithoutRole(companyId);
+    const jobs = await service.getJobsWithoutRole();
 
     return res.status(200).json({
       success: true,

@@ -95,9 +95,8 @@ export const updateJobById = async (
   const updatedJob = await job.save();
   return updatedJob;
 };
-export const getJobsWithoutRole = async (companyId: string) => {
+export const getJobsWithoutRole = async () => {
   return Job.find({
-    companyId,
     isDeleted: false,
   }).sort({ createdAt: -1 });
 };
