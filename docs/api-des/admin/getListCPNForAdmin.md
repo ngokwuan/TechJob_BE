@@ -1,14 +1,14 @@
-# Get all job in company without role
+# Get all companies with admin role
 
 ## Endpoint
 
-`GET /jobs/all`
+`GET admin/companies/all`
 
 ## Response Data
 
-| JSON Key | Data Type | Required | Value Description |
-| -------- | --------- | -------- | ----------------- |
-| job[]    | array     |          | Mảng công việc    |
+| JSON Key  | Data Type | Required | Value Description |
+| --------- | --------- | -------- | ----------------- |
+| company[] | array     |          | Mảng công ty      |
 
 ## Status
 

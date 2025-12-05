@@ -20,3 +20,11 @@ export const updateCompanyById = async (
     'companyName address cityId companyEmployees companyModel description phone workOverTime workingTime logo'
   );
 };
+export const getAllCompanies = async () => {
+  return AccountsCompany.find({
+    isDeleted: false,
+  }).sort({ createdAt: -1 });
+};
+export const getAllCompaniesForAdmin = async () => {
+  return AccountsCompany.find().sort({ createdAt: -1 });
+};
