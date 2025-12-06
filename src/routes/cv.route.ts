@@ -41,7 +41,7 @@ cvRouter.patch(
 );
 
 cvRouter.patch(
-  '/:cvId',
+  '/status/:cvId',
   checkUserJWT,
   checkRole('company'),
   validate(updateStatusSchema),
