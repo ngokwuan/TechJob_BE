@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`PATCH /cvs/:cvId`
+`PATCH /cvs/status/:cvId`
 
 ## Cookies
 
