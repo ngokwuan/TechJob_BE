@@ -12,10 +12,15 @@
 
 ## Response Data
 
-| JSON Key  | Data Type | Required | Value Description |
-| --------- | --------- | -------- | ----------------- |
-| totalUser | string    |          | Số lượng công ty  |
-| user[]    | array     |          | Mảng người dùng   |
+| JSON Key               | Data Type | Required | Value Description               |
+| ---------------------- | --------- | -------- | ------------------------------- |
+| totalUser              | string    |          | Số lượng công ty                |
+| user[]                 | array     |          | Mảng người dùng                 |
+| user[].fullName        | string    |          | Tên người dùng                  |
+| user[].email           | string    |          | Email người dùng                |
+| user[].avatar          | string    |          | Ảnh đại diện người dùng         |
+| user[].isDeleted       | string    |          | Trạng thái đã xóa người dùng    |
+| user[].totalJobApllied | string    |          | Tổng số job đã apply người dùng |
 
 ## Status
 
