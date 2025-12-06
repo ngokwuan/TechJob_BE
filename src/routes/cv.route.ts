@@ -51,5 +51,5 @@ cvRouter.get(
   '/:cvId',
   checkUserJWT,
   checkRole('company'),
-  controller.getDetailCV
+  controller.getDetailCVCPN
 );

@@ -47,7 +47,7 @@ export const createCVController = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-export const getDetailCV = async (req: AuthRequest, res: Response) => {
+export const getDetailCVCPN = async (req: AuthRequest, res: Response) => {
   try {
     const cvId = req.params.cvId;
 

@@ -16,7 +16,7 @@ export const checkExistCV = async (id: string) => {
   return await CV.findById(id);
 };
 export const findAndChangeViewedCV = async (cvId: string) => {
-  const cv = await CV.findById(cvId).lean();
+  const cv = await CV.findById(cvId).populate('jobId', 'title');
   if (!cv?.viewed) {
     await CV.findByIdAndUpdate(cvId, { viewed: true });
   }
