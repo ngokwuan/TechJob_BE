@@ -180,6 +180,37 @@ export const getJobsByCompanyId = async (companyId: string) => {
   ]);
   return jobs;
 };
-export const getJob = async (jobId: string) => {
-  return await Job.findById(jobId).populate('companyId', 'companyName logo');
+
+export const getDetailJob = async (jobId: string) => {
+  return await Job.findById(jobId).populate({
+    path: 'companyId',
+    select: 'companyName logo companyModel companyEmployees workingTime cityId',
+    populate: {
+      path: 'cityId',
+      select: 'cityName',
+    },
+  });
+};
+
+export const getRelateJobs = async (jobId: string) => {
+  const job = await Job.findById(jobId).select('companyId');
+  if (!job) return [];
+
+  const relateJobs = await Job.find({
+    companyId: job.companyId,
+    _id: { $ne: jobId },
+    isDeleted: false,
+  })
+    .select('title position workingForm createdAt images')
+    .populate({
+      path: 'companyId',
+      select: 'cityId',
+      populate: {
+        path: 'cityId',
+        select: 'cityName',
+      },
+    })
+    .sort({ createdAt: -1 });
+
+  return relateJobs;
 };

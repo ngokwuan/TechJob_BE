@@ -12,17 +12,16 @@
 
 ## Response Data
 
-| JSON Key     | Data Type | Required | Value Description |
-| ------------ | --------- | -------- | ----------------- |
-| totalCompany | string    |          | Số lượng công ty  |
-| company[]    | array     |          | Mảng công ty      |
-| company[]    | array     |          | Mảng công ty      |
-| company[]    | array     |          | Mảng công ty      |
-| company[]    | array     |          | Mảng công ty      |
-| company[]    | array     |          | Mảng công ty      |
-| company[]    | array     |          | Mảng công ty      |
-| company[]    | array     |          | Mảng công ty      |
-| company[]    | array     |          | Mảng công ty      |
+| JSON Key                   | Data Type | Required | Value Description             |
+| -------------------------- | --------- | -------- | ----------------------------- |
+| totalCompany               | string    |          | Số lượng công ty              |
+| company[]                  | array     |          | Mảng công ty                  |
+| company[].companyName      | string    |          | Tên công ty                   |
+| company[].email            | string    |          | Email công ty                 |
+| company[].isDeleted        | string    |          | Trạng thái đã xóa của công ty |
+| company[].logo             | string    |          | Logo công ty                  |
+| company[].companyEmployees | string    |          | Nhân sự công ty               |
+| company[].totalCVs         | string    |          | Tổng số CV nạp vào công ty    |
 
 ## Status
 

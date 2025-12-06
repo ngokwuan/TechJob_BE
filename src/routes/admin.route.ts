@@ -15,15 +15,15 @@ adminRouter.patch(
   controller.toggleCompanyStatus
 );
 
-// adminRouter.get(
-//   '/users',
-//   checkUserJWT,
-//   checkRole('admin'),
-//   controller.getAllUsersForAdmin
-// );
-// adminRouter.patch(
-//   '/users/:id/toggle',
-//   checkUserJWT,
-//   checkRole('admin'),
-//   controller.toggleUserStatus
-// );
+adminRouter.get(
+  '/users/all',
+  checkUserJWT,
+  checkRole('admin'),
+  controller.getAllUsersForAdmin
+);
+adminRouter.patch(
+  '/users/:id/toggle',
+  checkUserJWT,
+  checkRole('admin'),
+  controller.toggleUserStatus
+);

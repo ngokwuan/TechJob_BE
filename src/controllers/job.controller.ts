@@ -182,12 +182,12 @@ export const getDetailJob = async (req: AuthRequest, res: Response) => {
       });
     }
 
-    const jobs = await service.getJob(jobId);
-
+    const job = await service.getDetailJob(jobId);
+    const relateJobs = await service.getRelateJobs(jobId);
     return res.status(200).json({
       success: true,
       message: 'Lấy  công việc thành công',
-      data: jobs,
+      data: { job, relateJobs },
     });
   } catch (error) {
     console.error(error);
