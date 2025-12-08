@@ -19,6 +19,8 @@
 | email    | string    | \*       | Email             |
 | phone    | string    | \*       | SDT               |
 | avatar   | string    | \*       | Ảnh đại diện      |
+| gender   | string    | \*       | Giới tính         |
+| role     | string    | \*       | Quyền truy cập    |
 
 ## Status
 
