@@ -29,13 +29,50 @@ export const updateCompanyById = async (
     'companyName address cityId companyEmployees companyModel description phone workOverTime workingTime logo'
   );
 };
+
 export const getAllCompanies = async () => {
-  return AccountsCompany.find({
-    isDeleted: false,
-  })
-    .select('-password')
-    .sort({ createdAt: -1 });
+  return AccountsCompany.aggregate([
+    {
+      $match: { isDeleted: false },
+    },
+    {
+      $lookup: {
+        from: 'job',
+        localField: '_id',
+        foreignField: 'companyId',
+        pipeline: [{ $match: { isDeleted: false } }],
+        as: 'jobs',
+      },
+    },
+    {
+      $addFields: {
+        totalJob: { $size: '$jobs' },
+      },
+    },
+    {
+      $lookup: {
+        from: 'city',
+        localField: 'cityId',
+        foreignField: '_id',
+        as: 'city',
+      },
+    },
+    {
+      $unwind: {
+        path: '$city',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $project: {
+        password: 0,
+        jobs: 0,
+      },
+    },
+    { $sort: { createdAt: -1 } },
+  ]);
 };
+
 export const getAllCompaniesForAdmin = async () => {
   const companies = await AccountsCompany.aggregate([
     {

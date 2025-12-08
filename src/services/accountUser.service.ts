@@ -3,13 +3,8 @@ import { AccountsUser, IAccountsUser } from '../models/accountUser.model';
 export const getUserById = async (
   id: string
 ): Promise<IAccountsUser | null> => {
-  return AccountsUser.findById(id).select('fullName email role avatar gender');
-};
-export const getUserByEmail = async (
-  email: string
-): Promise<IAccountsUser | null> => {
-  return AccountsUser.findOne({ email }).select(
-    'fullName email role avatar gender'
+  return AccountsUser.findById(id).select(
+    'fullName email role avatar gender phone'
   );
 };
 
