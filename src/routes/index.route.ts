@@ -6,6 +6,7 @@ import { cvRouter } from './cv.route';
 import { companyRouter } from './accountCompany.route';
 import { cityRouter } from './city.route';
 import { adminRouter } from './admin.route';
+import { searchRoute } from './search.route';
 export const Routes = (app: Application): void => {
   app.use('/auth', authRouter);
   app.use('/jobs', jobRouter);
@@ -14,6 +15,7 @@ export const Routes = (app: Application): void => {
   app.use('/cvs', cvRouter);
   app.use('/cities', cityRouter);
   app.use('/admin', adminRouter);
+  app.use('/search', searchRoute);
 
   app.get('/', (req: Request, res: Response) => {
     res.json({ message: 'TechJob API' });
