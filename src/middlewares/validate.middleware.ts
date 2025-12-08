@@ -6,7 +6,8 @@ export const validate =
   <T>(schema: z.ZodSchema<T>) =>
   (req: AuthRequest<T>, res: Response, next: NextFunction) => {
     try {
-      req.validated = schema.parse(req.body);
+      const data = req.method === 'GET' ? req.query : req.body;
+      req.validated = schema.parse(data);
       next();
     } catch (error) {
       if (error instanceof ZodError) {
