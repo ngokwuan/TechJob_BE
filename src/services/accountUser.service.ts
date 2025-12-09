@@ -57,8 +57,11 @@ export const getAllUsersForAdmin = async () => {
 };
 
 export const updateStatusUser = async (id: string) => {
-  const user = await AccountsUser.findByIdAndUpdate(id, {
-    isDeleted: true,
-  }).select('-password -updatedAt');
+  const user = await AccountsUser.findById(id).select('-password -updatedAt');
+  if (!user) return null;
+
+  user.isDeleted = !user.isDeleted;
+  await user.save();
+
   return user;
 };

@@ -4,56 +4,93 @@ import { AccountsCompany } from '../models/accountCompany.model';
 export const searchService = async (keyword: string) => {
   const regex = new RegExp(keyword, 'i');
 
-  // ----- SEARCH JOBS -----
-  const jobs = await Job.find({
-    isDeleted: false,
-    $or: [{ title: regex }, { technologies: regex }, { position: regex }],
-  })
-    .populate('companyId', 'companyName logo address')
-    .sort({ createdAt: -1 })
-    .lean();
+  const jobs = await Job.aggregate([
+    {
+      $match: {
+        isDeleted: false,
+        $or: [{ title: regex }, { technologies: regex }, { position: regex }],
+      },
+    },
 
-  const formattedJobs = jobs.map((job) => ({
-    jobId: job._id,
-    title: job.title,
-    salaryMin: job.salaryMin,
-    salaryMax: job.salaryMax,
-    position: job.position,
-    workingForm: job.workingForm,
-    technologies: job.technologies,
-    description: job.description,
-    images: job.images,
-  }));
+    {
+      $lookup: {
+        from: 'accountCompany',
+        localField: 'companyId',
+        foreignField: '_id',
+        as: 'company',
+      },
+    },
 
-  // ----- SEARCH COMPANIES -----
-  const companies = await AccountsCompany.find({
-    isDeleted: false,
-    $or: [{ companyName: regex }, { address: regex }],
-  })
-    .select(
-      'companyName email address cityId companyEmployees companyModel description phone workOverTime workingTime logo'
-    )
-    .populate('cityId', 'cityName')
-    .sort({ createdAt: -1 })
-    .lean();
+    { $unwind: '$company' },
 
-  const formattedCompanies = companies.map((c) => ({
-    companyId: c._id,
-    companyName: c.companyName,
-    email: c.email,
-    address: c.address,
-    cityID: c.cityId?._id,
-    companyEmployees: c.companyEmployees,
-    companyModel: c.companyModel,
-    description: c.description,
-    phone: c.phone,
-    workOverTime: c.workOverTime,
-    workingTime: c.workingTime,
-    logo: c.logo,
-  }));
+    {
+      $project: {
+        jobId: '$_id',
+        title: 1,
+        salaryMin: 1,
+        salaryMax: 1,
+        position: 1,
+        workingForm: 1,
+        technologies: 1,
+        createdAt: 1,
+        companyName: '$company.companyName',
+        logo: '$company.logo',
+        _id: 0,
+      },
+    },
+
+    { $sort: { createdAt: -1 } },
+  ]);
+
+  const companies = await AccountsCompany.aggregate([
+    {
+      $match: {
+        isDeleted: false,
+        $or: [{ companyName: regex }, { address: regex }],
+      },
+    },
+
+    {
+      $lookup: {
+        from: 'job',
+        localField: '_id',
+        foreignField: 'companyId',
+        as: 'jobs',
+      },
+    },
+
+    {
+      $addFields: {
+        totalJobs: { $size: '$jobs' },
+      },
+    },
+
+    {
+      $lookup: {
+        from: 'city',
+        localField: 'cityId',
+        foreignField: '_id',
+        as: 'city',
+      },
+    },
+
+    { $unwind: { path: '$city', preserveNullAndEmptyArrays: true } },
+
+    {
+      $project: {
+        companyName: 1,
+        logo: 1,
+        cityName: '$city.cityName',
+        totalJobs: 1,
+        _id: 1,
+      },
+    },
+
+    { $sort: { totalJobs: -1 } },
+  ]);
 
   return {
-    jobs: formattedJobs,
-    companies: formattedCompanies,
+    jobs,
+    companies,
   };
 };
