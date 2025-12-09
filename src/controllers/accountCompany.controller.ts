@@ -3,6 +3,45 @@ import { Response } from 'express';
 import * as service from '../services/accountCompany.service';
 import { IAccountsCompany } from '../models/accountCompany.model';
 import { uploadImage } from '../services/cloudinary.service';
+import { getJobsByCompanyId } from '../services/job.service';
+
+export const getDetailCompanyForGuest = async (
+  req: AuthRequest,
+  res: Response
+) => {
+  try {
+    const id = req.params.companyId;
+
+    if (!id) {
+      return res.status(401).json({
+        success: false,
+        message: 'Không xác thực công ty',
+      });
+    }
+
+    const company: IAccountsCompany | null = await service.getCompanyById(id);
+
+    if (!company) {
+      return res.status(404).json({
+        success: false,
+        message: 'Không tìm thấy công ty',
+      });
+    }
+    const jobs = await getJobsByCompanyId(id);
+    const totalJobs = jobs.length;
+    return res.status(200).json({
+      success: true,
+      message: 'Lấy thông tin người dùng thành công',
+      data: { totalJobs, company },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server, vui lòng thử lại sau',
+    });
+  }
+};
 
 export const getCompanyProfile = async (req: AuthRequest, res: Response) => {
   try {
@@ -20,13 +59,13 @@ export const getCompanyProfile = async (req: AuthRequest, res: Response) => {
     if (!company) {
       return res.status(404).json({
         success: false,
-        message: 'Không tìm thấy người dùng',
+        message: 'Không tìm thấy công ty',
       });
     }
 
     return res.status(200).json({
       success: true,
-      message: 'Lấy thông tin người dùng thành công',
+      message: 'Lấy thông tin công ty thành công',
       data: company,
     });
   } catch (error) {

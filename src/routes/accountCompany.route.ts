@@ -7,6 +7,7 @@ import { updateCompanySchema } from '../validateSchemas/accountCompany.schema';
 export const companyRouter = Router();
 companyRouter.get('/me', checkUserJWT, controller.getCompanyProfile);
 companyRouter.get('/all', controller.getListCPN);
+companyRouter.get('/:companyId', controller.getDetailCompanyForGuest);
 companyRouter.patch(
   '/',
   checkUserJWT,
