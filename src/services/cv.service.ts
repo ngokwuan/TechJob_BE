@@ -58,3 +58,8 @@ export const getCVOfJob = async (jobIds: string[]) => {
     jobId: { $in: jobIds },
   }).populate('jobId', 'title');
 };
+export const getCVByUserId = async (userId: string) => {
+  return await CV.find({ userId }).select(
+    'jobId fullName email createdAt fileCV status'
+  );
+};

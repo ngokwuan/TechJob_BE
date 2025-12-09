@@ -179,7 +179,6 @@ export const deleteCV = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
 export const getListCVWithCPN = async (req: AuthRequest, res: Response) => {
   try {
     const companyId = String(req.user?.id);
@@ -197,6 +196,27 @@ export const getListCVWithCPN = async (req: AuthRequest, res: Response) => {
     const jobIds = jobs.map((j: any) => String(j.jobId));
 
     const cvs = await service.getCVOfJob(jobIds);
+
+    return res.json({
+      success: true,
+      message: 'Lấy danh sách CV thành công',
+      data: {
+        totalCV: cvs.length,
+        cvs,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server, vui lòng thử lại sau',
+    });
+  }
+};
+export const getListCVWithUser = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = String(req.user?.id);
+
+    const cvs = await service.getCVByUserId(userId);
 
     return res.json({
       success: true,
