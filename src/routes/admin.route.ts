@@ -12,6 +12,7 @@ adminRouter.get(
 adminRouter.patch(
   '/companies/:id/toggle',
   checkUserJWT,
+  checkRole('admin'),
   controller.toggleCompanyStatus
 );
 

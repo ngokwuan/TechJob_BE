@@ -102,7 +102,6 @@ export const getJobsWithoutRole = async () => {
       $match: { isDeleted: false },
     },
 
-    // Join company
     {
       $lookup: {
         from: 'accountCompany',
@@ -112,10 +111,8 @@ export const getJobsWithoutRole = async () => {
       },
     },
 
-    // Lấy đúng 1 object thay vì mảng
     { $unwind: '$company' },
 
-    // Chọn field
     {
       $project: {
         jobId: '$_id',
@@ -147,7 +144,6 @@ export const getJobsByCompanyId = async (companyId: string) => {
       },
     },
 
-    // Join CV để đếm số lượng
     {
       $lookup: {
         from: 'cv',
@@ -157,7 +153,6 @@ export const getJobsByCompanyId = async (companyId: string) => {
       },
     },
 
-    // Thêm field totalApplicants
     {
       $addFields: {
         totalApplicants: { $size: '$cvList' },
