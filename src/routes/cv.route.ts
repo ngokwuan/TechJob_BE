@@ -9,7 +9,12 @@ import {
 } from '../validateSchemas/cv.schema';
 import { upload } from '../middlewares/upload.middleware';
 export const cvRouter = Router();
-cvRouter.get('/', checkUserJWT, checkRole('user'), controller.getDetailCVUser);
+cvRouter.get(
+  '/me/:cvId',
+  checkUserJWT,
+  checkRole('user'),
+  controller.getDetailCVUser
+);
 cvRouter.get(
   '/me',
   checkUserJWT,

@@ -58,8 +58,53 @@ export const getCVOfJob = async (jobIds: string[]) => {
     jobId: { $in: jobIds },
   }).populate('jobId', 'title');
 };
+
 export const getCVByUserId = async (userId: string) => {
-  return await CV.find({ userId }).select(
-    'jobId fullName email createdAt fileCV status'
-  );
+  const cvList = await CV.aggregate([
+    {
+      $match: {
+        userId: new mongoose.Types.ObjectId(userId),
+      },
+    },
+
+    {
+      $lookup: {
+        from: 'job',
+        localField: 'jobId',
+        foreignField: '_id',
+        as: 'job',
+      },
+    },
+    { $unwind: { path: '$job', preserveNullAndEmptyArrays: true } },
+
+    {
+      $lookup: {
+        from: 'accountCompany',
+        localField: 'job.companyId',
+        foreignField: '_id',
+        as: 'company',
+      },
+    },
+    { $unwind: { path: '$company', preserveNullAndEmptyArrays: true } },
+
+    {
+      $project: {
+        fullName: 1,
+        email: 1,
+        fileCV: 1,
+        status: 1,
+        createdAt: 1,
+
+        jobTitle: '$job.title',
+        position: '$job.position',
+        salaryMin: '$job.salaryMin',
+        salaryMax: '$job.salaryMax',
+        workingForm: '$job.workingForm',
+
+        companyName: '$company.companyName',
+      },
+    },
+  ]);
+
+  return cvList;
 };

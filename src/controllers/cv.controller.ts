@@ -74,7 +74,7 @@ export const getDetailCVCPN = async (req: AuthRequest, res: Response) => {
 };
 export const getDetailCVUser = async (req: AuthRequest, res: Response) => {
   try {
-    const cvId = req.query.cvId as string;
+    const cvId = req.params.cvId as string;
     const cv = await service.findCV(cvId);
     if (!cv) {
       return res.status(404).json({
