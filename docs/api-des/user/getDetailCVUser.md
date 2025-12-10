@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`GET cvs/:cvId`
+`GET cvs/me/:cvId`
 
 ## Cookies
 
@@ -10,11 +10,11 @@
 | ------ | ------- |
 | token  | {token} |
 
-## Request data
+## Path Parameters
 
-| JSON Key | Data Type | Required | Value Description |
-| -------- | --------- | -------- | ----------------- |
-| cvId     | string    | \*       | Cv ID             |
+| Parameter | Data Type | Required | Value Description |
+| --------- | --------- | -------- | ----------------- |
+| cvId      | string    | \*       | Cv ID             |
 
 ## Response Data
 
