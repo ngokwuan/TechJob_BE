@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { Job } from '../models/job.model';
 import { AccountsCompany } from '../models/accountCompany.model';
 
@@ -93,4 +94,60 @@ export const searchService = async (keyword: string) => {
     jobs,
     companies,
   };
+};
+
+export const searchAndFilterJob = async (
+  kw = '',
+  position = '',
+  cityId = ''
+) => {
+  const regexKw = new RegExp(kw, 'i');
+
+  const pipeline: any[] = [
+    {
+      $match: {
+        isDeleted: false,
+        $or: [
+          { title: { $regex: regexKw } },
+          { technologies: { $elemMatch: { $regex: regexKw } } },
+        ],
+        ...(position && { position: position }),
+      },
+    },
+    {
+      $lookup: {
+        from: 'accountCompany',
+        localField: 'companyId',
+        foreignField: '_id',
+        as: 'company',
+      },
+    },
+    { $unwind: '$company' },
+  ];
+
+  if (cityId) {
+    pipeline.push({
+      $match: { 'company.cityId': new mongoose.Types.ObjectId(cityId) },
+    });
+  }
+
+  pipeline.push(
+    { $sort: { createdAt: -1 } },
+    {
+      $project: {
+        title: 1,
+        position: 1,
+        salaryMin: 1,
+        salaryMax: 1,
+        workingForm: 1,
+        technologies: 1,
+        companyName: '$company.companyName',
+        logo: '$company.logo',
+        address: '$company.address',
+        cityId: '$company.cityId',
+      },
+    }
+  );
+
+  return Job.aggregate(pipeline);
 };

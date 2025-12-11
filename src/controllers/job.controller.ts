@@ -29,12 +29,14 @@ export const createJobController = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-export const softDeleteJob = async (req: AuthRequest, res: Response) => {
+export const toggleSoftDeleteJob = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
 
     const result = await service.softDeleteByJobID(id);
-
+    const message = result?.isDeleted
+      ? 'Đã đóng tin tuyển dụng'
+      : 'Đã mở tin tuyển dụng';
     if (!result) {
       return res.status(404).json({
         success: false,
@@ -44,8 +46,8 @@ export const softDeleteJob = async (req: AuthRequest, res: Response) => {
 
     return res.status(200).json({
       success: true,
-      message: 'Đã đóng tin tuyển dụng',
-      data: { id },
+      message,
+      data: result,
     });
   } catch (error) {
     console.error(error);

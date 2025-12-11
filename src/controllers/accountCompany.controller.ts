@@ -32,7 +32,7 @@ export const getDetailCompanyForGuest = async (
     return res.status(200).json({
       success: true,
       message: 'Lấy thông tin người dùng thành công',
-      data: { totalJobs, company },
+      data: { totalJobs, company, jobs },
     });
   } catch (error) {
     console.error(error);

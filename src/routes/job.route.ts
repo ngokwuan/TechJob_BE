@@ -7,10 +7,17 @@ import {
   updateJobSchema,
 } from '../validateSchemas/job.schema';
 import { upload } from '../middlewares/upload.middleware';
+import { searchAndFilterJobForGuest } from '../controllers/search.controller';
+import { SearchQuerySchema } from '../validateSchemas/search.schema';
 
 export const jobRouter = Router();
 
 jobRouter.get('/all', controller.getListJobWithoutRole);
+jobRouter.get(
+  '/search',
+  validate(SearchQuerySchema),
+  searchAndFilterJobForGuest
+);
 jobRouter.get('/:jobId', controller.getDetailJob);
 jobRouter.get(
   '/',
@@ -31,7 +38,7 @@ jobRouter.delete(
   '/:id',
   checkUserJWT,
   checkRole('company'),
-  controller.softDeleteJob
+  controller.toggleSoftDeleteJob
 );
 jobRouter.delete(
   '/:id/force',

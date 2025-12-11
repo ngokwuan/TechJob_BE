@@ -1,4 +1,4 @@
-# Delete Job
+# Toggle softDelete Job
 
 ## Endpoint
 
@@ -18,9 +18,11 @@
 
 ## Response Data
 
-| JSON Key | Data Type | Required | Value Description |
-| -------- | --------- | -------- | ----------------- |
-| jobId    | string    | \*       | Job ID đã xóa     |
+| JSON Key  | Data Type | Required | Value Description  |
+| --------- | --------- | -------- | ------------------ |
+| jobId     | string    | \*       | Job ID đã xóa      |
+| isDeleted | string    | \*       | Trạng thái đã xóa  |
+| updatedAt | string    | \*       | Thời gian cập nhập |
 
 ## Status
 

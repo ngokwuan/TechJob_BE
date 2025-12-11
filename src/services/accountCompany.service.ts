@@ -31,17 +31,69 @@ export const updateCompanyById = async (
   );
 };
 
-export const getAllCompanies = async () => {
-  return AccountsCompany.aggregate([
+export const getAllCompaniesForAdmin = async () => {
+  const companies = await AccountsCompany.aggregate([
     {
-      $match: { isDeleted: false },
+      $sort: { createdAt: -1 },
+    },
+    {
+      $project: {
+        companyName: 1,
+        email: 1,
+        isDeleted: 1,
+        logo: 1,
+        companyEmployees: 1,
+      },
     },
     {
       $lookup: {
         from: 'job',
         localField: '_id',
         foreignField: 'companyId',
-        pipeline: [{ $match: { isDeleted: false } }],
+        as: 'jobs',
+      },
+    },
+    {
+      $lookup: {
+        from: 'cv',
+        let: { jobIds: '$jobs._id' },
+        pipeline: [
+          {
+            $match: {
+              $expr: { $in: ['$jobId', '$$jobIds'] },
+            },
+          },
+        ],
+        as: 'cvs',
+      },
+    },
+    {
+      $addFields: {
+        totalCVs: { $size: '$cvs' },
+      },
+    },
+    {
+      $project: {
+        jobs: 0,
+        cvs: 0,
+      },
+    },
+  ]);
+
+  return companies;
+};
+
+export const getAllCompanies = async () => {
+  return AccountsCompany.aggregate([
+    { $match: { isDeleted: false } },
+    {
+      $lookup: {
+        from: 'job',
+        let: { companyId: '$_id' },
+        pipeline: [
+          { $match: { $expr: { $eq: ['$companyId', '$$companyId'] } } },
+          { $match: { isDeleted: false } },
+        ],
         as: 'jobs',
       },
     },
@@ -66,65 +118,13 @@ export const getAllCompanies = async () => {
     },
     {
       $project: {
-        password: 0,
-        jobs: 0,
+        _id: 1,
+        companyName: 1,
+        logo: 1,
+        totalJob: 1,
+        cityName: '$city.cityName',
       },
     },
     { $sort: { createdAt: -1 } },
   ]);
-};
-
-export const getAllCompaniesForAdmin = async () => {
-  const companies = await AccountsCompany.aggregate([
-    {
-      $sort: { createdAt: -1 },
-    },
-    {
-      $project: {
-        companyName: 1,
-        email: 1,
-        isDeleted: 1,
-        logo: 1,
-        companyEmployees: 1,
-      },
-    },
-    // Lấy danh sách job của công ty
-    {
-      $lookup: {
-        from: 'job',
-        localField: '_id',
-        foreignField: 'companyId',
-        as: 'jobs',
-      },
-    },
-    // Lấy CV theo danh sách job._id
-    {
-      $lookup: {
-        from: 'cv',
-        let: { jobIds: '$jobs._id' },
-        pipeline: [
-          {
-            $match: {
-              $expr: { $in: ['$jobId', '$$jobIds'] },
-            },
-          },
-        ],
-        as: 'cvs',
-      },
-    },
-    {
-      $addFields: {
-        totalCVs: { $size: '$cvs' },
-      },
-    },
-    // Xoá các field không cần
-    {
-      $project: {
-        jobs: 0,
-        cvs: 0,
-      },
-    },
-  ]);
-
-  return companies;
 };
