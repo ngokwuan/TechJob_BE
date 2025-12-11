@@ -34,24 +34,20 @@ export const createJob = async (data: any) => {
 
   return newJob;
 };
-
 export const softDeleteByJobID = async (id: string) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return null;
     }
-    const existJob = await Job.findByIdAndUpdate(
-      id,
-      { isDeleted: true },
-      { new: true }
-    );
+    const existJob = await Job.findById(id).select('_id isDeleted');
     if (!existJob) return null;
-    return existJob.id;
+    existJob.isDeleted = !existJob.isDeleted;
+    await existJob.save();
+    return existJob;
   } catch (error) {
     throw error;
   }
 };
-
 export const forceDeleteByJobID = async (id: string) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -95,7 +91,6 @@ export const updateJobById = async (
   const updatedJob = await job.save();
   return updatedJob;
 };
-
 export const getJobsWithoutRole = async () => {
   const jobs = await Job.aggregate([
     {
@@ -135,7 +130,6 @@ export const getJobsWithoutRole = async () => {
 
   return jobs;
 };
-
 export const getJobsByCompanyId = async (companyId: string) => {
   const jobs = await Job.aggregate([
     {
