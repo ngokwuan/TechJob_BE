@@ -4,6 +4,12 @@ import { checkUserJWT, checkRole } from '../middlewares/jwt.middleware';
 
 export const adminRouter = Router();
 adminRouter.get(
+  '/dashboard',
+  checkUserJWT,
+  checkRole('admin'),
+  controller.getDashBoard
+);
+adminRouter.get(
   '/companies/all',
   checkUserJWT,
   checkRole('admin'),

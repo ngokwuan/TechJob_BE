@@ -108,3 +108,6 @@ export const getCVByUserId = async (userId: string) => {
 
   return cvList;
 };
+export const getAllCVForAdmin = async () => {
+  return CV.find().select('_id');
+};

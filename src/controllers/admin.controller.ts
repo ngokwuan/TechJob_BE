@@ -2,6 +2,8 @@ import { Response } from 'express';
 import { AuthRequest } from '../types/auth.type';
 import * as companyService from '../services/accountCompany.service';
 import * as userService from '../services/accountUser.service';
+import * as jobService from '../services/job.service';
+import * as cvService from '../services/cv.service';
 export const getListCPNForAdmin = async (req: AuthRequest, res: Response) => {
   try {
     const company = await companyService.getAllCompaniesForAdmin();
@@ -71,7 +73,6 @@ export const getAllUsersForAdmin = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-
 export const toggleUserStatus = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
@@ -96,4 +97,28 @@ export const toggleUserStatus = async (req: AuthRequest, res: Response) => {
       message: 'Lỗi server, vui lòng thử lại sau',
     });
   }
+};
+export const getDashBoard = async (req: AuthRequest, res: Response) => {
+  const cpns = await companyService.getAllCompaniesForAdmin();
+  const users = await userService.getAllUsersForAdmin();
+  const lockUsers = await userService.getAllLockUser();
+  const jobs = await jobService.getAllJobsForAdmin();
+  const cvs = await cvService.getAllCVForAdmin();
+  if (!cpns || !users || !lockUsers || !jobs || !cvs) {
+    return res.status(404).json({
+      success: false,
+      message: 'Không tìm thấy thông tin cung cấp',
+    });
+  }
+  return res.status(200).json({
+    success: true,
+    message: 'Lấy thông tin thành công',
+    data: {
+      totalCompanies: cpns.length,
+      totalUsers: users.length,
+      totalLockUsers: lockUsers.length,
+      totalJobs: jobs.length,
+      totalCVs: cvs.length,
+    },
+  });
 };
