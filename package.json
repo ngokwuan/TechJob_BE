@@ -25,7 +25,6 @@
     "multer": "^2.0.2",
     "multer-storage-cloudinary": "^2.2.1",
     "redis": "^5.10.0",
-    "sequelize": "^6.37.7",
     "zod": "^4.1.12"
   },
   "devDependencies": {
