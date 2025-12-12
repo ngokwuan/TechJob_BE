@@ -12,25 +12,35 @@
 
 ## Response Data
 
-| JSON Key     | Data Type | Required | Value Description  |
-| ------------ | --------- | -------- | ------------------ |
-| jobId        | string    | \*       | Job ID             |
-| companyId    | string    | \*       | Company ID         |
-| title        | string    | \*       | Tiêu đề công việc  |
-| salaryMin    | string    | \*       | Lương tối thiểu    |
-| salaryMax    | number    | \*       | Lương tối đa       |
-| position     | string    | \*       | Vị trí             |
-| workingForm  | string    | \*       | Hình thức làm việc |
-| technologies | array     | \*       | Công nghệ yêu cầu  |
-| description  | string    | \*       | Mô tả công việc    |
-| images       | string    |          | Hình ảnh           |
-| createdAt    | string    | \*       | Ngày đăng          |
-| updatedAt    | string    | \*       | Ngày cập nhật      |
+| JSON Key                       | Data Type | Required | Value Description   |
+| ------------------------------ | --------- | -------- | ------------------- |
+| job                            | object    | \*       | Công việc           |
+| job.id                         | string    | \*       | ID công việc        |
+| job.companyId                  | object    | \*       | ID công ty          |
+| job.companyId.companyName      | string    | \*       | Tên công ty         |
+| job.companyId.companyEmployees | string    | \*       | Số lượng nhân sự    |
+| job.companyId.companyModel     | string    | \*       | Mô hình công ty     |
+| job.companyId.workingTime      | string    | \*       | Thời gian làm việc  |
+| job.companyId.logo             | string    | \*       | Logo công ty        |
+| job.companyId.cityID           | string    | \*       | ID thành phố        |
+| job.companyId.cityID.cityName  | string    | \*       | Tên thành phố       |
+| job.title                      | string    | \*       | Tiêu đề công việc   |
+| job.salaryMin                  | string    | \*       | Lương tối thiểu     |
+| job.salaryMax                  | number    | \*       | Lương tối đa        |
+| job.position                   | string    | \*       | Vị trí              |
+| job.workingForm                | string    | \*       | Hình thức làm việc  |
+| job.technologies               | array     | \*       | Công nghệ yêu cầu   |
+| job.description                | string    | \*       | Mô tả công việc     |
+| job.images                     | string    |          | Hình ảnh            |
+| job.isDeleted                  | string    | \*       | Trạng thái đã xóa   |
+| job.createdAt                  | string    | \*       | Ngày đăng           |
+| job.updatedAt                  | string    | \*       | Ngày cập nhật       |
+| relateJobs                     | array     | \*       | Công việc liên quan |
 
 ## Status
 
-| Status | Message                   | Error Reason      |
-| ------ | ------------------------- | ----------------- |
-| 200    | Get Job Detail Successful | -                 |
-| 404    | Not Found                 | Job không tồn tại |
-| 500    | Internal Server Error     | -                 |
+| Status | Message               | Error Reason      |
+| ------ | --------------------- | ----------------- |
+| 200    | Successful            | -                 |
+| 404    | Not Found             | Job không tồn tại |
+| 500    | Internal Server Error | -                 |

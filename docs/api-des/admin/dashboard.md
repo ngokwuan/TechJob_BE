@@ -22,9 +22,9 @@
 
 ## Status
 
-| Status | Message                   | Error Reason         |
-| ------ | ------------------------- | -------------------- |
-| 200    | Get Statistics Successful | -                    |
-| 401    | Unauthorized              | Token không hợp lệ   |
-| 403    | Forbidden                 | Không có quyền admin |
-| 500    | Internal Server Error     | -                    |
+| Status | Message               | Error Reason         |
+| ------ | --------------------- | -------------------- |
+| 200    | Successful            | -                    |
+| 401    | Unauthorized          | Token không hợp lệ   |
+| 403    | Forbidden             | Không có quyền admin |
+| 500    | Internal Server Error | -                    |

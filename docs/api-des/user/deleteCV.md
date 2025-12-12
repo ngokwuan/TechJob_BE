@@ -26,7 +26,7 @@
 
 | Status | Message               | Error Reason              |
 | ------ | --------------------- | ------------------------- |
-| 200    | Delete CV Successful  | -                         |
+| 200    | Successful            | -                         |
 | 401    | Unauthorized          | Token không hợp lệ        |
 | 403    | Forbidden             | Không có quyền xóa cv này |
 | 404    | Not Found             | CV không tồn tại          |

@@ -12,9 +12,12 @@
 
 ## Response Data
 
-| JSON Key | Data Type | Required | Value Description |
-| -------- | --------- | -------- | ----------------- |
-| user     | object    |          | Người dùng        |
+| JSON Key  | Data Type | Required | Value Description             |
+| --------- | --------- | -------- | ----------------------------- |
+| id        | string    |          | ID Người dùng                 |
+| fullName  | string    |          | Tên người dùng                |
+| isDeleted | string    |          | Trạng thái đã xóa người dùng  |
+| updatedAt | string    |          | Thời gia cập nhật nngười dùng |
 
 ## Status
 

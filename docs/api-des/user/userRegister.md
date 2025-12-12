@@ -14,17 +14,18 @@
 
 ## Response Data
 
-| JSON Key | Data Type | Required | Value Description |
-| -------- | --------- | -------- | ----------------- |
-| userId   | string    | \*       | User ID           |
-| fullName | string    | \*       | Họ và tên         |
-| role     | string    | \*       | Quyền hạn         |
+| JSON Key      | Data Type | Required | Value Description |
+| ------------- | --------- | -------- | ----------------- |
+| user          | object    | \*       | Người dùng        |
+| user.id       | string    | \*       | ID người dùng     |
+| user.fullName | string    | \*       | Họ và tên         |
+| user.role     | string    | \*       | Quyền hạn         |
 
 ## Status
 
-| Status | Message                      | Error Reason         |
-| ------ | ---------------------------- | -------------------- |
-| 201    | User Registration Successful | -                    |
-| 400    | Bad Request                  | Dữ liệu không hợp lệ |
-| 409    | Conflict                     | Email đã tồn tại     |
-| 500    | Internal Server Error        | -                    |
+| Status | Message               | Error Reason         |
+| ------ | --------------------- | -------------------- |
+| 201    | Successful            | -                    |
+| 400    | Bad Request           | Dữ liệu không hợp lệ |
+| 409    | Conflict              | Email đã tồn tại     |
+| 500    | Internal Server Error | -                    |

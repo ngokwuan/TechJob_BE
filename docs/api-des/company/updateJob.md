@@ -31,22 +31,25 @@
 
 ## Response Data
 
-| JSON Key     | Data Type | Required | Value Description  |
-| ------------ | --------- | -------- | ------------------ |
-| title        | string    |          | Tiêu đề công việc  |
-| salaryMin    | string    |          | Lương tối thiểu    |
-| salaryMax    | number    |          | Lương tối đa       |
-| position     | string    |          | Vị trí             |
-| workingForm  | string    |          | Hình thức làm việc |
-| technologies | string    |          | Công nghệ yêu cầu  |
-| description  | string    |          | Mô tả công việc    |
-| images       | string    |          | URL hình ảnh       |
+| JSON Key     | Data Type | Required | Value Description            |
+| ------------ | --------- | -------- | ---------------------------- |
+| title        | string    |          | Tiêu đề công việc            |
+| salaryMin    | string    |          | Lương tối thiểu              |
+| salaryMax    | number    |          | Lương tối đa                 |
+| position     | string    |          | Vị trí                       |
+| workingForm  | string    |          | Hình thức làm việc           |
+| technologies | string    |          | Công nghệ yêu cầu            |
+| description  | string    |          | Mô tả công việc              |
+| images       | string    |          | URL hình ảnh                 |
+| isDeleted    | string    |          | URL hình ảnh                 |
+| createdAt    | string    | \*       | Thời gian tạo công việc      |
+| updatedAt    | string    | \*       | Thời gian cập nhập công việc |
 
 ## Status
 
 | Status | Message               | Error Reason                     |
 | ------ | --------------------- | -------------------------------- |
-| 200    | Update Job Successful | -                                |
+| 200    | Successful            | -                                |
 | 400    | Bad Request           | Dữ liệu không hợp lệ             |
 | 401    | Unauthorized          | Token không hợp lệ               |
 | 403    | Forbidden             | Không có quyền chỉnh sửa job này |

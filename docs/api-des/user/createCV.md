@@ -22,21 +22,25 @@
 
 ## Response Data
 
-| JSON Key | Data Type | Required | Value Description |
-| -------- | --------- | -------- | ----------------- |
-| userID   | string    | \*       | ID người nộp      |
-| jobID    | string    | \*       | ID việc làm       |
-| fullName | string    | \*       | Tên người nộp     |
-| email    | string    | \*       | Email             |
-| phone    | string    | \*       | Số điện thoại     |
-| fileCV   | string    | \*       | URL file          |
-| status   | string    | \*       | Trạng thái CV     |
+| JSON Key  | Data Type | Required | Value Description     |
+| --------- | --------- | -------- | --------------------- |
+| jobID     | string    | \*       | ID việc làm           |
+| userID    | string    | \*       | ID người nộp          |
+| fullName  | string    | \*       | Tên người nộp         |
+| email     | string    | \*       | Email                 |
+| phone     | string    | \*       | Số điện thoại         |
+| fileCV    | string    | \*       | URL file              |
+| status    | string    | \*       | Trạng thái CV         |
+| viewed    | string    | \*       | Trạng thái đã xem CV  |
+| id        | string    | \*       | ID CV                 |
+| createdAt | string    | \*       | Thời gian tạo CV      |
+| updatedAt | string    | \*       | Thời gian cập nhật CV |
 
 ## Status
 
 | Status | Message               | Error Reason              |
 | ------ | --------------------- | ------------------------- |
-| 201    | Create CV Successful  | -                         |
+| 201    | Successful            | -                         |
 | 400    | Bad Request           | Dữ liệu không hợp lệ      |
 | 401    | Unauthorized          | Token không hợp lệ        |
 | 403    | Forbidden             | Không có quyền tạo cv này |

@@ -16,6 +16,7 @@
 | ---------------------- | --------- | -------- | ------------------------------- |
 | totalUser              | string    |          | Số lượng công ty                |
 | user[]                 | array     |          | Mảng người dùng                 |
+| user[].id              | string    |          | ID người dùng                   |
 | user[].fullName        | string    |          | Tên người dùng                  |
 | user[].email           | string    |          | Email người dùng                |
 | user[].avatar          | string    |          | Ảnh đại diện người dùng         |
