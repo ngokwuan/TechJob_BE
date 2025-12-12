@@ -2,7 +2,7 @@
 
 ## Endpoint
 
-`GET /admin/dashboard/stats`
+`GET /admin/dashboard`
 
 ## Cookies
 
@@ -12,17 +12,13 @@
 
 ## Response Data
 
-| JSON Key             | Data Type | Required | Value Description         |
-| -------------------- | --------- | -------- | ------------------------- |
-| totalCompanies       | int       | \*       | Tổng số công ty           |
-| totalActiveCompanies | int       | \*       | Số công ty đang hoạt động |
-| totalUsers           | int       | \*       | Tổng số người dùng        |
-| totalJobs            | int       | \*       | Tổng số công việc         |
-| totalActiveJobs      | int       | \*       | Số công việc đang tuyển   |
-| totalCVs             | int       | \*       | Tổng số CV                |
-| totalPendingCVs      | int       | \*       | Số CV chờ xử lý           |
-| totalAcceptedCVs     | int       | \*       | Số CV được chấp nhận      |
-| totalRejectedCVs     | int       | \*       | Số CV bị từ chối          |
+| JSON Key       | Data Type | Required | Value Description          |
+| -------------- | --------- | -------- | -------------------------- |
+| totalCompanies | int       | \*       | Tổng số công ty            |
+| totalUsers     | int       | \*       | Tổng số người dùng         |
+| totalLockUsers | int       | \*       | Tổng số người dùng bị khóa |
+| totalJobs      | int       | \*       | Tổng số công việc          |
+| totalCVs       | int       | \*       | Tổng số CV                 |
 
 ## Status
 
