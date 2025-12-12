@@ -27,12 +27,7 @@ cvRouter.get(
   checkRole('company'),
   controller.getListCVWithCPN
 );
-cvRouter.delete(
-  '/:id',
-  checkUserJWT,
-  checkRole('company'),
-  controller.deleteCV
-);
+cvRouter.delete('/:id', checkUserJWT, checkRole('user'), controller.deleteCV);
 
 cvRouter.post(
   '/',
