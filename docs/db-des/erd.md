@@ -33,6 +33,7 @@ AccountsUser ||--o{ CV : "submits"
        string password
        string phone
        string avatar
+       string gender
        string role
         boolean isDeleted
         date createdAt

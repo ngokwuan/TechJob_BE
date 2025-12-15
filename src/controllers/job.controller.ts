@@ -199,3 +199,30 @@ export const getDetailJob = async (req: AuthRequest, res: Response) => {
     });
   }
 };
+export const filterPosOrIsDeletedJob = async (
+  req: AuthRequest,
+  res: Response
+) => {
+  try {
+    const { position, isDeleted } = req.query as {
+      position?: string;
+      isDeleted?: boolean;
+    };
+    const existJobs = await service.getAllJobsForAdmin();
+    const jobs = await service.filterPosOrIsDeleted(position, isDeleted);
+    return res.status(200).json({
+      success: true,
+      message: 'Lọc thành công công việc',
+      data: {
+        totalJob: existJobs.length,
+        jobs,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server, vui lòng thử lại sau',
+    });
+  }
+};

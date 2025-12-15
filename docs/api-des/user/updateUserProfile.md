@@ -10,7 +10,7 @@
 | ------ | ------- |
 | token  | {token} |
 
-## Response Data
+## Request Data
 
 | JSON Key | Data Type | Required | Value Description |
 | -------- | --------- | -------- | ----------------- |

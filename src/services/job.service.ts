@@ -206,3 +206,47 @@ export const getRelateJobs = async (jobId: string) => {
 
   return relateJobs;
 };
+
+export const filterPosOrIsDeleted = async (
+  position?: string,
+  isDeleted?: boolean
+) => {
+  const match: any = {};
+
+  if (position) match.position = position;
+  if (typeof isDeleted === 'boolean') match.isDeleted = isDeleted;
+
+  return await Job.aggregate([
+    {
+      $match: match,
+    },
+    {
+      $lookup: {
+        from: 'cv',
+        let: { jobId: '$_id' },
+        pipeline: [
+          { $match: { $expr: { $eq: ['$jobId', '$$jobId'] } } },
+          { $count: 'count' },
+        ],
+        as: 'cvCount',
+      },
+    },
+    {
+      $addFields: {
+        totalCV: {
+          $ifNull: [{ $arrayElemAt: ['$cvCount.count', 0] }, 0],
+        },
+      },
+    },
+    {
+      $project: {
+        title: 1,
+        workingForm: 1,
+        position: 1,
+        isDeleted: 1,
+        createdAt: 1,
+        totalCV: 1,
+      },
+    },
+  ]);
+};

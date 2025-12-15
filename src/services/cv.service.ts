@@ -111,3 +111,34 @@ export const getCVByUserId = async (userId: string) => {
 export const getAllCVForAdmin = async () => {
   return CV.find().select('_id');
 };
+export const filterStatusCV = async (status: string) => {
+  const cvList = await CV.aggregate([
+    {
+      $match: {
+        status: status,
+      },
+    },
+
+    {
+      $lookup: {
+        from: 'job',
+        localField: 'jobId',
+        foreignField: '_id',
+        as: 'job',
+      },
+    },
+    { $unwind: { path: '$job', preserveNullAndEmptyArrays: true } },
+
+    {
+      $project: {
+        fullName: 1,
+        email: 1,
+        viewed: 1,
+        status: 1,
+        createdAt: 1,
+        jobTitle: '$job.title',
+      },
+    },
+  ]);
+  return cvList;
+};

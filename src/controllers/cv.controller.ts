@@ -233,3 +233,21 @@ export const getListCVWithUser = async (req: AuthRequest, res: Response) => {
     });
   }
 };
+export const filterStatusCV = async (req: AuthRequest, res: Response) => {
+  try {
+    const status = req.query.status as string;
+    const existCV = await service.getAllCVForAdmin();
+    const cvs = await service.filterStatusCV(status);
+    return res.status(200).json({
+      success: true,
+      message: 'Lọc CV thành công',
+      data: { totalCV: existCV.length, cvs },
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server, vui lòng thử lại sau',
+    });
+  }
+};
