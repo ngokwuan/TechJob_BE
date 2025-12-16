@@ -20,13 +20,13 @@
 
 | JSON Key | Data Type | Required | Value Description |
 | -------- | --------- | -------- | ----------------- |
-| jobId    | string    | \*       | Job ID đã xóa     |
+| id       | string    | \*       | Job ID đã xóa     |
 
 ## Status
 
 | Status | Message               | Error Reason               |
 | ------ | --------------------- | -------------------------- |
-| 200    | Delete Job Successful | -                          |
+| 200    | Successful            | -                          |
 | 401    | Unauthorized          | Token không hợp lệ         |
 | 403    | Forbidden             | Không có quyền xóa job này |
 | 404    | Not Found             | Job không tồn tại          |

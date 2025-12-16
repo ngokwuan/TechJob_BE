@@ -13,18 +13,19 @@
 
 ## Response Data
 
-| JSON Key    | Data Type | Required | Value Description |
-| ----------- | --------- | -------- | ----------------- |
-| companyId   | string    | \*       | Company ID        |
-| companyName | string    | \*       | Tên công ty       |
-| role        | string    | \*       | Quyền hạn         |
-| token       | string    | \*       | JWT token         |
+| JSON Key            | Data Type | Required | Value Description |
+| ------------------- | --------- | -------- | ----------------- |
+| accessToken         | string    | \*       | JWT token         |
+| company             | object    | \*       | Công ty           |
+| company.id          | string    | \*       | Company ID        |
+| company.role        | string    | \*       | Quyền hạn         |
+| company.companyName | string    | \*       | Tên công ty       |
 
 ## Status
 
 | Status | Message               | Error Reason              |
 | ------ | --------------------- | ------------------------- |
-| 200    | Login Successful      | -                         |
+| 200    | Successful            | -                         |
 | 400    | Bad request           | Dữ liệu không hợp lệ      |
 | 401    | Unauthorized          | Email/Password không đúng |
 | 500    | Internal Server Error | -                         |

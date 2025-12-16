@@ -12,16 +12,21 @@
 
 ## Response Data
 
-| JSON Key       | Data Type | Required | Value Description  |
-| -------------- | --------- | -------- | ------------------ |
-| totalCV        | string    | \*       | Số lượng CV        |
-| cv[]           | array     | \*       | Mảng CV            |
-| cv[].jobId     | string    | \*       | Trình trạng đã xóa |
-| cv[].fullName  | string    | \*       | Tiêu đề CV         |
-| cv[].email     | string    | \*       | Hình thức làm việc |
-| cv[].createdAt | string    | \*       | Thời gian tạo      |
-| cv[].fileCV    | string    | \*       | ID CV              |
-| cv[].status    | string    | \*       | Tổng số CV         |
+| JSON Key       | Data Type | Required | Value Description     |
+| -------------- | --------- | -------- | --------------------- |
+| totalCV        | string    | \*       | Số lượng CV           |
+| cv[]           | array     | \*       | Mảng CV               |
+| cv[].jobId     | string    | \*       | ID công việc          |
+| cv[].userId    | string    | \*       | ID người dùng         |
+| cv[].fullName  | string    | \*       | Tên người dùng        |
+| cv[].email     | string    | \*       | Email                 |
+| cv[].phone     | string    | \*       | Số điện thoại         |
+| cv[].viewed    | string    | \*       | Trạng thái đã xem     |
+| cv[].createdAt | string    | \*       | Thời gian tạo         |
+| cv[].fileCV    | string    | \*       | file cv               |
+| cv[].status    | string    | \*       | Trạng thái duyệt CV   |
+| cv[].createdAt | string    | \*       | Thời gian tạo CV      |
+| cv[].updatedAt | string    | \*       | Thời gian cập nhật CV |
 
 ## Status
 

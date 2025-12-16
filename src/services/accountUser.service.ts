@@ -59,7 +59,7 @@ export const getAllLockUser = async () => {
   return AccountsUser.find({ isDeleted: true }).select('_id');
 };
 export const updateStatusUser = async (id: string) => {
-  const user = await AccountsUser.findById(id).select('-password -updatedAt');
+  const user = await AccountsUser.findById(id).select('_id fullName isDeleted');
   if (!user) return null;
 
   user.isDeleted = !user.isDeleted;

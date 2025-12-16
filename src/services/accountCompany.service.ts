@@ -4,7 +4,9 @@ import {
 } from '../models/accountCompany.model';
 
 export const updateStatusCPN = async (id: string) => {
-  const cpn = await AccountsCompany.findById(id).select('-password -updatedAt');
+  const cpn = await AccountsCompany.findById(id).select(
+    '_id companyName isDeleted'
+  );
   if (!cpn) return null;
   cpn.isDeleted = !cpn.isDeleted;
   await cpn.save();

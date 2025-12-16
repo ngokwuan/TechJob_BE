@@ -135,6 +135,8 @@ export const searchAndFilterJob = async (
     { $sort: { createdAt: -1 } },
     {
       $project: {
+        _id: 0,
+        jobId: '$_id',
         title: 1,
         position: 1,
         salaryMin: 1,

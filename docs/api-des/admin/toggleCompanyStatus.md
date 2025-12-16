@@ -12,9 +12,12 @@
 
 ## Response Data
 
-| JSON Key | Data Type | Required | Value Description |
-| -------- | --------- | -------- | ----------------- |
-| company  | object    |          | Công ty           |
+| JSON Key    | Data Type | Required | Value Description          |
+| ----------- | --------- | -------- | -------------------------- |
+| id          | string    |          | ID Công ty                 |
+| companyName | string    |          | Tên công ty                |
+| isDeleted   | string    |          | Trạng thái đã xóa công ty  |
+| updateAt    | string    |          | Thời gian cập nhật công ty |
 
 ## Status
 

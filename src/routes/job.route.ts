@@ -4,6 +4,7 @@ import { checkRole, checkUserJWT } from '../middlewares/jwt.middleware';
 import { validate } from '../middlewares/validate.middleware';
 import {
   createJobSchema,
+  filterJobSchema,
   updateJobSchema,
 } from '../validateSchemas/job.schema';
 import { upload } from '../middlewares/upload.middleware';
@@ -13,6 +14,14 @@ import { SearchQuerySchema } from '../validateSchemas/search.schema';
 export const jobRouter = Router();
 
 jobRouter.get('/all', controller.getListJobWithoutRole);
+jobRouter.get(
+  '/filter',
+  checkUserJWT,
+  checkRole('company'),
+  validate(filterJobSchema),
+
+  controller.filterPosOrIsDeletedJob
+);
 jobRouter.get(
   '/search',
   validate(SearchQuerySchema),

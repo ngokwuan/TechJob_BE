@@ -12,20 +12,23 @@
 
 ## Response Data
 
-| JSON Key    | Data Type | Required | Value Description |
-| ----------- | --------- | -------- | ----------------- |
-| companyId   | string    | \*       | Company ID        |
-| companyName | string    | \*       | Tên công ty       |
-| email       | string    | \*       | Email             |
-| address     | string    | \*       | Địa chỉ           |
-| cityID      | string    | \*       | ID thành phố      |
-| phone       | string    | \*       | Số điện thoại     |
-| logo        | string    | \*       | Logo công ty      |
+| JSON Key         | Data Type | Required | Value Description  |
+| ---------------- | --------- | -------- | ------------------ |
+| Id               | string    | \*       | Company ID         |
+| companyName      | string    | \*       | Tên công ty        |
+| address          | string    | \*       | Địa chỉ            |
+| companyEmployees | string    | \*       | Số lượng nhân sự   |
+| companyModel     | string    | \*       | Mô hình công ty    |
+| phone            | string    | \*       | Số điện thoại      |
+| workingTime      | string    | \*       | Thời gian làm việc |
+| workOverTime     | string    | \*       | Làm việc ngoài giờ |
+| logo             | string    | \*       | Logo công ty       |
+| cityID           | string    | \*       | ID thành phố       |
 
 ## Status
 
-| Status | Message                       | Error Reason          |
-| ------ | ----------------------------- | --------------------- |
-| 200    | Get Company Detail Successful | -                     |
-| 404    | Not Found                     | Company không tồn tại |
-| 500    | Internal Server Error         | -                     |
+| Status | Message               | Error Reason           |
+| ------ | --------------------- | ---------------------- |
+| 200    | Successful            | -                      |
+| 404    | Not Found             | Không tìm thấy công ty |
+| 500    | Internal Server Error | -                      |

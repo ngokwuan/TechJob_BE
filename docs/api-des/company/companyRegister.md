@@ -14,17 +14,18 @@
 
 ## Response Data
 
-| JSON Key    | Data Type | Required | Value Description |
-| ----------- | --------- | -------- | ----------------- |
-| companyId   | string    | \*       | Company ID        |
-| companyName | string    | \*       | Tên công ty       |
-| role        | string    | \*       | Quyền hạn         |
+| JSON Key            | Data Type | Required | Value Description |
+| ------------------- | --------- | -------- | ----------------- |
+| company             | object    | \*       | Công ty           |
+| company.id          | string    | \*       | ID công ty        |
+| company.role        | string    | \*       | Quyền hạn         |
+| company.companyName | string    | \*       | Tên công ty       |
 
 ## Status
 
-| Status | Message                         | Error Reason         |
-| ------ | ------------------------------- | -------------------- |
-| 201    | Company Registration Successful | -                    |
-| 400    | Bad Request                     | Dữ liệu không hợp lệ |
-| 409    | Conflict                        | Email đã tồn tại     |
-| 500    | Internal Server Error           | -                    |
+| Status | Message               | Error Reason         |
+| ------ | --------------------- | -------------------- |
+| 201    | Successful            | -                    |
+| 400    | Bad Request           | Dữ liệu không hợp lệ |
+| 409    | Conflict              | Email đã tồn tại     |
+| 500    | Internal Server Error | -                    |

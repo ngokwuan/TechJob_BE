@@ -21,3 +21,7 @@ export const updateJobSchema = z.object({
   description: z.string().optional(),
   images: z.any().optional(),
 });
+export const filterJobSchema = z.object({
+  position: z.string().optional(),
+  isDeleted: z.coerce.boolean().optional(),
+});

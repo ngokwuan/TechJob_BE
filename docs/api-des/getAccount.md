@@ -1,8 +1,8 @@
-# Get User Detail
+# Get Account
 
 ## Endpoint
 
-`GET /users/me`
+`GET /auth/check`
 
 ## Cookies
 
@@ -18,8 +18,6 @@
 | fullName | string    | \*       | Họ và tên         |
 | email    | string    | \*       | Email             |
 | role     | string    | \*       | Quyền truy cập    |
-| gender   | string    | \*       | Giới tính         |
-| avatar   | string    | \*       | Ảnh đại diện      |
 
 ## Status
 
