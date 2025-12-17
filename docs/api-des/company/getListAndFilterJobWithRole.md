@@ -10,6 +10,13 @@
 | ------ | ------- |
 | token  | {token} |
 
+## Request Data
+
+| JSON Key  | Data Type | Required | Value Description  |
+| --------- | --------- | -------- | ------------------ |
+| isDeleted | boolean   |          | Trình trạng đã xóa |
+| position  | string    |          | Vị trí công việc   |
+
 ## Response Data
 
 | JSON Key              | Data Type | Required | Value Description  |
@@ -19,6 +26,7 @@
 | job[].title           | string    |          | Tiêu đề công việc  |
 | job[].workingForm     | string    |          | Hình thức làm việc |
 | job[].isDeleted       | boolean   |          | Trình trạng đã xóa |
+| job[].position        | string    |          | Vị trí công việc   |
 | job[].jobId           | string    |          | ID công việc       |
 | job[].createdAt       | string    |          | Thời gian tạo      |
 | job[].totalApplicants | number    |          | Tổng số CV         |

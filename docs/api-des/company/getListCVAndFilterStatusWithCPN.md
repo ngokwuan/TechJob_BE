@@ -10,6 +10,12 @@
 | ------ | ------- |
 | token  | {token} |
 
+## Request Data
+
+| JSON Key    | Data Type | Required | Value Description   |
+| ----------- | --------- | -------- | ------------------- |
+| cv[].status | string    |          | Trạng thái duyệt CV |
+
 ## Response Data
 
 | JSON Key       | Data Type | Required | Value Description     |

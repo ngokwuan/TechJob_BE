@@ -2,17 +2,13 @@ import mongoose from 'mongoose';
 import { Job } from '../models/job.model';
 import { AccountsCompany } from '../models/accountCompany.model';
 
-export const searchService = async (keyword: string) => {
+export const searchService = async (keyword: string, cityId?: string) => {
   const regex = new RegExp(keyword, 'i');
-
-  const jobs = await Job.aggregate([
-    {
-      $match: {
-        isDeleted: false,
-        $or: [{ title: regex }, { technologies: regex }, { position: regex }],
-      },
-    },
-
+  const match: any = {
+    isDeleted: false,
+    $or: [{ title: regex }, { technologies: regex }, { position: regex }],
+  };
+  const pipeline: any[] = [
     {
       $lookup: {
         from: 'accountCompany',
@@ -21,11 +17,27 @@ export const searchService = async (keyword: string) => {
         as: 'company',
       },
     },
-
     { $unwind: '$company' },
+  ];
+  if (cityId) {
+    match['company.cityId'] = new mongoose.Types.ObjectId(cityId);
+  }
+  pipeline.push(
+    {
+      $lookup: {
+        from: 'city',
+        localField: 'company.cityId',
+        foreignField: '_id',
+        as: 'city',
+      },
+    },
+    { $unwind: { path: '$city', preserveNullAndEmptyArrays: true } },
+
+    { $match: match },
 
     {
       $project: {
+        _id: 0,
         jobId: '$_id',
         title: 1,
         salaryMin: 1,
@@ -36,12 +48,14 @@ export const searchService = async (keyword: string) => {
         createdAt: 1,
         companyName: '$company.companyName',
         logo: '$company.logo',
-        _id: 0,
+        cityId: '$company.cityId',
+        cityName: '$city.cityName',
       },
     },
 
-    { $sort: { createdAt: -1 } },
-  ]);
+    { $sort: { createdAt: -1 } }
+  );
+  const jobs = await Job.aggregate(pipeline);
 
   const companies = await AccountsCompany.aggregate([
     {
