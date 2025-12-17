@@ -179,23 +179,19 @@ export const deleteCV = async (req: AuthRequest, res: Response) => {
     });
   }
 };
-export const getListCVWithCPN = async (req: AuthRequest, res: Response) => {
+export const getListCVAndFilterStatusWithCPN = async (
+  req: AuthRequest,
+  res: Response
+) => {
   try {
-    const companyId = String(req.user?.id);
-
+    const companyId = req.user?.id as string;
+    const { status } = req.validated as { status?: string };
     const jobs = await getJobsByCompanyId(companyId);
+    const jobIds = jobs.map((j: any) => j.jobId);
 
-    if (!jobs.length) {
-      return res.json({
-        success: true,
-        message: 'Không có job nào',
-        data: { totalCV: 0, cvs: [] },
-      });
-    }
-
-    const jobIds = jobs.map((j: any) => String(j.jobId));
-
-    const cvs = await service.getCVOfJob(jobIds);
+    console.log('jobIds', jobIds);
+    const cvs = await service.getCVOfJob(jobIds, status);
+    console.log('cvs', cvs);
 
     return res.json({
       success: true,
@@ -227,24 +223,6 @@ export const getListCVWithUser = async (req: AuthRequest, res: Response) => {
       },
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: 'Lỗi server, vui lòng thử lại sau',
-    });
-  }
-};
-export const filterStatusCV = async (req: AuthRequest, res: Response) => {
-  try {
-    const status = req.query.status as string;
-    const existCV = await service.getAllCVForAdmin();
-    const cvs = await service.filterStatusCV(status);
-    return res.status(200).json({
-      success: true,
-      message: 'Lọc CV thành công',
-      data: { totalCV: existCV.length, cvs },
-    });
-  } catch (error) {
-    console.log(error);
     return res.status(500).json({
       success: false,
       message: 'Lỗi server, vui lòng thử lại sau',

@@ -130,12 +130,22 @@ export const getJobsWithoutRole = async () => {
 
   return jobs;
 };
-export const getJobsByCompanyId = async (companyId: string) => {
+export const getJobsByCompanyId = async (
+  companyId: string,
+  position?: string,
+  isDeleted?: boolean
+) => {
+  const match: any = {
+    companyId: new mongoose.Types.ObjectId(companyId),
+  };
+  if (position) match.position = position;
+  if (typeof isDeleted === 'boolean') {
+    match.isDeleted = isDeleted;
+  }
+
   const jobs = await Job.aggregate([
     {
-      $match: {
-        companyId: new mongoose.Types.ObjectId(companyId),
-      },
+      $match: match,
     },
 
     {
@@ -161,7 +171,8 @@ export const getJobsByCompanyId = async (companyId: string) => {
         workingForm: 1,
         createdAt: 1,
         totalApplicants: 1,
-        _id: 0, // không trả về _id vì đã map thành jobId
+        position: 1,
+        _id: 0,
       },
     },
 
@@ -205,48 +216,4 @@ export const getRelateJobs = async (jobId: string) => {
     .sort({ createdAt: -1 });
 
   return relateJobs;
-};
-
-export const filterPosOrIsDeleted = async (
-  position?: string,
-  isDeleted?: boolean
-) => {
-  const match: any = {};
-
-  if (position) match.position = position;
-  if (typeof isDeleted === 'boolean') match.isDeleted = isDeleted;
-
-  return await Job.aggregate([
-    {
-      $match: match,
-    },
-    {
-      $lookup: {
-        from: 'cv',
-        let: { jobId: '$_id' },
-        pipeline: [
-          { $match: { $expr: { $eq: ['$jobId', '$$jobId'] } } },
-          { $count: 'count' },
-        ],
-        as: 'cvCount',
-      },
-    },
-    {
-      $addFields: {
-        totalCV: {
-          $ifNull: [{ $arrayElemAt: ['$cvCount.count', 0] }, 0],
-        },
-      },
-    },
-    {
-      $project: {
-        title: 1,
-        workingForm: 1,
-        position: 1,
-        isDeleted: 1,
-        createdAt: 1,
-        totalCV: 1,
-      },
-    },
-  ]);
 };

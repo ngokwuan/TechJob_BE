@@ -2,12 +2,12 @@ import { Response } from 'express';
 import { SearchQueryInput } from '../validateSchemas/search.schema';
 import * as service from '../services/search.service';
 
-export const searchController = async (req: any, res: Response) => {
+export const searchAndFilterCityId = async (req: any, res: Response) => {
   try {
-    const { keyword } = req.validated as SearchQueryInput;
+    const { keyword, cityId } = req.validated as SearchQueryInput;
     const kw = keyword?.trim() || '';
 
-    const result = await service.searchService(kw);
+    const result = await service.searchService(kw, cityId);
 
     return res.status(200).json({
       success: true,

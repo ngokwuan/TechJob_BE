@@ -6,6 +6,7 @@ import {
   createCVSchema,
   updateCVSchema,
   updateStatusSchema,
+  filterStatusSchema,
 } from '../validateSchemas/cv.schema';
 import { upload } from '../middlewares/upload.middleware';
 export const cvRouter = Router();
@@ -21,19 +22,20 @@ cvRouter.get(
   checkRole('user'),
   controller.getListCVWithUser
 );
-cvRouter.get(
-  '/filter',
-  checkUserJWT,
-  checkRole('company'),
-  validate(updateStatusSchema),
-  controller.filterStatusCV
-);
+// cvRouter.get(
+//   '/filter',
+//   checkUserJWT,
+//   checkRole('company'),
+//   validate(updateStatusSchema),
+//   controller.filterStatusCV
+// );
 
 cvRouter.get(
   '/all',
   checkUserJWT,
   checkRole('company'),
-  controller.getListCVWithCPN
+  validate(filterStatusSchema),
+  controller.getListCVAndFilterStatusWithCPN
 );
 cvRouter.delete('/:id', checkUserJWT, checkRole('user'), controller.deleteCV);
 

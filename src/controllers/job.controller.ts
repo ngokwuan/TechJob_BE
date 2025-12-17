@@ -143,16 +143,21 @@ export const getListJobWithoutRole = async (
     });
   }
 };
-export const getListJobWithRole = async (req: AuthRequest, res: Response) => {
+export const getListAndFilterJobWithRole = async (
+  req: AuthRequest,
+  res: Response
+) => {
   try {
-    const companyId = req.user?.id;
-    if (!companyId) {
-      return res.status(401).json({
-        success: false,
-        message: 'Không xác thực công ty',
-      });
-    }
-    const jobs = await service.getJobsByCompanyId(companyId);
+    const companyId = req.user?.id as string;
+    const { position, isDeleted } = req.validated as {
+      position?: string;
+      isDeleted?: boolean;
+    };
+    const jobs = await service.getJobsByCompanyId(
+      companyId,
+      position,
+      isDeleted
+    );
     if (!jobs) {
       return res.status(404).json({
         success: false,
@@ -190,33 +195,6 @@ export const getDetailJob = async (req: AuthRequest, res: Response) => {
       success: true,
       message: 'Lấy  công việc thành công',
       data: { job, relateJobs },
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: 'Lỗi server, vui lòng thử lại sau',
-    });
-  }
-};
-export const filterPosOrIsDeletedJob = async (
-  req: AuthRequest,
-  res: Response
-) => {
-  try {
-    const { position, isDeleted } = req.query as {
-      position?: string;
-      isDeleted?: boolean;
-    };
-    const existJobs = await service.getAllJobsForAdmin();
-    const jobs = await service.filterPosOrIsDeleted(position, isDeleted);
-    return res.status(200).json({
-      success: true,
-      message: 'Lọc thành công công việc',
-      data: {
-        totalJob: existJobs.length,
-        jobs,
-      },
     });
   } catch (error) {
     console.error(error);

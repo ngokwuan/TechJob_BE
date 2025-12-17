@@ -19,5 +19,10 @@ export const updateStatusSchema = z.object({
     z.literal('Accepted'),
   ]),
 });
+export const filterStatusSchema = z.object({
+  status: z
+    .union([z.literal('Pending'), z.literal('Rejected'), z.literal('Accepted')])
+    .optional(),
+});
 
 export type UpdateStatusCVInput = z.infer<typeof updateStatusSchema>;

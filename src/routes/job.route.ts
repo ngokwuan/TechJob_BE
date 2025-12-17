@@ -14,14 +14,7 @@ import { SearchQuerySchema } from '../validateSchemas/search.schema';
 export const jobRouter = Router();
 
 jobRouter.get('/all', controller.getListJobWithoutRole);
-jobRouter.get(
-  '/filter',
-  checkUserJWT,
-  checkRole('company'),
-  validate(filterJobSchema),
 
-  controller.filterPosOrIsDeletedJob
-);
 jobRouter.get(
   '/search',
   validate(SearchQuerySchema),
@@ -32,7 +25,8 @@ jobRouter.get(
   '/',
   checkUserJWT,
   checkRole('company'),
-  controller.getListJobWithRole
+  validate(filterJobSchema),
+  controller.getListAndFilterJobWithRole
 );
 jobRouter.post(
   '/',
