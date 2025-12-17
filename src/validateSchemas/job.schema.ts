@@ -23,5 +23,9 @@ export const updateJobSchema = z.object({
 });
 export const filterJobSchema = z.object({
   position: z.string().optional(),
-  isDeleted: z.coerce.boolean().optional(),
+  isDeleted: z.preprocess((val) => {
+    if (val === 'true') return true;
+    if (val === 'false') return false;
+    return undefined;
+  }, z.boolean().optional()),
 });
