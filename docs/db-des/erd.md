@@ -15,6 +15,7 @@ AccountsUser ||--o{ CV : "submits"
        string companyEmployees
        string companyModel
        string description
+       string images
        string phone
        string workOverTime
        string workingTime "vd: 8:00-17:00"

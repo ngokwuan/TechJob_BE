@@ -216,7 +216,7 @@ export const searchAndFilterCPN = async (keyword: string, cityId?: string) => {
         logo: 1,
         cityName: '$city.cityName',
         totalJobs: 1,
-        _id: 0,
+        _id: 1,
       },
     },
 

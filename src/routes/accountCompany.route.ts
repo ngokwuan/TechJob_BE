@@ -28,7 +28,10 @@ companyRouter.patch(
   '/',
   checkUserJWT,
   checkRole('company'),
-  upload.single('logo'),
+  upload.fields([
+    { name: 'logo', maxCount: 1 },
+    { name: 'images', maxCount: 10 },
+  ]),
   validate(updateCompanySchema),
   controller.updateCompanyProfile
 );

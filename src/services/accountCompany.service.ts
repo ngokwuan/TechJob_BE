@@ -20,7 +20,7 @@ export const getCompanyById = async (
   id: string
 ): Promise<IAccountsCompany | null> => {
   return AccountsCompany.findById(id).select(
-    'companyName address cityId companyEmployees companyModel description phone workOverTime workingTime logo'
+    'companyName address cityId companyEmployees companyModel description images phone workOverTime workingTime logo'
   );
 };
 export const updateCompanyById = async (
@@ -30,7 +30,7 @@ export const updateCompanyById = async (
   return AccountsCompany.findByIdAndUpdate(id, data, {
     new: true,
   }).select(
-    'companyName address cityId companyEmployees companyModel description phone workOverTime workingTime logo'
+    'companyName address cityId companyEmployees companyModel description images phone workOverTime workingTime logo'
   );
 };
 
