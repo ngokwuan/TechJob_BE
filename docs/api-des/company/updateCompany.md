@@ -20,6 +20,7 @@
 | companyEmployees | string    |          | Số lượng nhân viên            |
 | companyModel     | string    |          | Mô hình công ty               |
 | description      | string    |          | Mô tả công ty                 |
+| images           | string    |          | URL ảnh công ty               |
 | phone            | string    |          | Số điện thoại                 |
 | workOverTime     | string    |          | Chế độ làm thêm giờ           |
 | workingTime      | string    |          | Giờ làm việc (vd: 8:00-17:00) |
@@ -38,6 +39,8 @@
 | phone            | string    |          | Số điện thoại                 |
 | workOverTime     | string    |          | Chế độ làm thêm giờ           |
 | workingTime      | string    |          | Giờ làm việc (vd: 8:00-17:00) |
+| description      | string    |          | Mô tả công ty                 |
+| images           | string    |          | URL ảnh công ty               |
 | logo             | string    |          | URL logo công ty              |
 | updatedAt        | string    |          | Ngày cập nhật                 |
 | cityId           | string    |          | ID thành phố                  |

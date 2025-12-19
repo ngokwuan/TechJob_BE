@@ -23,6 +23,8 @@
 | workingTime      | string    | \*       | Thời gian làm việc |
 | workOverTime     | string    | \*       | Làm việc ngoài giờ |
 | logo             | string    | \*       | Logo công ty       |
+| images           | string    | \*       | Ảnh công ty        |
+| description      | string    | \*       | Mô tả công ty      |
 | cityID           | string    | \*       | ID thành phố       |
 
 ## Status

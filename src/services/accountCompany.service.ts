@@ -2,7 +2,8 @@ import {
   AccountsCompany,
   IAccountsCompany,
 } from '../models/accountCompany.model';
-
+import * as jobService from '../services/job.service';
+import * as cvService from '../services/cv.service';
 export const updateStatusCPN = async (id: string) => {
   const cpn = await AccountsCompany.findById(id).select(
     '_id companyName isDeleted'
@@ -129,4 +130,19 @@ export const getAllCompanies = async () => {
     },
     { $sort: { createdAt: -1 } },
   ]);
+};
+export const getDashboard = async (id: string) => {
+  const jobs = await jobService.getJobsByCompanyId(id);
+  const activeJobs = await jobService.countActiveJobsByCompany(id);
+  const cvsByStatus = await cvService.getCVStatusSummary(id);
+  const totalJobs = jobs.length;
+  const totalActiveJobs = activeJobs;
+  const totalLockJobs = totalJobs - totalActiveJobs;
+
+  return {
+    totalJobs,
+    totalActiveJobs,
+    totalLockJobs,
+    ...cvsByStatus,
+  };
 };

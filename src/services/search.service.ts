@@ -56,13 +56,16 @@ export const searchService = async (keyword: string, cityId?: string) => {
     { $sort: { createdAt: -1 } }
   );
   const jobs = await Job.aggregate(pipeline);
-
+  const matchCPN: any = {
+    isDeleted: false,
+    $or: [{ companyName: regex }, { address: regex }],
+  };
+  if (cityId) {
+    matchCPN.cityId = new mongoose.Types.ObjectId(cityId);
+  }
   const companies = await AccountsCompany.aggregate([
     {
-      $match: {
-        isDeleted: false,
-        $or: [{ companyName: regex }, { address: regex }],
-      },
+      $match: matchCPN,
     },
 
     {
@@ -166,4 +169,58 @@ export const searchAndFilterJob = async (
   );
 
   return Job.aggregate(pipeline);
+};
+export const searchAndFilterCPN = async (keyword: string, cityId?: string) => {
+  const regex = new RegExp(keyword, 'i');
+  const match: any = {
+    isDeleted: false,
+    $or: [{ companyName: regex }],
+  };
+  if (cityId) {
+    match.cityId = new mongoose.Types.ObjectId(cityId);
+  }
+  const companies = await AccountsCompany.aggregate([
+    {
+      $match: match,
+    },
+
+    {
+      $lookup: {
+        from: 'job',
+        localField: '_id',
+        foreignField: 'companyId',
+        as: 'jobs',
+      },
+    },
+
+    {
+      $addFields: {
+        totalJobs: { $size: '$jobs' },
+      },
+    },
+
+    {
+      $lookup: {
+        from: 'city',
+        localField: 'cityId',
+        foreignField: '_id',
+        as: 'city',
+      },
+    },
+
+    { $unwind: { path: '$city', preserveNullAndEmptyArrays: true } },
+
+    {
+      $project: {
+        companyName: 1,
+        logo: 1,
+        cityName: '$city.cityName',
+        totalJobs: 1,
+        _id: 0,
+      },
+    },
+
+    { $sort: { totalJobs: -1 } },
+  ]);
+  return companies;
 };

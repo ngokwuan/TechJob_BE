@@ -217,3 +217,9 @@ export const getRelateJobs = async (jobId: string) => {
 
   return relateJobs;
 };
+export const countActiveJobsByCompany = async (companyId: string) => {
+  return Job.countDocuments({
+    companyId: new mongoose.Types.ObjectId(companyId),
+    isDeleted: false,
+  });
+};

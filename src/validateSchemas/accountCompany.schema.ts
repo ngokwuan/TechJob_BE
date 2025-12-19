@@ -12,5 +12,9 @@ export const updateCompanySchema = z.object({
   workingTime: z.string().optional(),
   logo: z.any().optional(),
 });
+export const searchAndFilterCPNSchema = z.object({
+  keyword: z.string().optional(),
+  cityId: z.string().optional(),
+});
 
 export type UpdateCompanyInput = z.infer<typeof updateCompanySchema>;
