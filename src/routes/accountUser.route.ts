@@ -7,6 +7,12 @@ import { updateUserSchema } from '../validateSchemas/accountUser.schema';
 export const userRouter = Router();
 
 userRouter.get('/me', checkUserJWT, controller.getUserProfile);
+userRouter.get(
+  '/dashboard',
+  checkUserJWT,
+  checkRole('user'),
+  controller.getDashboard
+);
 userRouter.patch(
   '/',
   checkUserJWT,

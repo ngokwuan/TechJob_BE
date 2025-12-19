@@ -134,7 +134,7 @@ export const getAllCompanies = async () => {
 export const getDashboard = async (id: string) => {
   const jobs = await jobService.getJobsByCompanyId(id);
   const activeJobs = await jobService.countActiveJobsByCompany(id);
-  const cvsByStatus = await cvService.getCVStatusSummary(id);
+  const cvsByStatus = await cvService.getCVStatusByCompanyId(id);
   const totalJobs = jobs.length;
   const totalActiveJobs = activeJobs;
   const totalLockJobs = totalJobs - totalActiveJobs;

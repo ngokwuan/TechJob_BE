@@ -3,7 +3,7 @@ import { Response } from 'express';
 import { getUserById, updateUserById } from '../services/accountUser.service';
 import { IAccountsUser } from '../models/accountUser.model';
 import { uploadImage } from '../services/cloudinary.service';
-
+import * as cvService from '../services/cv.service';
 export const getUserProfile = async (req: AuthRequest, res: Response) => {
   try {
     const id = req.user?.id;
@@ -75,6 +75,25 @@ export const updateUserProfile = async (req: AuthRequest, res: Response) => {
       success: true,
       message: 'Cập nhật thông tin người dùng thành công',
       data: updatedUser,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server, vui lòng thử lại sau',
+    });
+  }
+};
+export const getDashboard = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user?.id as string;
+    const cvs = await cvService.getCVByUserId(userId);
+    const cvsByStatus = await cvService.getCVStatusByUserId(userId);
+    const result = { totalCVs: cvs.length, ...cvsByStatus };
+    return res.status(200).json({
+      success: true,
+      message: 'Lấy thông tin thành công ',
+      data: result,
     });
   } catch (error) {
     console.error(error);
