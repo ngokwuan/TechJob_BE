@@ -145,3 +145,20 @@ export const getListCPN = async (req: AuthRequest, res: Response) => {
     });
   }
 };
+export const getDashBoard = async (req: AuthRequest, res: Response) => {
+  try {
+    const id = req.user?.id as string;
+    const result = await service.getDashboard(id);
+    return res.status(200).json({
+      success: true,
+      message: 'Lấy thông tin  thành công',
+      data: result,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Lỗi server, vui lòng thử lại sau',
+    });
+  }
+};

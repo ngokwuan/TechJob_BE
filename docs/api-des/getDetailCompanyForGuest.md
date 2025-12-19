@@ -19,6 +19,8 @@
 | company.companyName    | string    | \*       | Tên công ty                    |
 | company.address        | string    |          | Địa chỉ                        |
 | company.logo           | string    |          | Logo công ty                   |
+| company.images         | string    |          | Ảnh công ty                    |
+| company.description    | string    |          | Mô tả công ty                  |
 | jobs                   | array     | \*       | Danh sách công việc đang tuyển |
 | jobs[].id              | string    | \*       | Id công việc                   |
 | jobs[].title           | string    | \*       | Tiêu đề công việc              |

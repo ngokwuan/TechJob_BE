@@ -117,3 +117,35 @@ export const getCVByUserId = async (userId: string) => {
 export const getAllCVForAdmin = async () => {
   return CV.find().select('_id');
 };
+export const getCVStatusSummary = async (companyId: string) => {
+  const result = await CV.aggregate([
+    {
+      $lookup: {
+        from: 'job',
+        localField: 'jobId',
+        foreignField: '_id',
+        as: 'job',
+      },
+    },
+    { $unwind: '$job' },
+
+    {
+      $match: {
+        'job.companyId': new mongoose.Types.ObjectId(companyId),
+      },
+    },
+
+    {
+      $group: {
+        _id: '$status',
+        total: { $sum: 1 },
+      },
+    },
+  ]);
+
+  return {
+    totalPendingCVs: result.find((r) => r._id === 'Pending')?.total || 0,
+    totalRejectedCVs: result.find((r) => r._id === 'Rejected')?.total || 0,
+    totalAcceptedCVs: result.find((r) => r._id === 'Accepted')?.total || 0,
+  };
+};
