@@ -12,6 +12,7 @@ export interface IAccountsCompany extends Document {
   companyEmployees?: string;
   companyModel?: string;
   description?: string;
+  images?: string[];
   phone?: string;
   workOverTime?: string;
   workingTime?: string;
@@ -31,6 +32,7 @@ const AccountsCompanySchema = new Schema<IAccountsCompany>(
     companyEmployees: { type: String },
     companyModel: { type: String },
     description: { type: String },
+    images: { type: [String], default: [] },
     phone: { type: String },
     workOverTime: { type: String },
     workingTime: { type: String },

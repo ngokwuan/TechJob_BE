@@ -2,7 +2,8 @@ import { AuthRequest } from '../types/auth.type';
 import { Response } from 'express';
 import * as service from '../services/accountCompany.service';
 import { IAccountsCompany } from '../models/accountCompany.model';
-import { uploadImage } from '../services/cloudinary.service';
+import { uploadImage, uploadImages } from '../services/cloudinary.service';
+
 import { getJobsByCompanyId } from '../services/job.service';
 
 export const getDetailCompanyForGuest = async (
@@ -31,7 +32,7 @@ export const getDetailCompanyForGuest = async (
     const totalJobs = jobs.length;
     return res.status(200).json({
       success: true,
-      message: 'Lấy thông tin người dùng thành công',
+      message: 'Lấy thông tin công ty thành công',
       data: { totalJobs, company, jobs },
     });
   } catch (error) {
@@ -76,38 +77,70 @@ export const getCompanyProfile = async (req: AuthRequest, res: Response) => {
     });
   }
 };
+// export const updateCompanyProfile = async (req: AuthRequest, res: Response) => {
+//   try {
+//     const id = String(req.user?.id);
+//     const updateData = req.validated;
+//     const imageUrls = await uploadImages(
+//       req.files as Express.Multer.File[],
+//       'company-images'
+//     );
+//     if (imageUrls.length > 0) {
+//       updateData.images = imageUrls;
+//     }
+//     let logoUrl: string | undefined;
+
+//     if (req.file) {
+//       logoUrl = await uploadImage(req.file, 'company-logo');
+//     }
+//     const updatedCompany = await service.updateCompanyById(id, {
+//       ...updateData,
+//       ...(logoUrl && { logo: logoUrl }),
+//       images: imageUrls,
+//     });
+
+//     if (!updatedCompany) {
+//       return res.status(404).json({
+//         success: false,
+//         message: 'Công ty không tồn tại',
+//       });
+//     }
+//     return res.status(200).json({
+//       success: true,
+//       message: 'Cập nhật thông tin công ty thành công',
+//       data: updatedCompany,
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({
+//       success: false,
+//       message: 'Lỗi server, vui lòng thử lại sau',
+//     });
+//   }
+// };
 export const updateCompanyProfile = async (req: AuthRequest, res: Response) => {
   try {
     const id = String(req.user?.id);
-    const {
-      companyName,
-      address,
-      cityId,
-      companyEmployees,
-      companyModel,
-      description,
-      phone,
-      workOverTime,
-      workingTime,
-    } = req.validated;
+    const updateData = req.validated;
 
-    let logoUrl: string | undefined;
+    const files = req.files as {
+      logo?: Express.Multer.File[];
+      images?: Express.Multer.File[];
+    };
 
-    if (req.file) {
-      logoUrl = await uploadImage(req.file, 'company-logo');
+    // Upload images
+    if (files?.images?.length) {
+      const imageUrls = await uploadImages(files.images, 'company-images');
+      updateData.images = imageUrls;
     }
-    const updatedCompany = await service.updateCompanyById(id, {
-      companyName,
-      address,
-      cityId,
-      companyEmployees,
-      companyModel,
-      description,
-      phone,
-      workOverTime,
-      workingTime,
-      ...(logoUrl && { logo: logoUrl }),
-    });
+
+    // Upload logo
+    if (files?.logo?.length) {
+      const logoUrl = await uploadImage(files.logo[0], 'company-logo');
+      updateData.logo = logoUrl;
+    }
+
+    const updatedCompany = await service.updateCompanyById(id, updateData);
 
     if (!updatedCompany) {
       return res.status(404).json({
@@ -115,6 +148,7 @@ export const updateCompanyProfile = async (req: AuthRequest, res: Response) => {
         message: 'Công ty không tồn tại',
       });
     }
+
     return res.status(200).json({
       success: true,
       message: 'Cập nhật thông tin công ty thành công',
@@ -128,6 +162,7 @@ export const updateCompanyProfile = async (req: AuthRequest, res: Response) => {
     });
   }
 };
+
 export const getListCPN = async (req: AuthRequest, res: Response) => {
   try {
     const jobs = await service.getAllCompanies();

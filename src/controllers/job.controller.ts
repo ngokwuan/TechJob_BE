@@ -86,13 +86,11 @@ export const updateJobController = async (req: AuthRequest, res: Response) => {
     const companyId = String(req.user?.id);
     const { jobId } = req.params;
     const updateData = req.validated;
-    // Lấy file upload (nếu có)
     const imageUrls = await uploadImages(
       req.files as Express.Multer.File[],
       'jobs'
     );
 
-    // Nếu có ảnh mới, cập nhật vào updateData
     if (imageUrls.length > 0) {
       updateData.images = imageUrls;
     }

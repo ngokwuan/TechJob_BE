@@ -11,6 +11,7 @@ export const updateCompanySchema = z.object({
   workOverTime: z.string().optional(),
   workingTime: z.string().optional(),
   logo: z.any().optional(),
+  images: z.any().optional(),
 });
 export const searchAndFilterCPNSchema = z.object({
   keyword: z.string().optional(),
