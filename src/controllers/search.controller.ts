@@ -28,8 +28,8 @@ export const searchAndFilterJobForGuest = async (req: any, res: Response) => {
   try {
     const { keyword = '', position = '', cityId = '' } = req.validated;
     const kw = keyword?.trim() || '';
-
-    const result = await service.searchAndFilterJob(kw, position, cityId);
+    const page = Number(req.query.page) || 1;
+    const result = await service.searchAndFilterJob(kw, position, cityId, page);
 
     return res.status(200).json({
       success: true,
@@ -49,14 +49,16 @@ export const searchAndFilterCPNForGuest = async (
   res: Response
 ) => {
   try {
+    const page = Number(req.query.page) || 1;
+
     const { keyword, cityId } = req.validated;
     const kw = keyword?.trim() || '';
-    const result = await service.searchAndFilterCPN(kw, cityId);
+    const result = await service.searchAndFilterCPN(kw, cityId, page);
 
     return res.status(200).json({
       success: true,
       message: 'Tra cứu thành công',
-      data: { totalCompany: result.length, result },
+      data: result,
     });
   } catch (error) {
     console.error(error);

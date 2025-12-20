@@ -55,18 +55,33 @@ export const deleteByCVId = async (id: string) => {
 
 export const getCVOfJob = async (
   jobIds: mongoose.Types.ObjectId[],
+  page = 1,
   status?: string
 ) => {
+  const LIMIT = 10;
+  const skip = (page - 1) * LIMIT;
+
   const filter: any = {
     jobId: { $in: jobIds },
   };
   if (status) filter.status = status;
 
-  return CV.find(filter).populate('jobId', 'title');
+  const [dataCV, totalPageCV] = await Promise.all([
+    CV.find(filter).populate('jobId', 'title').skip(skip).limit(LIMIT),
+    CV.countDocuments(filter),
+  ]);
+
+  return {
+    totalPageCV: Math.ceil(totalPageCV / LIMIT),
+    dataCV,
+  };
 };
 
-export const getCVByUserId = async (userId: string) => {
-  const cvList = await CV.aggregate([
+export const getCVByUserId = async (userId: string, page = 1) => {
+  const LIMIT = 10;
+  const skip = (page - 1) * LIMIT;
+
+  const basePipeline = [
     {
       $match: {
         userId: new mongoose.Types.ObjectId(userId),
@@ -110,9 +125,17 @@ export const getCVByUserId = async (userId: string) => {
         companyName: '$company.companyName',
       },
     },
+  ];
+
+  const [data, total] = await Promise.all([
+    CV.aggregate([...basePipeline, { $skip: skip }, { $limit: LIMIT }]),
+    CV.aggregate([...basePipeline, { $count: 'count' }]),
   ]);
 
-  return cvList;
+  return {
+    totalPage: Math.ceil((total[0]?.count || 0) / LIMIT),
+    data,
+  };
 };
 export const getAllCVForAdmin = async () => {
   return CV.find().select('_id');

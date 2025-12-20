@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { PipelineStage } from 'mongoose';
 import { Job } from '../models/job.model';
 import { AccountsCompany } from '../models/accountCompany.model';
 
@@ -116,11 +116,14 @@ export const searchService = async (keyword: string, cityId?: string) => {
 export const searchAndFilterJob = async (
   kw = '',
   position = '',
-  cityId = ''
+  cityId = '',
+  page = 1
 ) => {
   const regexKw = new RegExp(kw, 'i');
+  const LIMIT = 12;
+  const skip = (page - 1) * LIMIT;
 
-  const pipeline: any[] = [
+  const basePipeline: PipelineStage[] = [
     {
       $match: {
         isDeleted: false,
@@ -141,14 +144,13 @@ export const searchAndFilterJob = async (
     },
     { $unwind: '$company' },
   ];
-
   if (cityId) {
-    pipeline.push({
+    basePipeline.push({
       $match: { 'company.cityId': new mongoose.Types.ObjectId(cityId) },
     });
   }
 
-  pipeline.push(
+  basePipeline.push(
     { $sort: { createdAt: -1 } },
     {
       $project: {
@@ -167,10 +169,24 @@ export const searchAndFilterJob = async (
       },
     }
   );
+  const [data, total] = await Promise.all([
+    Job.aggregate([...basePipeline, { $skip: skip }, { $limit: LIMIT }]),
+    Job.aggregate([...basePipeline, { $count: 'count' }]),
+  ]);
 
-  return Job.aggregate(pipeline);
+  return {
+    totalPage: Math.ceil((total[0]?.count || 0) / LIMIT),
+    data,
+  };
 };
-export const searchAndFilterCPN = async (keyword: string, cityId?: string) => {
+
+export const searchAndFilterCPN = async (
+  keyword: string,
+  cityId?: string,
+  page = 1
+) => {
+  const LIMIT = 12;
+  const skip = (page - 1) * LIMIT;
   const regex = new RegExp(keyword, 'i');
   const match: any = {
     isDeleted: false,
@@ -179,7 +195,7 @@ export const searchAndFilterCPN = async (keyword: string, cityId?: string) => {
   if (cityId) {
     match.cityId = new mongoose.Types.ObjectId(cityId);
   }
-  const companies = await AccountsCompany.aggregate([
+  const basePipeline: PipelineStage[] = [
     {
       $match: match,
     },
@@ -221,6 +237,18 @@ export const searchAndFilterCPN = async (keyword: string, cityId?: string) => {
     },
 
     { $sort: { totalJobs: -1 } },
+  ];
+  const [data, total] = await Promise.all([
+    AccountsCompany.aggregate([
+      ...basePipeline,
+      { $skip: skip },
+      { $limit: LIMIT },
+    ]),
+    AccountsCompany.aggregate([...basePipeline, { $count: 'count' }]),
   ]);
-  return companies;
+
+  return {
+    totalPage: Math.ceil((total[0]?.count || 0) / LIMIT),
+    data,
+  };
 };

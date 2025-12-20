@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import { PipelineStage } from 'mongoose';
+
 import { Job } from '../models/job.model';
 import { AccountsCompany } from '../models/accountCompany.model';
 export const checkExistJob = async (jobId: string) => {
@@ -91,12 +93,15 @@ export const updateJobById = async (
   const updatedJob = await job.save();
   return updatedJob;
 };
-export const getJobsWithoutRole = async () => {
-  const jobs = await Job.aggregate([
+
+export const getJobsWithoutRole = async (page = 1) => {
+  const LIMIT = 12;
+  const skip = (page - 1) * LIMIT;
+
+  const basePipeline: PipelineStage[] = [
     {
       $match: { isDeleted: false },
     },
-
     {
       $lookup: {
         from: 'accountCompany',
@@ -105,9 +110,7 @@ export const getJobsWithoutRole = async () => {
         as: 'company',
       },
     },
-
     { $unwind: '$company' },
-
     {
       $project: {
         jobId: '$_id',
@@ -120,21 +123,32 @@ export const getJobsWithoutRole = async () => {
         createdAt: 1,
         companyName: '$company.companyName',
         logo: '$company.logo',
-
         _id: 0,
       },
     },
-
     { $sort: { createdAt: -1 } },
+  ];
+
+  const [data, total] = await Promise.all([
+    Job.aggregate([...basePipeline, { $skip: skip }, { $limit: LIMIT }]),
+    Job.aggregate([...basePipeline, { $count: 'count' }]),
   ]);
 
-  return jobs;
+  return {
+    totalPage: Math.ceil((total[0]?.count || 0) / LIMIT),
+    data,
+  };
 };
+
 export const getJobsByCompanyId = async (
   companyId: string,
+  page = 1,
   position?: string,
   isDeleted?: boolean
 ) => {
+  const LIMIT = 10;
+  const skip = (page - 1) * LIMIT;
+
   const match: any = {
     companyId: new mongoose.Types.ObjectId(companyId),
   };
@@ -142,8 +156,7 @@ export const getJobsByCompanyId = async (
   if (typeof isDeleted === 'boolean') {
     match.isDeleted = isDeleted;
   }
-
-  const jobs = await Job.aggregate([
+  const basePipeline: PipelineStage[] = [
     {
       $match: match,
     },
@@ -177,8 +190,16 @@ export const getJobsByCompanyId = async (
     },
 
     { $sort: { createdAt: -1 } },
+  ];
+  const [data, total] = await Promise.all([
+    Job.aggregate([...basePipeline, { $skip: skip }, { $limit: LIMIT }]),
+    Job.aggregate([...basePipeline, { $count: 'count' }]),
   ]);
-  return jobs;
+
+  return {
+    totalPage: Math.ceil((total[0]?.count || 0) / LIMIT),
+    data,
+  };
 };
 export const getAllJobsForAdmin = async () => {
   const jobs = await Job.find();

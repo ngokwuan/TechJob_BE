@@ -126,12 +126,13 @@ export const getListJobWithoutRole = async (
   res: Response
 ) => {
   try {
-    const jobs = await service.getJobsWithoutRole();
+    const page = Number(req.query.page) || 1;
+    const result = await service.getJobsWithoutRole(page);
 
-    return res.status(200).json({
+    return res.json({
       success: true,
-      message: 'Lấy danh sách công việc thành công',
-      data: jobs,
+      message: 'Lấy danh sách thành công',
+      data: result,
     });
   } catch (error) {
     console.error(error);
@@ -146,27 +147,32 @@ export const getListAndFilterJobWithRole = async (
   res: Response
 ) => {
   try {
+    const page = Number(req.query.page) || 1;
+
     const companyId = req.user?.id as string;
     const { position, isDeleted } = req.validated as {
       position?: string;
       isDeleted?: boolean;
     };
-    const jobs = await service.getJobsByCompanyId(
+    const { data, totalPage } = await service.getJobsByCompanyId(
       companyId,
+      page,
       position,
       isDeleted
     );
-    if (!jobs) {
+    if (!data) {
       return res.status(404).json({
         success: false,
         message: 'Không tồn tài công việc nào',
       });
     }
-    const totalJob = jobs.length;
+    const totalJob = data.length;
     return res.status(200).json({
       success: true,
       message: 'Lấy danh sách công việc thành công',
-      data: { totalJob, jobs },
+      totalJob,
+      data,
+      totalPage,
     });
   } catch (error) {
     console.error(error);

@@ -6,8 +6,12 @@ import * as jobService from '../services/job.service';
 import * as cvService from '../services/cv.service';
 export const getListCPNForAdmin = async (req: AuthRequest, res: Response) => {
   try {
-    const company = await companyService.getAllCompaniesForAdmin();
-    if (!company) {
+    const page = Number(req.query.page) || 1;
+
+    const { data, totalPage } = await companyService.getAllCompaniesForAdmin(
+      page
+    );
+    if (!data) {
       return res.status(404).json({
         success: false,
         message: 'Không tìm thấy công ty nào',
@@ -16,7 +20,9 @@ export const getListCPNForAdmin = async (req: AuthRequest, res: Response) => {
     return res.status(200).json({
       success: true,
       message: 'Lấy danh sách công ty thành công',
-      data: { totalCompany: company.length, company },
+      totalCompany: data.length,
+      data,
+      totalPage,
     });
   } catch (error) {
     console.error(error);
@@ -53,8 +59,10 @@ export const toggleCompanyStatus = async (req: AuthRequest, res: Response) => {
 };
 export const getAllUsersForAdmin = async (req: AuthRequest, res: Response) => {
   try {
-    const user = await userService.getAllUsersForAdmin();
-    if (!user) {
+    const page = Number(req.query.page) || 1;
+
+    const { data, totalPage } = await userService.getAllUsersForAdmin(page);
+    if (!data) {
       return res.status(404).json({
         success: false,
         message: 'Không tìm thấy người dùng nào',
@@ -63,7 +71,9 @@ export const getAllUsersForAdmin = async (req: AuthRequest, res: Response) => {
     return res.status(200).json({
       success: true,
       message: 'Lấy danh sách người dùng thành công',
-      data: { totalUser: user.length, user },
+      totalUser: data.length,
+      data,
+      totalPage,
     });
   } catch (error) {
     console.error(error);
@@ -99,8 +109,8 @@ export const toggleUserStatus = async (req: AuthRequest, res: Response) => {
   }
 };
 export const getDashBoard = async (req: AuthRequest, res: Response) => {
-  const cpns = await companyService.getAllCompaniesForAdmin();
-  const users = await userService.getAllUsersForAdmin();
+  const cpns = await companyService.getAllCompaniesForDashboardAdmin();
+  const users = await userService.getAllUsersForDashboardAdmin();
   const lockUsers = await userService.getAllLockUser();
   const jobs = await jobService.getAllJobsForAdmin();
   const cvs = await cvService.getAllCVForAdmin();
