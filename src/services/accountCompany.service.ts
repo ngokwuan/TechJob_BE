@@ -2,18 +2,40 @@ import {
   AccountsCompany,
   IAccountsCompany,
 } from '../models/accountCompany.model';
+import { Job } from '../models/job.model';
 import * as jobService from '../services/job.service';
 import * as cvService from '../services/cv.service';
 import { PipelineStage } from 'mongoose';
+
 export const updateStatusCPN = async (id: string) => {
-  const cpn = await AccountsCompany.findById(id).select(
-    '_id companyName isDeleted'
-  );
-  if (!cpn) return null;
-  cpn.isDeleted = !cpn.isDeleted;
-  await cpn.save();
-  return cpn;
+  const session = await AccountsCompany.startSession();
+  session.startTransaction();
+
+  try {
+    const company = await AccountsCompany.findById(id).session(session);
+    if (!company) return null;
+
+    const newStatus = !company.isDeleted;
+    company.isDeleted = newStatus;
+    await company.save({ session });
+
+    await Job.updateMany(
+      { companyId: company._id },
+      { $set: { isDeleted: newStatus } },
+      { session }
+    );
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return company;
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
+  }
 };
+
 export const checkExistCPN = async (id: string) => {
   return await AccountsCompany.findById(id);
 };
