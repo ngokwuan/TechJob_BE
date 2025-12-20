@@ -87,9 +87,9 @@ export const updateUserProfile = async (req: AuthRequest, res: Response) => {
 export const getDashboard = async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.user?.id as string;
-    const cvs = await cvService.getCVByUserId(userId);
+    const { data } = await cvService.getCVByUserId(userId);
     const cvsByStatus = await cvService.getCVStatusByUserId(userId);
-    const result = { totalCVs: cvs.length, ...cvsByStatus };
+    const result = { totalCVs: data.length, ...cvsByStatus };
     return res.status(200).json({
       success: true,
       message: 'Lấy thông tin thành công ',
