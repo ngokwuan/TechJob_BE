@@ -185,18 +185,24 @@ export const getListCVAndFilterStatusWithCPN = async (
 ) => {
   try {
     const companyId = req.user?.id as string;
+    const page = Number(req.query.page) || 1;
     const { status } = req.validated as { status?: string };
-    const jobs = await getJobsByCompanyId(companyId);
-    const jobIds = jobs.map((j: any) => j.jobId);
+    const { data } = await getJobsByCompanyId(companyId);
+    const jobIds = data.map((j: any) => j.jobId);
 
-    const cvs = await service.getCVOfJob(jobIds, status);
+    const { dataCV, totalPageCV } = await service.getCVOfJob(
+      jobIds,
+      page,
+      status
+    );
 
     return res.json({
       success: true,
       message: 'Lấy danh sách CV thành công',
       data: {
-        totalCV: cvs.length,
-        cvs,
+        totalCV: dataCV.length,
+        dataCV,
+        totalPageCV,
       },
     });
   } catch (error) {
@@ -209,16 +215,14 @@ export const getListCVAndFilterStatusWithCPN = async (
 export const getListCVWithUser = async (req: AuthRequest, res: Response) => {
   try {
     const userId = String(req.user?.id);
+    const page = Number(req.query.page) || 1;
 
-    const cvs = await service.getCVByUserId(userId);
+    const cvs = await service.getCVByUserId(userId, page);
 
     return res.json({
       success: true,
       message: 'Lấy danh sách CV thành công',
-      data: {
-        totalCV: cvs.length,
-        cvs,
-      },
+      data: cvs,
     });
   } catch (error) {
     return res.status(500).json({
