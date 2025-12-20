@@ -189,9 +189,7 @@ export const getListCVAndFilterStatusWithCPN = async (
     const jobs = await getJobsByCompanyId(companyId);
     const jobIds = jobs.map((j: any) => j.jobId);
 
-    console.log('jobIds', jobIds);
     const cvs = await service.getCVOfJob(jobIds, status);
-    console.log('cvs', cvs);
 
     return res.json({
       success: true,

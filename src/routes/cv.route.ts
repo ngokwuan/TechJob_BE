@@ -22,13 +22,6 @@ cvRouter.get(
   checkRole('user'),
   controller.getListCVWithUser
 );
-// cvRouter.get(
-//   '/filter',
-//   checkUserJWT,
-//   checkRole('company'),
-//   validate(updateStatusSchema),
-//   controller.filterStatusCV
-// );
 
 cvRouter.get(
   '/all',
