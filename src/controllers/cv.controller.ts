@@ -199,11 +199,10 @@ export const getListCVAndFilterStatusWithCPN = async (
     return res.json({
       success: true,
       message: 'Lấy danh sách CV thành công',
-      data: {
-        totalCV: dataCV.length,
-        dataCV,
-        totalPageCV,
-      },
+
+      totalCV: dataCV.length,
+      dataCV,
+      totalPageCV,
     });
   } catch (error) {
     return res.status(500).json({

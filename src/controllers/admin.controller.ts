@@ -20,7 +20,9 @@ export const getListCPNForAdmin = async (req: AuthRequest, res: Response) => {
     return res.status(200).json({
       success: true,
       message: 'Lấy danh sách công ty thành công',
-      data: { totalCompany: data.length, data, totalPage },
+      totalCompany: data.length,
+      data,
+      totalPage,
     });
   } catch (error) {
     console.error(error);
@@ -69,7 +71,9 @@ export const getAllUsersForAdmin = async (req: AuthRequest, res: Response) => {
     return res.status(200).json({
       success: true,
       message: 'Lấy danh sách người dùng thành công',
-      data: { totalUser: data.length, data, totalPage },
+      totalUser: data.length,
+      data,
+      totalPage,
     });
   } catch (error) {
     console.error(error);

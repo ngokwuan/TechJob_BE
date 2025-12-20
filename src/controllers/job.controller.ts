@@ -170,7 +170,9 @@ export const getListAndFilterJobWithRole = async (
     return res.status(200).json({
       success: true,
       message: 'Lấy danh sách công việc thành công',
-      data: { totalJob, data, totalPage },
+      totalJob,
+      data,
+      totalPage,
     });
   } catch (error) {
     console.error(error);
