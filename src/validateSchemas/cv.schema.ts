@@ -22,13 +22,7 @@ export const updateStatusSchema = z.object({
 
 export const filterStatusSchema = z
   .object({
-    status: z
-      .union([
-        z.literal('Pending'),
-        z.literal('Rejected'),
-        z.literal('Accepted'),
-      ])
-      .optional(),
+    status: z.enum(['Pending', 'Rejected', 'Accepted']).optional(),
   })
   .passthrough();
 
