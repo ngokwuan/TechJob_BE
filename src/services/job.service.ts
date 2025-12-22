@@ -234,10 +234,15 @@ export const getRelateJobs = async (jobId: string) => {
         select: 'cityName',
       },
     })
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .lean();
 
-  return relateJobs;
+  return relateJobs.map(({ _id, ...rest }) => ({
+    jobId: _id.toString(),
+    ...rest,
+  }));
 };
+
 export const countActiveJobsByCompany = async (companyId: string) => {
   return Job.countDocuments({
     companyId: new mongoose.Types.ObjectId(companyId),
