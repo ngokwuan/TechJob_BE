@@ -162,8 +162,18 @@ export const companyRegister = async (req: AuthRequest, res: Response) => {
 
 export const logout = async (req: AuthRequest, res: Response) => {
   try {
-    const token = req.cookies.token;
-    await removeToken(token);
+    const token = req.cookies?.token;
+
+    if (token) {
+      await removeToken(token);
+    }
+
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+    });
 
     return res.status(200).json({
       success: true,

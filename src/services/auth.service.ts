@@ -74,12 +74,16 @@ export const registerAccount = async (
 
 export const removeToken = async (token: string) => {
   try {
-    const decoded: any = jwt.decode(token);
-    const exp = decoded?.exp;
+    const decoded = jwt.decode(token) as jwt.JwtPayload | null;
 
-    const ttl = exp ? exp - Math.floor(Date.now() / 1000) : 3600;
+    if (!decoded?.exp) return;
 
-    await redis.set(`blacklist:${token}`, '1', { EX: ttl });
+    const now = Math.floor(Date.now() / 1000);
+    const ttl = Math.max(decoded.exp - now, 0);
+
+    if (ttl > 0) {
+      await redis.set(`blacklist:${token}`, '1', { EX: ttl });
+    }
   } catch (err) {
     console.error('Blacklist token error:', err);
   }
