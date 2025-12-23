@@ -93,7 +93,6 @@ export const updateJobById = async (
   const updatedJob = await job.save();
   return updatedJob;
 };
-
 export const getJobsWithoutRole = async (page = 1) => {
   const LIMIT = 12;
   const skip = (page - 1) * LIMIT;
@@ -139,7 +138,6 @@ export const getJobsWithoutRole = async (page = 1) => {
     data,
   };
 };
-
 export const getJobsByCompanyId = async (
   companyId: string,
   page = 1,
@@ -215,7 +213,6 @@ export const getDetailJob = async (jobId: string) => {
     },
   });
 };
-
 export const getRelateJobs = async (jobId: string) => {
   const job = await Job.findById(jobId).select('companyId');
   if (!job) return [];
@@ -242,10 +239,22 @@ export const getRelateJobs = async (jobId: string) => {
     ...rest,
   }));
 };
-
 export const countActiveJobsByCompany = async (companyId: string) => {
   return Job.countDocuments({
     companyId: new mongoose.Types.ObjectId(companyId),
     isDeleted: false,
   });
+};
+export const findSimilarJobs = async (job: any, limit = 5) => {
+  return await Job.find({
+    _id: { $ne: job._id },
+    isDeleted: false,
+    $or: [
+      { position: job.position },
+      { technologies: { $in: job.technologies || [] } },
+    ],
+  })
+    .select('title position workingForm salaryMin salaryMax')
+    .limit(limit)
+    .lean();
 };
