@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { AccountsUser, IAccountsUser } from '../models/accountUser.model';
-import redis from '../config/redis';
+import connectRedis from '../config/redis';
 import {
   AccountsCompany,
   IAccountsCompany,
@@ -82,7 +82,7 @@ export const removeToken = async (token: string) => {
     const ttl = Math.max(decoded.exp - now, 0);
 
     if (ttl > 0) {
-      await redis.set(`blacklist:${token}`, '1', { EX: ttl });
+      await connectRedis.set(`blacklist:${token}`, '1', { EX: ttl });
     }
   } catch (err) {
     console.error('Blacklist token error:', err);
@@ -90,6 +90,6 @@ export const removeToken = async (token: string) => {
 };
 
 export const isBlacklisted = async (token: string): Promise<boolean> => {
-  const result = await redis.get(`blacklist:${token}`);
+  const result = await connectRedis.get(`blacklist:${token}`);
   return result === '1';
 };
