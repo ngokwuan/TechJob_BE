@@ -1,9 +1,14 @@
 import { Response } from 'express';
 import { AuthRequest } from '../types/auth.type';
 import * as service from '../services/cv.service';
-import { checkExistJob, getJobsByCompanyId } from '../services/job.service';
+import {
+  checkExistJob,
+  getJobsByCompanyId,
+  findSimilarJobs,
+} from '../services/job.service';
 import { UpdateStatusCVInput } from '../validateSchemas/cv.schema';
 import { uploadCV } from '../services/cloudinary.service';
+import { sendSuggestedJobsEmail } from '../services/mail.service';
 
 export const createCVController = async (req: AuthRequest, res: Response) => {
   try {
@@ -34,13 +39,16 @@ export const createCVController = async (req: AuthRequest, res: Response) => {
     }
 
     const cv = await service.createCV(cvData);
+    const similarJobs = await findSimilarJobs(job);
 
+    await sendSuggestedJobsEmail(cvData.email, job.title, similarJobs);
     return res.status(201).json({
       success: true,
       message: 'Tạo CV thành công',
       data: cv,
     });
   } catch (error: any) {
+    console.error('Create CV error:', error);
     return res.status(500).json({
       success: false,
       message: 'Lỗi server, vui lòng thử lại sau ',

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import * as service from '../services/job.service';
 import { AuthRequest } from '../types/auth.type';
 import { uploadImages } from '../services/cloudinary.service';
+
 export const createJobController = async (req: AuthRequest, res: Response) => {
   try {
     const companyId = req.user?.id;
