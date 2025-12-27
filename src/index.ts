@@ -44,10 +44,12 @@ app.use(
       return callback(new Error('Not allowed by CORS'));
     },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 
-app.options('*', cors());
+app.options(/.*/, cors());
 
 app.use(cookieParser());
 app.use(express.json());
