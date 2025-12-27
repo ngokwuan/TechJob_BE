@@ -18,7 +18,7 @@ app.use(
     origin: [
       'http://localhost:3000',
       'http://localhost:3001',
-      'https://fe-tech-job-prj-pnei.vercel.app/',
+      'https://fe-tech-job-prj.vercel.app/',
       'https://techjob-be.onrender.com',
     ],
     credentials: true,
