@@ -38,7 +38,7 @@ export const userLogin = async (req: AuthRequest, res: Response) => {
       fullName: user.fullName,
     };
     const token = createJWT(payload);
-    res.cookie('access_token', token, {
+    res.cookie('token', token, {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
