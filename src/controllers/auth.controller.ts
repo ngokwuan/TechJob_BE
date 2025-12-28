@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Response, CookieOptions } from 'express';
 import { AuthRequest } from '../types/auth.type';
 import {
   loginAccount,
@@ -9,6 +9,17 @@ import { createJWT } from '../middlewares/jwt.middleware';
 import { IAccountsUser } from '../models/accountUser.model';
 import { IAccountsCompany } from '../models/accountCompany.model';
 
+const getCookieOptions = (): CookieOptions => {
+  const sameSite: 'none' | 'lax' =
+    process.env.NODE_ENV === 'production' ? 'none' : 'lax';
+
+  return {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  };
+};
 export const checkAccount = async (req: AuthRequest, res: Response) => {
   return res.status(200).json({
     success: true,
@@ -38,12 +49,7 @@ export const userLogin = async (req: AuthRequest, res: Response) => {
       fullName: user.fullName,
     };
     const token = createJWT(payload);
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    res.cookie('token', token, getCookieOptions());
 
     return res.status(200).json({
       success: true,
@@ -114,12 +120,7 @@ export const companyLogin = async (req: AuthRequest, res: Response) => {
       companyName: company.companyName,
     };
     const token = createJWT(payload);
-    res.cookie('access_token', token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    res.cookie('token', token, getCookieOptions());
 
     return res.status(200).json({
       success: true,
@@ -179,12 +180,7 @@ export const logout = async (req: AuthRequest, res: Response) => {
       await removeToken(token);
     }
 
-    res.clearCookie('token', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      path: '/',
-    });
+    res.clearCookie('token', getCookieOptions());
 
     return res.status(200).json({
       success: true,

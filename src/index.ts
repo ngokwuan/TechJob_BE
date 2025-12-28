@@ -4,7 +4,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { Routes } from './routes/index.route';
 import { connectDB } from './config/db';
-
+import { connectRedis } from './config/redis';
 dotenv.config();
 
 const app: Application = express();
@@ -12,6 +12,15 @@ const PORT = process.env.PORT;
 
 //MongoDB connection
 connectDB();
+
+//Redis connection
+
+connectRedis()
+  .then(() => console.log('Redis connected successfully'))
+  .catch((err) => {
+    console.error('Redis connection failed:', err.message);
+    console.log(' Server will continue without Redis (blacklist disabled)');
+  });
 // Middleware
 
 const allowedOrigins = [
@@ -33,6 +42,7 @@ app.use(
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Set-Cookie'],
   })
 );
 

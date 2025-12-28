@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { AccountsUser, IAccountsUser } from '../models/accountUser.model';
-import connectRedis from '../config/redis';
+import redis from '../config/redis';
 import {
   AccountsCompany,
   IAccountsCompany,
@@ -16,6 +16,10 @@ const AccountModels = {
 
 export type AccountModel = keyof typeof AccountModels;
 type AccountDocument = IAccountsUser | IAccountsCompany;
+
+const isRedisReady = (): boolean => {
+  return redis.isReady && redis.isOpen;
+};
 
 export const findAccount = async (
   email: string,
@@ -72,24 +76,43 @@ export const registerAccount = async (
   }
 };
 
-export const removeToken = async (token: string) => {
+export const removeToken = async (token: string): Promise<void> => {
   try {
+    if (!isRedisReady()) {
+      return;
+    }
+
     const decoded = jwt.decode(token) as jwt.JwtPayload | null;
 
-    if (!decoded?.exp) return;
+    if (!decoded?.exp) {
+      return;
+    }
 
     const now = Math.floor(Date.now() / 1000);
     const ttl = Math.max(decoded.exp - now, 0);
 
     if (ttl > 0) {
-      await connectRedis.set(`blacklist:${token}`, '1', { EX: ttl });
+      await redis.set(`blacklist:${token}`, '1', { EX: ttl });
     }
   } catch (err) {
-    console.error('Blacklist token error:', err);
+    console.error(' Lỗi blacklist ', err);
   }
 };
 
 export const isBlacklisted = async (token: string): Promise<boolean> => {
-  const result = await connectRedis.get(`blacklist:${token}`);
-  return result === '1';
+  try {
+    if (!isRedisReady()) {
+      return false;
+    }
+
+    const result = await redis.get(`blacklist:${token}`);
+
+    if (result === '1') {
+      return true;
+    }
+
+    return false;
+  } catch (err) {
+    return false;
+  }
 };
