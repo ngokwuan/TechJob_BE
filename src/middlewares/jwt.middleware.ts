@@ -6,7 +6,7 @@ import { AccountsCompany } from '../models/accountCompany.model';
 import { AccountsUser } from '../models/accountUser.model';
 
 if (!process.env.JWT_SECRET_KEY) {
-  throw new Error('JWT_SECRET_KEY is not defined in environment variables');
+  throw new Error('JWT_SECRET_KEY không hiển thị trong env');
 }
 
 const JWT_SECRET = process.env.JWT_SECRET_KEY;
@@ -41,6 +41,7 @@ export const checkUserJWT = async (
 ) => {
   try {
     const token = req.cookies.token;
+
     if (!token) {
       return res.status(401).json({
         success: false,
@@ -89,9 +90,11 @@ export const checkUserJWT = async (
         });
       }
     }
+
     req.user = { id, ...data };
     next();
   } catch (error) {
+    console.error('Xác thực thất bại', error);
     return res.status(401).json({
       success: false,
       message: 'Xác thực thất bại',
@@ -105,7 +108,7 @@ export const checkRole = (role: string) => {
       if (!req.user) {
         return res.status(401).json({
           success: false,
-          message: 'Token không hợp lệ ',
+          message: 'Token không hợp lệ',
         });
       }
 
