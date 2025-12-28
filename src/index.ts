@@ -13,19 +13,6 @@ const PORT = process.env.PORT;
 //MongoDB connection
 connectDB();
 // Middleware
-// app.use(
-//   cors({
-//     origin: [
-//       'http://localhost:3000',
-//       'http://localhost:3001',
-//       'https://fe-tech-job-prj.vercel.app/',
-//       'https://techjob-be.onrender.com',
-//     ],
-//     credentials: true,
-//     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-//     allowedHeaders: ['Content-Type', 'Authorization'],
-//   })
-// );
 
 const allowedOrigins = [
   'http://localhost:3000',

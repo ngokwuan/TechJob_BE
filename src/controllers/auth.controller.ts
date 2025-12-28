@@ -38,11 +38,17 @@ export const userLogin = async (req: AuthRequest, res: Response) => {
       fullName: user.fullName,
     };
     const token = createJWT(payload);
+    res.cookie('access_token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
     return res.status(200).json({
       success: true,
       message: 'Đăng nhập thành công',
       data: {
-        accessToken: token,
         user: payload,
       },
     });
@@ -108,12 +114,17 @@ export const companyLogin = async (req: AuthRequest, res: Response) => {
       companyName: company.companyName,
     };
     const token = createJWT(payload);
+    res.cookie('access_token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
     return res.status(200).json({
       success: true,
       message: 'Đăng nhập thành công',
       data: {
-        accessToken: token,
         company: payload,
       },
     });
