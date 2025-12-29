@@ -58,7 +58,7 @@ export const updateCompanyById = async (
 };
 
 export const getAllCompaniesForAdmin = async (page = 1) => {
-  const LIMIT = 10;
+  const LIMIT = 5;
   const skip = (page - 1) * LIMIT;
 
   const basePipeline: PipelineStage[] = [

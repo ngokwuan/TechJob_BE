@@ -58,7 +58,7 @@ export const getCVOfJob = async (
   page = 1,
   status?: string
 ) => {
-  const LIMIT = 10;
+  const LIMIT = 5;
   const skip = (page - 1) * LIMIT;
 
   const filter: any = {
@@ -78,7 +78,7 @@ export const getCVOfJob = async (
 };
 
 export const getCVByUserId = async (userId: string, page = 1) => {
-  const LIMIT = 10;
+  const LIMIT = 5;
   const skip = (page - 1) * LIMIT;
 
   const basePipeline = [

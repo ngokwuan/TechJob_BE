@@ -144,7 +144,7 @@ export const getJobsByCompanyId = async (
   position?: string,
   isDeleted?: boolean
 ) => {
-  const LIMIT = 10;
+  const LIMIT = 5;
   const skip = (page - 1) * LIMIT;
 
   const match: any = {

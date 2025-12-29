@@ -20,7 +20,7 @@ export const updateUserById = async (
   ).select('fullName email role avatar phone gender');
 };
 export const getAllUsersForAdmin = async (page = 1) => {
-  const LIMIT = 10;
+  const LIMIT = 5;
   const skip = (page - 1) * LIMIT;
 
   const basePipeline: PipelineStage[] = [
