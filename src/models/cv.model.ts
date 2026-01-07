@@ -13,6 +13,7 @@ export interface ICV extends Document {
   fileCV: string;
   viewed?: boolean;
   status: CVStatus;
+  suggestedMailSentAt?: Date;
 }
 
 const CVSchema: Schema<ICV> = new Schema(
@@ -32,6 +33,10 @@ const CVSchema: Schema<ICV> = new Schema(
       type: String,
       enum: ['Pending', 'Rejected', 'Accepted'],
       default: 'Pending',
+    },
+    suggestedMailSentAt: {
+      type: Date,
+      default: null,
     },
   },
   { timestamps: true }
