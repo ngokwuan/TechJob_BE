@@ -193,3 +193,19 @@ export const getCVStatusByUserId = async (userId: string) => {
     totalAcceptedCVs: result.find((r) => r._id === 'Accepted')?.total || 0,
   };
 };
+
+export const updateCVAfterSentMail = async (cvId: mongoose.Types.ObjectId) => {
+  await CV.findByIdAndUpdate(cvId, {
+    suggestedMailSentAt: new Date(),
+  });
+};
+export const findCVsNeedWeeklySuggestedMail = async () => {
+  const ONE_WEEK_AGO = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
+  return CV.find({
+    $or: [
+      { suggestedMailSentAt: null }, // chưa gửi lần nào
+      { suggestedMailSentAt: { $lte: ONE_WEEK_AGO } }, // quá 7 ngày
+    ],
+  }).populate('jobId');
+};

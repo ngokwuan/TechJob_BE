@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import mongoose from 'mongoose';
 import { AuthRequest } from '../types/auth.type';
 import * as service from '../services/cv.service';
 import {
@@ -42,6 +43,9 @@ export const createCVController = async (req: AuthRequest, res: Response) => {
     const similarJobs = await findSimilarJobs(job);
 
     await sendSuggestedJobsEmail(cvData.email, job.title, similarJobs);
+
+    await service.updateCVAfterSentMail(cv._id as mongoose.Types.ObjectId);
+
     return res.status(201).json({
       success: true,
       message: 'Tạo CV thành công',

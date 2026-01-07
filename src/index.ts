@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import { Routes } from './routes/index.route';
 import { connectDB } from './config/db';
 import { connectRedis } from './config/redis';
+import { startSuggestedJobCron } from './cron/suggestedJob.cron';
 dotenv.config();
 
 const app: Application = express();
@@ -21,6 +22,10 @@ connectRedis()
     console.error('Redis connection failed:', err.message);
     console.log(' Server will continue without Redis (blacklist disabled)');
   });
+
+//Start cron for send mail to user every week
+startSuggestedJobCron();
+
 // Middleware
 
 const allowedOrigins = [
