@@ -6,8 +6,15 @@ export const validate =
   <T>(schema: z.ZodSchema<T>) =>
   (req: AuthRequest<T>, res: Response, next: NextFunction) => {
     try {
-      const data = req.method === 'GET' ? req.query : req.body;
-      const parsed = schema.parse(data) ?? {};
+      let data;
+
+      if (req.method === 'GET') {
+        data = req.query;
+      } else {
+        data = req.body || {};
+      }
+
+      const parsed = schema.parse(data);
       req.validated = parsed as T;
       next();
     } catch (error) {
@@ -16,6 +23,7 @@ export const validate =
           success: false,
           message: 'Dữ liệu không hợp lệ',
           errors: error.issues.map((err) => ({
+            field: err.path.join('.'),
             message: err.message,
           })),
         });
