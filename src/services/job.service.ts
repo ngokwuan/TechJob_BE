@@ -159,6 +159,36 @@ export const getJobsByCompanyId = async (
       $match: match,
     },
 
+    // Join company
+    {
+      $lookup: {
+        from: 'accountCompany',
+        localField: 'companyId',
+        foreignField: '_id',
+        as: 'company',
+      },
+    },
+    {
+      $unwind: '$company',
+    },
+
+    // Join city
+    {
+      $lookup: {
+        from: 'city',
+        localField: 'company.cityId',
+        foreignField: '_id',
+        as: 'city',
+      },
+    },
+    {
+      $unwind: {
+        path: '$city',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+
+    // Join CV
     {
       $lookup: {
         from: 'cv',
@@ -171,6 +201,7 @@ export const getJobsByCompanyId = async (
     {
       $addFields: {
         totalApplicants: { $size: '$cvList' },
+        cityName: '$city.cityName',
       },
     },
 
@@ -183,12 +214,14 @@ export const getJobsByCompanyId = async (
         createdAt: 1,
         totalApplicants: 1,
         position: 1,
+        cityName: 1,
         _id: 0,
       },
     },
 
     { $sort: { createdAt: -1 } },
   ];
+
   const [data, total] = await Promise.all([
     Job.aggregate([...basePipeline, { $skip: skip }, { $limit: LIMIT }]),
     Job.aggregate([...basePipeline, { $count: 'count' }]),
@@ -203,16 +236,48 @@ export const getAllJobsForAdmin = async () => {
   const jobs = await Job.find();
   return jobs;
 };
+
 export const getDetailJob = async (jobId: string) => {
-  return await Job.findById(jobId).populate({
-    path: 'companyId',
-    select: 'companyName logo companyModel companyEmployees workingTime cityId',
-    populate: {
-      path: 'cityId',
-      select: 'cityName',
-    },
-  });
+  const job = await Job.findById(jobId)
+    .populate({
+      path: 'companyId',
+      select:
+        'companyName logo companyModel companyEmployees workingTime cityId',
+      populate: {
+        path: 'cityId',
+        select: 'cityName',
+      },
+    })
+    .lean();
+
+  if (!job) return null;
+
+  const company = job.companyId as any;
+
+  return {
+    jobId: job._id.toString(),
+    title: job.title,
+    salaryMin: job.salaryMin,
+    salaryMax: job.salaryMax,
+    position: job.position,
+    workingForm: job.workingForm,
+    technologies: job.technologies,
+    description: job.description,
+    images: job.images,
+    createdAt: job.createdAt,
+
+    // Company info
+    companyName: company?.companyName,
+    logo: company?.logo,
+    companyModel: company?.companyModel,
+    companyEmployees: company?.companyEmployees,
+    workingTime: company?.workingTime,
+
+    //  City
+    cityName: company?.cityId?.cityName || null,
+  };
 };
+
 export const getRelateJobs = async (jobId: string) => {
   const job = await Job.findById(jobId).select('companyId');
   if (!job) return [];
@@ -222,7 +287,7 @@ export const getRelateJobs = async (jobId: string) => {
     _id: { $ne: jobId },
     isDeleted: false,
   })
-    .select('title position workingForm createdAt images')
+    .select('title position workingForm createdAt images companyId')
     .populate({
       path: 'companyId',
       select: 'cityId',
@@ -234,9 +299,14 @@ export const getRelateJobs = async (jobId: string) => {
     .sort({ createdAt: -1 })
     .lean();
 
-  return relateJobs.map(({ _id, ...rest }) => ({
-    jobId: _id.toString(),
-    ...rest,
+  return relateJobs.map((job: any) => ({
+    jobId: job._id.toString(),
+    title: job.title,
+    position: job.position,
+    workingForm: job.workingForm,
+    createdAt: job.createdAt,
+    images: job.images,
+    cityName: job.companyId?.cityId?.cityName || null,
   }));
 };
 

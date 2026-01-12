@@ -12,6 +12,8 @@ export interface IJob extends Document {
   description?: string;
   images?: string[];
   isDeleted?: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const JobSchema: Schema<IJob> = new Schema(
