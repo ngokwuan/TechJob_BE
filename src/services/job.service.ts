@@ -282,32 +282,71 @@ export const getRelateJobs = async (jobId: string) => {
   const job = await Job.findById(jobId).select('companyId');
   if (!job) return [];
 
-  const relateJobs = await Job.find({
-    companyId: job.companyId,
-    _id: { $ne: jobId },
-    isDeleted: false,
-  })
-    .select('title position workingForm createdAt images companyId')
-    .populate({
-      path: 'companyId',
-      select: 'cityId',
-      populate: {
-        path: 'cityId',
-        select: 'cityName',
-      },
-    })
-    .sort({ createdAt: -1 })
-    .lean();
+  const companyId = job.companyId;
 
-  return relateJobs.map((job: any) => ({
-    jobId: job._id.toString(),
-    title: job.title,
-    position: job.position,
-    workingForm: job.workingForm,
-    createdAt: job.createdAt,
-    images: job.images,
-    cityName: job.companyId?.cityId?.cityName || null,
-  }));
+  return await Job.aggregate([
+    {
+      $match: {
+        companyId: companyId,
+        isDeleted: false,
+        _id: { $ne: new mongoose.Types.ObjectId(jobId) },
+      },
+    },
+
+    {
+      $lookup: {
+        from: 'cv',
+        localField: '_id',
+        foreignField: 'jobId',
+        as: 'cvList',
+      },
+    },
+
+    {
+      $lookup: {
+        from: 'accountCompany',
+        localField: 'companyId',
+        foreignField: '_id',
+        as: 'company',
+      },
+    },
+    { $unwind: '$company' },
+
+    {
+      $lookup: {
+        from: 'city',
+        localField: 'company.cityId',
+        foreignField: '_id',
+        as: 'city',
+      },
+    },
+    {
+      $unwind: {
+        path: '$city',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $addFields: {
+        totalApplicants: { $size: '$cvList' },
+        cityName: '$city.cityName',
+      },
+    },
+    { $sort: { createdAt: -1 } },
+    {
+      $project: {
+        jobId: '$_id',
+        title: 1,
+        position: 1,
+        workingForm: 1,
+        createdAt: 1,
+        images: 1,
+        cityName: 1,
+        totalApplicants: 1,
+        _id: 0,
+      },
+    },
+  ]);
 };
 
 export const countActiveJobsByCompany = async (companyId: string) => {
