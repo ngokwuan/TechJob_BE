@@ -4,7 +4,7 @@ import * as service from '../services/accountCompany.service';
 import { IAccountsCompany } from '../models/accountCompany.model';
 import { uploadImage, uploadImages } from '../services/cloudinary.service';
 
-import { getJobsByCompanyId } from '../services/job.service';
+import { getJobsByCompanyIdWithoutFilter } from '../services/job.service';
 
 export const getDetailCompanyForGuest = async (
   req: AuthRequest,
@@ -28,7 +28,7 @@ export const getDetailCompanyForGuest = async (
         message: 'Không tìm thấy công ty',
       });
     }
-    const { data } = await getJobsByCompanyId(id);
+    const data = await getJobsByCompanyIdWithoutFilter(id);
     const totalJobs = data.length;
     return res.status(200).json({
       success: true,
