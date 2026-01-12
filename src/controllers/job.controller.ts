@@ -167,11 +167,11 @@ export const getListAndFilterJobWithRole = async (
         message: 'Không tồn tài công việc nào',
       });
     }
-    const totalJob = data.length;
+    const totalJobs = data.length;
     return res.status(200).json({
       success: true,
       message: 'Lấy danh sách công việc thành công',
-      totalJob,
+      totalJobs,
       data,
       totalPage,
     });

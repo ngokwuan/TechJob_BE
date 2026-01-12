@@ -167,7 +167,7 @@ export const getAllCompanies = async (page = 1) => {
     },
     {
       $addFields: {
-        totalJob: { $size: '$jobs' },
+        totalJobs: { $size: '$jobs' },
       },
     },
     {
@@ -189,7 +189,7 @@ export const getAllCompanies = async (page = 1) => {
         _id: 1,
         companyName: 1,
         logo: 1,
-        totalJob: 1,
+        totalJobs: 1,
         cityName: '$city.cityName',
       },
     },
