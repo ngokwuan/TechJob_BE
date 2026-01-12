@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { PipelineStage } from 'mongoose';
+import { PipelineStage, Types } from 'mongoose';
 
 import { Job } from '../models/job.model';
 import { AccountsCompany } from '../models/accountCompany.model';
@@ -138,6 +138,82 @@ export const getJobsWithoutRole = async (page = 1) => {
     data,
   };
 };
+export const getJobsByCompanyIdWithoutFilter = async (companyId: string) => {
+  const basePipeline: PipelineStage[] = [
+    {
+      $match: {
+        isDeleted: false,
+        companyId: new Types.ObjectId(companyId),
+      },
+    },
+
+    // Join company
+    {
+      $lookup: {
+        from: 'accountCompany',
+        localField: 'companyId',
+        foreignField: '_id',
+        as: 'company',
+      },
+    },
+    {
+      $unwind: '$company',
+    },
+
+    // Join city
+    {
+      $lookup: {
+        from: 'city',
+        localField: 'company.cityId',
+        foreignField: '_id',
+        as: 'city',
+      },
+    },
+    {
+      $unwind: {
+        path: '$city',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+
+    // Join CV
+    {
+      $lookup: {
+        from: 'cv',
+        localField: '_id',
+        foreignField: 'jobId',
+        as: 'cvList',
+      },
+    },
+
+    {
+      $addFields: {
+        totalApplicants: { $size: '$cvList' },
+        cityName: '$city.cityName',
+      },
+    },
+
+    {
+      $project: {
+        jobId: '$_id',
+        title: 1,
+
+        workingForm: 1,
+        createdAt: 1,
+        totalApplicants: 1,
+        position: 1,
+        cityName: 1,
+        _id: 0,
+      },
+    },
+
+    { $sort: { createdAt: -1 } },
+  ];
+
+  const data = await Job.aggregate(basePipeline);
+
+  return data;
+};
 export const getJobsByCompanyId = async (
   companyId: string,
   page = 1,
@@ -267,6 +343,7 @@ export const getDetailJob = async (jobId: string) => {
     createdAt: job.createdAt,
 
     // Company info
+    companyId: company._id,
     companyName: company?.companyName,
     logo: company?.logo,
     companyModel: company?.companyModel,
