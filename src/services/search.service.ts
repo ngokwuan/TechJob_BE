@@ -4,11 +4,17 @@ import { AccountsCompany } from '../models/accountCompany.model';
 
 export const searchService = async (keyword: string, cityId?: string) => {
   const regex = new RegExp(keyword, 'i');
-  const match: any = {
+
+  const jobMatch: any = {
     isDeleted: false,
     $or: [{ title: regex }, { technologies: regex }, { position: regex }],
   };
+
   const pipeline: any[] = [
+    {
+      $match: jobMatch,
+    },
+
     {
       $lookup: {
         from: 'accountCompany',
@@ -18,10 +24,22 @@ export const searchService = async (keyword: string, cityId?: string) => {
       },
     },
     { $unwind: '$company' },
+
+    {
+      $match: {
+        'company.isDeleted': false,
+      },
+    },
   ];
+
   if (cityId) {
-    match['company.cityId'] = new mongoose.Types.ObjectId(cityId);
+    pipeline.push({
+      $match: {
+        'company.cityId': new mongoose.Types.ObjectId(cityId),
+      },
+    });
   }
+
   pipeline.push(
     {
       $lookup: {
@@ -32,8 +50,6 @@ export const searchService = async (keyword: string, cityId?: string) => {
       },
     },
     { $unwind: { path: '$city', preserveNullAndEmptyArrays: true } },
-
-    { $match: match },
 
     {
       $project: {
@@ -52,20 +68,22 @@ export const searchService = async (keyword: string, cityId?: string) => {
         cityName: '$city.cityName',
       },
     },
-
     { $sort: { createdAt: -1 } }
   );
+
   const jobs = await Job.aggregate(pipeline);
-  const matchCPN: any = {
+  const companyMatch: any = {
     isDeleted: false,
     $or: [{ companyName: regex }, { address: regex }],
   };
+
   if (cityId) {
-    matchCPN.cityId = new mongoose.Types.ObjectId(cityId);
+    companyMatch.cityId = new mongoose.Types.ObjectId(cityId);
   }
+
   const companies = await AccountsCompany.aggregate([
     {
-      $match: matchCPN,
+      $match: companyMatch,
     },
 
     {
@@ -79,7 +97,15 @@ export const searchService = async (keyword: string, cityId?: string) => {
 
     {
       $addFields: {
-        totalJobs: { $size: '$jobs' },
+        totalJobs: {
+          $size: {
+            $filter: {
+              input: '$jobs',
+              as: 'job',
+              cond: { $eq: ['$$job.isDeleted', false] },
+            },
+          },
+        },
       },
     },
 
@@ -107,10 +133,7 @@ export const searchService = async (keyword: string, cityId?: string) => {
     { $sort: { totalJobs: -1 } },
   ]);
 
-  return {
-    jobs,
-    companies,
-  };
+  return { jobs, companies };
 };
 
 export const searchAndFilterJob = async (
@@ -188,13 +211,16 @@ export const searchAndFilterCPN = async (
   const LIMIT = 12;
   const skip = (page - 1) * LIMIT;
   const regex = new RegExp(keyword, 'i');
+
   const match: any = {
     isDeleted: false,
     $or: [{ companyName: regex }],
   };
+
   if (cityId) {
     match.cityId = new mongoose.Types.ObjectId(cityId);
   }
+
   const basePipeline: PipelineStage[] = [
     {
       $match: match,
@@ -211,7 +237,15 @@ export const searchAndFilterCPN = async (
 
     {
       $addFields: {
-        totalJobs: { $size: '$jobs' },
+        totalJobs: {
+          $size: {
+            $filter: {
+              input: '$jobs',
+              as: 'job',
+              cond: { $eq: ['$$job.isDeleted', false] },
+            },
+          },
+        },
       },
     },
 
@@ -238,6 +272,7 @@ export const searchAndFilterCPN = async (
 
     { $sort: { totalJobs: -1 } },
   ];
+
   const [data, total] = await Promise.all([
     AccountsCompany.aggregate([
       ...basePipeline,
