@@ -20,7 +20,7 @@ export const getDetailCompanyForGuest = async (
       });
     }
 
-    const company: IAccountsCompany | null = await service.getCompanyById(id);
+    const company = await service.getCompanyById(id);
 
     if (!company) {
       return res.status(404).json({
@@ -35,7 +35,7 @@ export const getDetailCompanyForGuest = async (
       message: 'Lấy thông tin công ty thành công',
       totalJobs,
       company,
-      data,
+      jobs: data,
     });
   } catch (error) {
     console.error(error);
@@ -57,7 +57,7 @@ export const getCompanyProfile = async (req: AuthRequest, res: Response) => {
       });
     }
 
-    const company: IAccountsCompany | null = await service.getCompanyById(id);
+    const company = await service.getCompanyById(id);
 
     if (!company) {
       return res.status(404).json({

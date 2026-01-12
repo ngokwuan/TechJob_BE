@@ -63,10 +63,12 @@ export const getAllUsersForAdmin = async (page = 1) => {
     ]),
     AccountsUser.aggregate([...basePipeline, { $count: 'count' }]),
   ]);
+  const totalUser = total[0]?.count || 0;
 
   return {
     totalPage: Math.ceil((total[0]?.count || 0) / LIMIT),
     data,
+    totalUser,
   };
 };
 export const getAllLockUser = async () => {

@@ -39,13 +39,36 @@ export const updateStatusCPN = async (id: string) => {
 export const checkExistCPN = async (id: string) => {
   return await AccountsCompany.findById(id);
 };
-export const getCompanyById = async (
-  id: string
-): Promise<IAccountsCompany | null> => {
-  return AccountsCompany.findById(id).select(
-    'companyName address cityId companyEmployees companyModel description images phone workOverTime workingTime logo'
-  );
+
+export const getCompanyById = async (id: string) => {
+  const company = await AccountsCompany.findById(id)
+    .select(
+      'companyName address cityId companyEmployees companyModel description images phone workOverTime workingTime logo'
+    )
+    .populate({
+      path: 'cityId',
+      select: 'cityName',
+    })
+    .lean();
+
+  if (!company) return null;
+
+  return {
+    _id: company._id,
+    companyName: company.companyName,
+    address: company.address,
+    companyEmployees: company.companyEmployees,
+    companyModel: company.companyModel,
+    description: company.description,
+    images: company.images,
+    phone: company.phone,
+    workOverTime: company.workOverTime,
+    workingTime: company.workingTime,
+    logo: company.logo,
+    cityName: (company.cityId as any)?.cityName || null,
+  };
 };
+
 export const updateCompanyById = async (
   id: string,
   data: Partial<IAccountsCompany>
@@ -117,10 +140,11 @@ export const getAllCompaniesForAdmin = async (page = 1) => {
     ]),
     AccountsCompany.aggregate([...basePipeline, { $count: 'count' }]),
   ]);
-
+  const totalCompany = total[0]?.count || 0;
   return {
     totalPage: Math.ceil((total[0]?.count || 0) / LIMIT),
     data,
+    totalCompany,
   };
 };
 

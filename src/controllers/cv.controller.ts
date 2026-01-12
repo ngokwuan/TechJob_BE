@@ -10,10 +10,19 @@ import {
 import { UpdateStatusCVInput } from '../validateSchemas/cv.schema';
 import { uploadCV } from '../services/cloudinary.service';
 import { sendSuggestedJobsEmail } from '../services/mail.service';
+import { getUserById } from '../services/accountUser.service';
 
 export const createCVController = async (req: AuthRequest, res: Response) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.id as string;
+    const user = await getUserById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'Người dùng không tồn tại',
+      });
+    }
 
     const file = req.file;
     if (!file) {
@@ -42,7 +51,7 @@ export const createCVController = async (req: AuthRequest, res: Response) => {
     const cv = await service.createCV(cvData);
     const similarJobs = await findSimilarJobs(job);
 
-    await sendSuggestedJobsEmail(cvData.email, job.title, similarJobs);
+    await sendSuggestedJobsEmail(user.email, job.title, similarJobs);
 
     await service.updateCVAfterSentMail(cv._id as mongoose.Types.ObjectId);
 

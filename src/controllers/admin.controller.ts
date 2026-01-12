@@ -8,9 +8,8 @@ export const getListCPNForAdmin = async (req: AuthRequest, res: Response) => {
   try {
     const page = Number(req.query.page) || 1;
 
-    const { data, totalPage } = await companyService.getAllCompaniesForAdmin(
-      page
-    );
+    const { data, totalPage, totalCompany } =
+      await companyService.getAllCompaniesForAdmin(page);
     if (!data) {
       return res.status(404).json({
         success: false,
@@ -20,7 +19,7 @@ export const getListCPNForAdmin = async (req: AuthRequest, res: Response) => {
     return res.status(200).json({
       success: true,
       message: 'Lấy danh sách công ty thành công',
-      totalCompany: data.length,
+      totalCompany,
       data,
       totalPage,
     });
@@ -61,7 +60,8 @@ export const getAllUsersForAdmin = async (req: AuthRequest, res: Response) => {
   try {
     const page = Number(req.query.page) || 1;
 
-    const { data, totalPage } = await userService.getAllUsersForAdmin(page);
+    const { data, totalPage, totalUser } =
+      await userService.getAllUsersForAdmin(page);
     if (!data) {
       return res.status(404).json({
         success: false,
@@ -71,7 +71,7 @@ export const getAllUsersForAdmin = async (req: AuthRequest, res: Response) => {
     return res.status(200).json({
       success: true,
       message: 'Lấy danh sách người dùng thành công',
-      totalUser: data.length,
+      totalUser,
       data,
       totalPage,
     });
